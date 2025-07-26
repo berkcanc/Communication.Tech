@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/Communication.Tech.Gateway.props" />
+</Project>

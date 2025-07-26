@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'communication-tech-server'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['communication.tech.server:5059']
+
+  - job_name: 'communication-tech-gateway'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['communication.tech.gateway:5000']
+
+  - job_name: 'communication-tech-consumer'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['communication.tech.consumer:80']

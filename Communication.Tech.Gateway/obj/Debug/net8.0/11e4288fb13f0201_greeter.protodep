@@ -1,0 +1,2 @@
+obj/Debug/net8.0/Greeter.cs \
+obj/Debug/net8.0/GreeterGrpc.cs: ../Communication.Tech.Server/Protos/greeter.proto

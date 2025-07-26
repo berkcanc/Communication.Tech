@@ -1,0 +1,1887 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Communication.Tech.Server/1.0.0": {
+        "dependencies": {
+          "Communication.Tech.Gateway": "1.0.0",
+          "Google.Protobuf": "3.30.2",
+          "GraphQL": "8.5.0",
+          "Grpc.AspNetCore": "2.70.0",
+          "Grpc.AspNetCore.Server.Reflection": "2.70.0",
+          "Grpc.Tools": "2.70.0",
+          "HotChocolate.AspNetCore": "15.1.5",
+          "Swashbuckle.AspNetCore": "6.6.2"
+        },
+        "runtime": {
+          "Communication.Tech.Server.dll": {}
+        }
+      },
+      "ChilliCream.Nitro.App/28.0.7": {
+        "dependencies": {
+          "Yarp.ReverseProxy": "2.3.0"
+        },
+        "runtime": {
+          "lib/net8.0/ChilliCream.Nitro.App.dll": {
+            "assemblyVersion": "28.0.0.0",
+            "fileVersion": "28.0.7.0"
+          }
+        }
+      },
+      "Confluent.Kafka/2.8.0": {
+        "dependencies": {
+          "librdkafka.redist": "2.8.0"
+        },
+        "runtime": {
+          "lib/net8.0/Confluent.Kafka.dll": {
+            "assemblyVersion": "2.8.0.0",
+            "fileVersion": "2.8.0.0"
+          }
+        }
+      },
+      "Google.Protobuf/3.30.2": {
+        "runtime": {
+          "lib/net5.0/Google.Protobuf.dll": {
+            "assemblyVersion": "3.30.2.0",
+            "fileVersion": "3.30.2.0"
+          }
+        }
+      },
+      "GraphQL/8.5.0": {
+        "dependencies": {
+          "GraphQL-Parser": "9.5.0",
+          "GraphQL.Analyzers": "8.5.0"
+        },
+        "runtime": {
+          "lib/net6.0/GraphQL.dll": {
+            "assemblyVersion": "8.5.0.0",
+            "fileVersion": "8.5.0.0"
+          }
+        }
+      },
+      "GraphQL-Parser/9.5.0": {
+        "runtime": {
+          "lib/net6.0/GraphQLParser.dll": {
+            "assemblyVersion": "9.5.0.0",
+            "fileVersion": "9.5.0.0"
+          }
+        }
+      },
+      "GraphQL.Analyzers/8.5.0": {},
+      "GreenDonut/15.1.5": {
+        "dependencies": {
+          "GreenDonut.Abstractions": "15.1.5",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.ObjectPool": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/GreenDonut.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "GreenDonut.Abstractions/15.1.5": {
+        "runtime": {
+          "lib/net8.0/GreenDonut.Abstractions.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "GreenDonut.Data/15.1.5": {
+        "dependencies": {
+          "GreenDonut": "15.1.5",
+          "GreenDonut.Data.Abstractions": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/GreenDonut.Data.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "GreenDonut.Data.Abstractions/15.1.5": {
+        "dependencies": {
+          "GreenDonut.Abstractions": "15.1.5",
+          "GreenDonut.Data.Primitives": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/GreenDonut.Data.Abstractions.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "GreenDonut.Data.Primitives/15.1.5": {
+        "runtime": {
+          "lib/net8.0/GreenDonut.Data.Primitives.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "Grpc.AspNetCore/2.70.0": {
+        "dependencies": {
+          "Google.Protobuf": "3.30.2",
+          "Grpc.AspNetCore.Server.ClientFactory": "2.70.0",
+          "Grpc.Tools": "2.70.0"
+        }
+      },
+      "Grpc.AspNetCore.Server/2.70.0": {
+        "dependencies": {
+          "Grpc.Net.Common": "2.70.0"
+        },
+        "runtime": {
+          "lib/net8.0/Grpc.AspNetCore.Server.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.70.0.0"
+          }
+        }
+      },
+      "Grpc.AspNetCore.Server.ClientFactory/2.70.0": {
+        "dependencies": {
+          "Grpc.AspNetCore.Server": "2.70.0",
+          "Grpc.Net.ClientFactory": "2.70.0"
+        },
+        "runtime": {
+          "lib/net8.0/Grpc.AspNetCore.Server.ClientFactory.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.70.0.0"
+          }
+        }
+      },
+      "Grpc.AspNetCore.Server.Reflection/2.70.0": {
+        "dependencies": {
+          "Google.Protobuf": "3.30.2",
+          "Grpc.AspNetCore.Server": "2.70.0",
+          "Grpc.Reflection": "2.70.0"
+        },
+        "runtime": {
+          "lib/net8.0/Grpc.AspNetCore.Server.Reflection.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.70.0.0"
+          }
+        }
+      },
+      "Grpc.Core.Api/2.70.0": {
+        "runtime": {
+          "lib/netstandard2.1/Grpc.Core.Api.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.70.0.0"
+          }
+        }
+      },
+      "Grpc.Net.Client/2.70.0": {
+        "dependencies": {
+          "Grpc.Net.Common": "2.70.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Grpc.Net.Client.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.70.0.0"
+          }
+        }
+      },
+      "Grpc.Net.ClientFactory/2.70.0": {
+        "dependencies": {
+          "Grpc.Net.Client": "2.70.0",
+          "Microsoft.Extensions.Http": "6.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Grpc.Net.ClientFactory.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.70.0.0"
+          }
+        }
+      },
+      "Grpc.Net.Common/2.70.0": {
+        "dependencies": {
+          "Grpc.Core.Api": "2.70.0"
+        },
+        "runtime": {
+          "lib/net8.0/Grpc.Net.Common.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.70.0.0"
+          }
+        }
+      },
+      "Grpc.Reflection/2.70.0": {
+        "dependencies": {
+          "Google.Protobuf": "3.30.2",
+          "Grpc.Core.Api": "2.70.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Grpc.Reflection.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.70.0.0"
+          }
+        }
+      },
+      "Grpc.Tools/2.70.0": {},
+      "HotChocolate/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Authorization": "15.1.5",
+          "HotChocolate.CostAnalysis": "15.1.5",
+          "HotChocolate.Execution": "15.1.5",
+          "HotChocolate.Execution.Projections": "15.1.5",
+          "HotChocolate.Fetching": "15.1.5",
+          "HotChocolate.Types": "15.1.5",
+          "HotChocolate.Types.CursorPagination": "15.1.5",
+          "HotChocolate.Types.CursorPagination.Extensions": "15.1.5",
+          "HotChocolate.Types.Mutations": "15.1.5",
+          "HotChocolate.Types.Queries": "15.1.5",
+          "HotChocolate.Validation": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Abstractions/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Primitives": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Abstractions.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.AspNetCore/15.1.5": {
+        "dependencies": {
+          "ChilliCream.Nitro.App": "28.0.7",
+          "HotChocolate": "15.1.5",
+          "HotChocolate.Subscriptions.InMemory": "15.1.5",
+          "HotChocolate.Transport.Sockets": "15.1.5",
+          "HotChocolate.Types.Scalars.Upload": "15.1.5",
+          "HotChocolate.Utilities.DependencyInjection": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.AspNetCore.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Authorization/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Execution": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Authorization.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.CostAnalysis/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Execution": "15.1.5",
+          "HotChocolate.Types": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.CostAnalysis.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Execution/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Abstractions": "15.1.5",
+          "HotChocolate.Execution.Abstractions": "15.1.5",
+          "HotChocolate.Fetching": "15.1.5",
+          "HotChocolate.Types": "15.1.5",
+          "HotChocolate.Utilities.DependencyInjection": "15.1.5",
+          "HotChocolate.Validation": "15.1.5",
+          "Microsoft.Extensions.DependencyInjection": "8.0.0",
+          "System.IO.Pipelines": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Execution.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Execution.Abstractions/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Abstractions": "15.1.5",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Execution.Abstractions.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Execution.Projections/15.1.5": {
+        "dependencies": {
+          "GreenDonut.Data": "15.1.5",
+          "GreenDonut.Data.Abstractions": "15.1.5",
+          "GreenDonut.Data.Primitives": "15.1.5",
+          "HotChocolate.Execution": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Execution.Projections.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Features/15.1.5": {
+        "runtime": {
+          "lib/net8.0/HotChocolate.Features.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Fetching/15.1.5": {
+        "dependencies": {
+          "GreenDonut": "15.1.5",
+          "HotChocolate.Types": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Fetching.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Language/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Language.SyntaxTree": "15.1.5",
+          "HotChocolate.Language.Utf8": "15.1.5",
+          "HotChocolate.Language.Visitors": "15.1.5",
+          "HotChocolate.Language.Web": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Language.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Language.SyntaxTree/15.1.5": {
+        "dependencies": {
+          "Microsoft.Extensions.ObjectPool": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Language.SyntaxTree.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Language.Utf8/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Language.SyntaxTree": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Language.Utf8.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Language.Visitors/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Language.SyntaxTree": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Language.Visitors.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Language.Web/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Language.Utf8": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Language.Web.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Primitives/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Language": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Primitives.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Subscriptions/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Abstractions": "15.1.5",
+          "HotChocolate.Execution.Abstractions": "15.1.5",
+          "HotChocolate.Utilities": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Subscriptions.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Subscriptions.InMemory/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Execution.Abstractions": "15.1.5",
+          "HotChocolate.Subscriptions": "15.1.5",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Subscriptions.InMemory.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Transport.Sockets/15.1.5": {
+        "dependencies": {
+          "System.IO.Pipelines": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Transport.Sockets.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Types/15.1.5": {
+        "dependencies": {
+          "GreenDonut": "15.1.5",
+          "HotChocolate.Abstractions": "15.1.5",
+          "HotChocolate.Features": "15.1.5",
+          "HotChocolate.Types.Shared": "15.1.5",
+          "HotChocolate.Utilities": "15.1.5",
+          "Microsoft.Extensions.DependencyInjection": "8.0.0",
+          "Microsoft.Extensions.ObjectPool": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Types.CursorPagination/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Execution.Abstractions": "15.1.5",
+          "HotChocolate.Types": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.CursorPagination.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Types.CursorPagination.Extensions/15.1.5": {
+        "dependencies": {
+          "GreenDonut.Data": "15.1.5",
+          "HotChocolate.Types.CursorPagination": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.CursorPagination.Extensions.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Types.Errors/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Execution": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.Errors.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Types.Mutations/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Execution": "15.1.5",
+          "HotChocolate.Types.Errors": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.Mutations.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Types.Queries/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Execution": "15.1.5",
+          "HotChocolate.Types.Errors": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.Queries.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Types.Scalars.Upload/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Types": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.Scalars.Upload.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Types.Shared/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Language.SyntaxTree": "15.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Types.Shared.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Utilities/15.1.5": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Utilities.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Utilities.DependencyInjection/15.1.5": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Utilities.DependencyInjection.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "HotChocolate.Validation/15.1.5": {
+        "dependencies": {
+          "HotChocolate.Types": "15.1.5",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Validation.dll": {
+            "assemblyVersion": "15.1.5.0",
+            "fileVersion": "15.1.5.0"
+          }
+        }
+      },
+      "librdkafka.redist/2.8.0": {
+        "runtimeTargets": {
+          "runtimes/linux-arm64/native/librdkafka.so": {
+            "rid": "linux-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/alpine-librdkafka.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/centos8-librdkafka.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/librdkafka.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-arm64/native/librdkafka.dylib": {
+            "rid": "osx-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/librdkafka.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libcrypto-3-x64.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libcurl.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/librdkafka.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/librdkafkacpp.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libssl-3-x64.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/msvcp140.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/vcruntime140.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/zlib1.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/zstd.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/libcrypto-3.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/libcurl.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/librdkafka.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/librdkafkacpp.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/libssl-3.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/msvcp140.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/vcruntime140.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/zlib1.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/zstd.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Microsoft.Extensions.ApiDescription.Server/6.0.5": {},
+      "Microsoft.Extensions.Configuration/9.0.4": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4",
+          "Microsoft.Extensions.Primitives": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/9.0.4": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Binder/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4"
+        }
+      },
+      "Microsoft.Extensions.Configuration.CommandLine/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.4",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4"
+        }
+      },
+      "Microsoft.Extensions.Configuration.EnvironmentVariables/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.4",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4"
+        }
+      },
+      "Microsoft.Extensions.Configuration.FileExtensions/9.0.4": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.4",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4",
+          "Microsoft.Extensions.FileProviders.Abstractions": "9.0.4",
+          "Microsoft.Extensions.FileProviders.Physical": "9.0.4",
+          "Microsoft.Extensions.Primitives": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.FileExtensions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Json/9.0.4": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.4",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4",
+          "Microsoft.Extensions.Configuration.FileExtensions": "9.0.4",
+          "Microsoft.Extensions.FileProviders.Abstractions": "9.0.4",
+          "System.Text.Json": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.Json.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.UserSecrets/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4",
+          "Microsoft.Extensions.Configuration.Json": "9.0.4",
+          "Microsoft.Extensions.FileProviders.Abstractions": "9.0.4",
+          "Microsoft.Extensions.FileProviders.Physical": "9.0.4"
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {},
+      "Microsoft.Extensions.Diagnostics/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.4",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0",
+          "System.Diagnostics.DiagnosticSource": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Abstractions/9.0.4": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Physical/9.0.4": {
+        "dependencies": {
+          "Microsoft.Extensions.FileProviders.Abstractions": "9.0.4",
+          "Microsoft.Extensions.FileSystemGlobbing": "9.0.4",
+          "Microsoft.Extensions.Primitives": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.FileProviders.Physical.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileSystemGlobbing/9.0.4": {
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.FileSystemGlobbing.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "Microsoft.Extensions.Hosting/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.4",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4",
+          "Microsoft.Extensions.Configuration.Binder": "8.0.0",
+          "Microsoft.Extensions.Configuration.CommandLine": "8.0.0",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "8.0.0",
+          "Microsoft.Extensions.Configuration.FileExtensions": "9.0.4",
+          "Microsoft.Extensions.Configuration.Json": "9.0.4",
+          "Microsoft.Extensions.Configuration.UserSecrets": "8.0.0",
+          "Microsoft.Extensions.DependencyInjection": "8.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Diagnostics": "8.0.0",
+          "Microsoft.Extensions.FileProviders.Abstractions": "9.0.4",
+          "Microsoft.Extensions.FileProviders.Physical": "9.0.4",
+          "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging.Configuration": "8.0.0",
+          "Microsoft.Extensions.Logging.Console": "8.0.0",
+          "Microsoft.Extensions.Logging.Debug": "8.0.0",
+          "Microsoft.Extensions.Logging.EventLog": "8.0.0",
+          "Microsoft.Extensions.Logging.EventSource": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Hosting.Abstractions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "8.0.0",
+          "Microsoft.Extensions.FileProviders.Abstractions": "9.0.4",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Http/6.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging.Configuration/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.4",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4",
+          "Microsoft.Extensions.Configuration.Binder": "8.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging.Console/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging.Configuration": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0",
+          "System.Text.Json": "9.0.4"
+        }
+      },
+      "Microsoft.Extensions.Logging.Debug/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging.EventLog/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0",
+          "System.Diagnostics.EventLog": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging.EventSource/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0",
+          "Microsoft.Extensions.Primitives": "9.0.4",
+          "System.Text.Json": "9.0.4"
+        }
+      },
+      "Microsoft.Extensions.ObjectPool/8.0.0": {},
+      "Microsoft.Extensions.Options/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Primitives": "9.0.4"
+        }
+      },
+      "Microsoft.Extensions.Options.ConfigurationExtensions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.4",
+          "Microsoft.Extensions.Configuration.Binder": "8.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.0",
+          "Microsoft.Extensions.Primitives": "9.0.4"
+        }
+      },
+      "Microsoft.Extensions.Primitives/9.0.4": {
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "Microsoft.OpenApi/1.6.14": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "assemblyVersion": "1.6.14.0",
+            "fileVersion": "1.6.14.0"
+          }
+        }
+      },
+      "Pipelines.Sockets.Unofficial/2.2.8": {
+        "dependencies": {
+          "System.IO.Pipelines": "9.0.4"
+        },
+        "runtime": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "2.2.8.1080"
+          }
+        }
+      },
+      "prometheus-net/8.0.1": {
+        "dependencies": {
+          "Microsoft.Extensions.Http": "6.0.0",
+          "Microsoft.Extensions.ObjectPool": "8.0.0"
+        },
+        "runtime": {
+          "lib/net7.0/Prometheus.NetStandard.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.1.0"
+          }
+        }
+      },
+      "prometheus-net.AspNetCore/8.0.1": {
+        "dependencies": {
+          "prometheus-net": "8.0.1"
+        },
+        "runtime": {
+          "lib/net6.0/Prometheus.AspNetCore.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.1.0"
+          }
+        }
+      },
+      "RabbitMQ.Client/6.5.0": {
+        "dependencies": {
+          "System.Memory": "4.5.5",
+          "System.Threading.Channels": "7.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/RabbitMQ.Client.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.5.0.0"
+          }
+        }
+      },
+      "StackExchange.Redis/2.8.37": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Pipelines.Sockets.Unofficial": "2.2.8"
+        },
+        "runtime": {
+          "lib/net8.0/StackExchange.Redis.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.8.37.59676"
+          }
+        }
+      },
+      "Swashbuckle.AspNetCore/6.6.2": {
+        "dependencies": {
+          "Microsoft.Extensions.ApiDescription.Server": "6.0.5",
+          "Swashbuckle.AspNetCore.Swagger": "6.6.2",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.6.2",
+          "Swashbuckle.AspNetCore.SwaggerUI": "6.6.2"
+        }
+      },
+      "Swashbuckle.AspNetCore.Swagger/6.6.2": {
+        "dependencies": {
+          "Microsoft.OpenApi": "1.6.14"
+        },
+        "runtime": {
+          "lib/net8.0/Swashbuckle.AspNetCore.Swagger.dll": {
+            "assemblyVersion": "6.6.2.0",
+            "fileVersion": "6.6.2.401"
+          }
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerGen/6.6.2": {
+        "dependencies": {
+          "Swashbuckle.AspNetCore.Swagger": "6.6.2"
+        },
+        "runtime": {
+          "lib/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {
+            "assemblyVersion": "6.6.2.0",
+            "fileVersion": "6.6.2.401"
+          }
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerUI/6.6.2": {
+        "runtime": {
+          "lib/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll": {
+            "assemblyVersion": "6.6.2.0",
+            "fileVersion": "6.6.2.401"
+          }
+        }
+      },
+      "System.Diagnostics.DiagnosticSource/8.0.0": {},
+      "System.Diagnostics.EventLog/8.0.0": {},
+      "System.IO.Hashing/8.0.0": {
+        "runtime": {
+          "lib/net8.0/System.IO.Hashing.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
+      "System.IO.Pipelines/9.0.4": {
+        "runtime": {
+          "lib/net8.0/System.IO.Pipelines.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "System.Memory/4.5.5": {},
+      "System.Text.Encodings.Web/9.0.4": {
+        "runtime": {
+          "lib/net8.0/System.Text.Encodings.Web.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll": {
+            "rid": "browser",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "System.Text.Json/9.0.4": {
+        "dependencies": {
+          "System.IO.Pipelines": "9.0.4",
+          "System.Text.Encodings.Web": "9.0.4"
+        },
+        "runtime": {
+          "lib/net8.0/System.Text.Json.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "System.Threading.Channels/7.0.0": {},
+      "Yarp.ReverseProxy/2.3.0": {
+        "dependencies": {
+          "System.IO.Hashing": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Yarp.ReverseProxy.dll": {
+            "assemblyVersion": "2.3.0.0",
+            "fileVersion": "2.300.25.12702"
+          }
+        }
+      },
+      "Communication.Tech.Gateway/1.0.0": {
+        "dependencies": {
+          "Confluent.Kafka": "2.8.0",
+          "Grpc.AspNetCore": "2.70.0",
+          "Grpc.AspNetCore.Server.Reflection": "2.70.0",
+          "Grpc.Core.Api": "2.70.0",
+          "Microsoft.Extensions.Configuration.Json": "9.0.4",
+          "Microsoft.Extensions.Hosting": "8.0.0",
+          "RabbitMQ.Client": "6.5.0",
+          "StackExchange.Redis": "2.8.37",
+          "Swashbuckle.AspNetCore": "6.6.2",
+          "prometheus-net.AspNetCore": "8.0.1"
+        },
+        "runtime": {
+          "Communication.Tech.Gateway.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Communication.Tech.Server/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ChilliCream.Nitro.App/28.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-G6CZod8ForeoVMXigRyAxTTqiiUYcppE85UY/zy4XLMunpF1Ginn5njWK+F+93bw3x5SssPR/fexEpOtQqkVLw==",
+      "path": "chillicream.nitro.app/28.0.7",
+      "hashPath": "chillicream.nitro.app.28.0.7.nupkg.sha512"
+    },
+    "Confluent.Kafka/2.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-i5Qb5BPthGXmLRSZWXVLPVNfo9Mxt+UieC+E/ZTFmlGIuPPd57g7Sxp8QP7fYp7qEBXs561jvWDLGaCZqV9ycg==",
+      "path": "confluent.kafka/2.8.0",
+      "hashPath": "confluent.kafka.2.8.0.nupkg.sha512"
+    },
+    "Google.Protobuf/3.30.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Y2aOVLIt75yeeEWigg9V9YnjsEm53sADtLGq0gLhwaXpk3iu8tYSoauolyhenagA2sWno2TQ2WujI0HQd6s1Vw==",
+      "path": "google.protobuf/3.30.2",
+      "hashPath": "google.protobuf.3.30.2.nupkg.sha512"
+    },
+    "GraphQL/8.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BZkfH7GVacTZEkyqa4XN9mW12UA/0XYrpEkkrJnNBf0Pqw8CZWQfItLaWgG2C1Ju9YHH1UUG+LmIpo8iMP6pKA==",
+      "path": "graphql/8.5.0",
+      "hashPath": "graphql.8.5.0.nupkg.sha512"
+    },
+    "GraphQL-Parser/9.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5XWJGKHdVi8pyD4P0EglmJmlXEGs0HzvGlEBf3+/Ve1jLYBBKIOkKvY0Ej17b9Kn1bbBxkrmghqbmsMbkLL1nQ==",
+      "path": "graphql-parser/9.5.0",
+      "hashPath": "graphql-parser.9.5.0.nupkg.sha512"
+    },
+    "GraphQL.Analyzers/8.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jwfvZD5agmw9J8iZEe6BUfKAY+/lC7EqDQg+6JRwXaQ6G/MCLy8jyBc2SHF/2JdAtrkygc1bVyCUP5mR2PHzVA==",
+      "path": "graphql.analyzers/8.5.0",
+      "hashPath": "graphql.analyzers.8.5.0.nupkg.sha512"
+    },
+    "GreenDonut/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PYNoLm3MJBxDffGJkQLIKSKbHcN93szDQW6JEWpJo0phKy78HB1sfmJFETq9/XAj2XiifuYJqXsjyyOfEaO7iQ==",
+      "path": "greendonut/15.1.5",
+      "hashPath": "greendonut.15.1.5.nupkg.sha512"
+    },
+    "GreenDonut.Abstractions/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Jf+EFXCa2PD7USnN5w3+jSKUcwTh/ArPBRlCsQPq6H8kfZnKIMQGYD0Ght/im3O5G31kceyyhHqHk7CSld2T+Q==",
+      "path": "greendonut.abstractions/15.1.5",
+      "hashPath": "greendonut.abstractions.15.1.5.nupkg.sha512"
+    },
+    "GreenDonut.Data/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DqMqzcLaBMMurei8BKEJTu5U7bwSVG0XLPn6vV0Kw5ZJn4GXcQrH72Rf+eljMGrDCP4EHu0ka+QEyVNZIl/g6A==",
+      "path": "greendonut.data/15.1.5",
+      "hashPath": "greendonut.data.15.1.5.nupkg.sha512"
+    },
+    "GreenDonut.Data.Abstractions/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4MFY8J/wv6FZ1IzJN/eggOpSJpvLAkx+2ttKUtucC4d1qlmKXKrcSvN93/SkIlAHt1YDSWBUhME7vh5u2JsTLg==",
+      "path": "greendonut.data.abstractions/15.1.5",
+      "hashPath": "greendonut.data.abstractions.15.1.5.nupkg.sha512"
+    },
+    "GreenDonut.Data.Primitives/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mtDz04ywC2mJpl5VO7rch9P+zpr1MZLsIch1gD+WZzhEBA4oMb2kqOLq8U1+zgbojm5k01CGChuzmi0eemz+kA==",
+      "path": "greendonut.data.primitives/15.1.5",
+      "hashPath": "greendonut.data.primitives.15.1.5.nupkg.sha512"
+    },
+    "Grpc.AspNetCore/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-s29ST5F2/PZLzOnfqfeDn0emAZajBtYnV9G7hkbK8Eu9+XphoL3KfiEsg2eBsx7P9YYQXcksDbE+CbHApMZeJA==",
+      "path": "grpc.aspnetcore/2.70.0",
+      "hashPath": "grpc.aspnetcore.2.70.0.nupkg.sha512"
+    },
+    "Grpc.AspNetCore.Server/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9d6JuMLSxwOX4zERV7HBwq1XL8DD48a6FSoxD5dDXrCz/o0HqMXE2+lRcXHckOlz1JCesznW8XMMJdsU1FfY7w==",
+      "path": "grpc.aspnetcore.server/2.70.0",
+      "hashPath": "grpc.aspnetcore.server.2.70.0.nupkg.sha512"
+    },
+    "Grpc.AspNetCore.Server.ClientFactory/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-k4GrvUAgVWm7DyhnV55MHdX4bQSpZVEQmlZO3bdSmGZ+z6Hx+CwDlhqiReczCm6qbzSUbS1YW0t7z7UEObTwKA==",
+      "path": "grpc.aspnetcore.server.clientfactory/2.70.0",
+      "hashPath": "grpc.aspnetcore.server.clientfactory.2.70.0.nupkg.sha512"
+    },
+    "Grpc.AspNetCore.Server.Reflection/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eTwtLFAaRkZ/efEoDFF+zjpAMYDkGHZtZTZyaTyuJss22lasKX0xW9J489a13ynTV1s/tiFEwAsDlWrweVepDA==",
+      "path": "grpc.aspnetcore.server.reflection/2.70.0",
+      "hashPath": "grpc.aspnetcore.server.reflection.2.70.0.nupkg.sha512"
+    },
+    "Grpc.Core.Api/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-66UotvWcSIq41oiQhLWcQACyKPM4umxXNiht5DQTLZJfNwEswWOcS7Z0xIEHyNIBE7ZpjotH22bEjTkvhPxmVw==",
+      "path": "grpc.core.api/2.70.0",
+      "hashPath": "grpc.core.api.2.70.0.nupkg.sha512"
+    },
+    "Grpc.Net.Client/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xNv0FFCVJa5S1beUtye82WFCxKThuE1jbN8DO1x1Rj8VSIWXLBUmfSID5a1fGzsU2R/EMfwPoWclJ2RMfQuGXw==",
+      "path": "grpc.net.client/2.70.0",
+      "hashPath": "grpc.net.client.2.70.0.nupkg.sha512"
+    },
+    "Grpc.Net.ClientFactory/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Qg+93oj/8RdEw3PnLZNNYWnWCWyJYC/ZYZcjeln/pLaxLaPvdXES1peiqSJUI4wLFZ1JwGlbWt8+nM1i2E7ihg==",
+      "path": "grpc.net.clientfactory/2.70.0",
+      "hashPath": "grpc.net.clientfactory.2.70.0.nupkg.sha512"
+    },
+    "Grpc.Net.Common/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rBdEUMyCwa+iB8mqC6JKyPbj3SBHHkReJj/yy/XKJI63GcG6w9DJMMGTVcYHqq4Ci2W4m0HT4jt2pFfFscar8g==",
+      "path": "grpc.net.common/2.70.0",
+      "hashPath": "grpc.net.common.2.70.0.nupkg.sha512"
+    },
+    "Grpc.Reflection/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gsYDRT7zYazUZqsPfXCmArMeKAniz8b0f0EBvvD/Mul8SneHIHQRaYPTHOmjI/FF/YRC6wnoG+vQanyrZ6NncA==",
+      "path": "grpc.reflection/2.70.0",
+      "hashPath": "grpc.reflection.2.70.0.nupkg.sha512"
+    },
+    "Grpc.Tools/2.70.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Mibx8fUC1ihh1jZU5+yy7nR4C05FPSI1uKAtSaLkorU3xX/6XNWhuZhku5BuWdw2FRPuWKDfpts5f7a1UUqH2g==",
+      "path": "grpc.tools/2.70.0",
+      "hashPath": "grpc.tools.2.70.0.nupkg.sha512"
+    },
+    "HotChocolate/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bvvvv2lCUDcZ9nmADbvAVqrFNXH+15pVXHl7gKGFjzoqb1btjEwNFnwB3Xy1AKMif5iJGf3gMaTn2IRYwISBiQ==",
+      "path": "hotchocolate/15.1.5",
+      "hashPath": "hotchocolate.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Abstractions/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-x5NjfoLJg8X3ROCu6eCeF6ennFQ5SX8LA0mVOHZgs0pGnIILrFnlanHkzksd2aCrE1yxqRJwfiHl8ItX1UXtvg==",
+      "path": "hotchocolate.abstractions/15.1.5",
+      "hashPath": "hotchocolate.abstractions.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.AspNetCore/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ef24FjiD8Pa7ilL8kSrH2hnqsYDu7xaJSxoIpOLKftq2okeqeuAdQkpYL1yUxtKFIwaITF+eILOekBU+lLHAXg==",
+      "path": "hotchocolate.aspnetcore/15.1.5",
+      "hashPath": "hotchocolate.aspnetcore.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Authorization/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-P14+Jza980sW0SHavp6aku3S4TLqD0ntr9kxLYu6mBKcS4wxzBF4ZbqrwDfflMBIcKzVamAu9UDhJfCDNwlG6g==",
+      "path": "hotchocolate.authorization/15.1.5",
+      "hashPath": "hotchocolate.authorization.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.CostAnalysis/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Q43RWh9Fbxqf8BTCDI/fadIAO65dFDuVZYB7E4OIvfXHG+n3kM0hZ2u70zhC8VvHnRPnPm09WQHVeQw3AOwFbQ==",
+      "path": "hotchocolate.costanalysis/15.1.5",
+      "hashPath": "hotchocolate.costanalysis.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Execution/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sESDqFHT7zrP6xuTS9LwdK90zAN4snQXUd4I13R+28vh1YLqx1GK/nsknSt3MyndsA+wUwWa2NeJ8DTU+dn3dQ==",
+      "path": "hotchocolate.execution/15.1.5",
+      "hashPath": "hotchocolate.execution.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Execution.Abstractions/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-H+Rdx/szpBno+t+gHkvn/hE8726h80uLe26pC+wuMBK7FqRhwLbTR74pj0WfJeY594m1+XOkBRq/K8hDPzbWYA==",
+      "path": "hotchocolate.execution.abstractions/15.1.5",
+      "hashPath": "hotchocolate.execution.abstractions.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Execution.Projections/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UAXe/yDPOvvK/ASc008rpubaCJGfsesz9rL0kiBk1Zgyu05IewcWJ/Y19FV6iYi/XoB+gGdkiui3OVekjyD5rg==",
+      "path": "hotchocolate.execution.projections/15.1.5",
+      "hashPath": "hotchocolate.execution.projections.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Features/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aPoIxccj+fnXlx2EPZpmu0Hwp/Lg/PZgw6W3vE+KeMzBuiJUXMYoltXt6IRNoM37ltL5aKEWHQ2OecqBpchbvw==",
+      "path": "hotchocolate.features/15.1.5",
+      "hashPath": "hotchocolate.features.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Fetching/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PCc6/8gT9wKcwREiT2e8Zl5nJWKEF7R2/KFKiPrsDXvOB9TyUGKq7FH8C8Z/zQSatAr/s8yyLh+KtW0FLzRd/A==",
+      "path": "hotchocolate.fetching/15.1.5",
+      "hashPath": "hotchocolate.fetching.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Language/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z/kTy9ghXGmttyc0X8cHXF0HBQSUrHgJmzN7s5ZNXydrPa7I00c0u3uNwXTbGsF0/bf8tu27AGgE3E5MR+O2ew==",
+      "path": "hotchocolate.language/15.1.5",
+      "hashPath": "hotchocolate.language.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Language.SyntaxTree/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-g9wXM/w6m3KAe9jqu5pWC32MyvpyJ6aleL6UFoglAoX178+v9eeqLrRvoQYp9OTLKreU+LZd1dgN+4ZlNB7xTA==",
+      "path": "hotchocolate.language.syntaxtree/15.1.5",
+      "hashPath": "hotchocolate.language.syntaxtree.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Language.Utf8/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+mY3g+K2cMunOnCvh5lgGDbyfPPiFo0rfnEX6IFPLGBQnBhO5ohOQojXhbU5D0SUrPl9yBaHThpnKqrThnZeJQ==",
+      "path": "hotchocolate.language.utf8/15.1.5",
+      "hashPath": "hotchocolate.language.utf8.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Language.Visitors/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+fcAmMcJEL4ruHxHXBF4j8SSOHFh4l/C3xN7QXAsl7X4Q/uDB5a8yH8DtRS9lJR3+WNiHAD5ev4fLtwqBZVsTQ==",
+      "path": "hotchocolate.language.visitors/15.1.5",
+      "hashPath": "hotchocolate.language.visitors.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Language.Web/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6OFRzHif+rXYhbYbMSBwAkUtXNQSvPEh5qrZr27kQAR6R2mh7FJ26exT5M0ZEzFxGlweCvzQFaXw4v36fHX5nw==",
+      "path": "hotchocolate.language.web/15.1.5",
+      "hashPath": "hotchocolate.language.web.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Primitives/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-02ymWkwUsmFKGsu73lJtEkFUj4oPKWZSWZ20yetEEIOCI/cAFy+qZ/DWVkyMZvsQOpNRwHXy79OZydV3wWKh+w==",
+      "path": "hotchocolate.primitives/15.1.5",
+      "hashPath": "hotchocolate.primitives.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Subscriptions/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hKnlsjG5lVOKxDfuYWZTgbevOedbP9Z7sXPESZOZvZLxUpJtKcdIyTmuFTSpBDZC/EvXeP0Zjo7s3EODGCog/Q==",
+      "path": "hotchocolate.subscriptions/15.1.5",
+      "hashPath": "hotchocolate.subscriptions.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Subscriptions.InMemory/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NEPaZ3bzJMpvIlFbZnCg3wSzwnJ4KoXzbKZVROpTokU4LDPrI0zVMmHAAEfyR/LIeuhF+Z3LtyIMVKSdWacBPg==",
+      "path": "hotchocolate.subscriptions.inmemory/15.1.5",
+      "hashPath": "hotchocolate.subscriptions.inmemory.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Transport.Sockets/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6M3QGA6WxRAvvRrdiEChTGaEpPLp3hYVb+WqIjlPrgGscwh7qb/DNa6hNQNmxjxanM4ZS0K0yg6kZLymeVt9Vg==",
+      "path": "hotchocolate.transport.sockets/15.1.5",
+      "hashPath": "hotchocolate.transport.sockets.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Types/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UsM/uKWxa40jHQakfnn3QagTtpOcJozcEpKkejFZrNjGuk/dQCfuAN7DYGpgflMr+iJpWkH1kZ/zBRzjPYg3tw==",
+      "path": "hotchocolate.types/15.1.5",
+      "hashPath": "hotchocolate.types.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Types.CursorPagination/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-REbPV9jc4gslAZOoi1HziThOpDfX9OEg7K2XOb9jPZWa6AvsmdAHWloMTjD63QTOeOw34h5+4ZTUfvPouaryIg==",
+      "path": "hotchocolate.types.cursorpagination/15.1.5",
+      "hashPath": "hotchocolate.types.cursorpagination.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Types.CursorPagination.Extensions/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XbWOFRzQZBphqgCCJGtfm2OjvgseypSgfsqw1LVCjJ0U8r5yc6JXAovrcFypxIKuBIxkDEVIG8OY1vBa/euGkA==",
+      "path": "hotchocolate.types.cursorpagination.extensions/15.1.5",
+      "hashPath": "hotchocolate.types.cursorpagination.extensions.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Types.Errors/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wLq/cBP9+zmkrwFnOKuXe0sgP0D9Zk5YD9DIrguBy/qFjjtnfzb1EqAGjfsL9RSCUhXpEYCUKEpkCStonr9T+Q==",
+      "path": "hotchocolate.types.errors/15.1.5",
+      "hashPath": "hotchocolate.types.errors.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Types.Mutations/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-s9pvZYMqwyeqGfaTps4BheW9WoUM7LPoobFGtSvPZP0lmp98n/x7WORFGES5Tndcwr2oToIPtN23zLM7+w9gwg==",
+      "path": "hotchocolate.types.mutations/15.1.5",
+      "hashPath": "hotchocolate.types.mutations.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Types.Queries/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-x0EG2UO1BethVEdgspGHKSDygU9JdwtAiJLYf10vABG/L35VEU2zqQHRzSP3MJaIpU2cZEcQ5xpErytc6Yx1NQ==",
+      "path": "hotchocolate.types.queries/15.1.5",
+      "hashPath": "hotchocolate.types.queries.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Types.Scalars.Upload/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Hums5ecnrtBvgTD0va8odJuRJtoXm0MSdzcYMPyTyBFKPdjBIlH7qoknWgjO/zxP2wuaOxvGtmA7ckWeNu8AmA==",
+      "path": "hotchocolate.types.scalars.upload/15.1.5",
+      "hashPath": "hotchocolate.types.scalars.upload.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Types.Shared/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Wa5LL7o0zYuHzCpfqDMD3wUB+CT/eRe0SqT5oDnAr3R88eL0BPe3FrQiCjxLqFI4+3QhN5FL+PsA7CxSKh01pA==",
+      "path": "hotchocolate.types.shared/15.1.5",
+      "hashPath": "hotchocolate.types.shared.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Utilities/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+/MWRkWfKL4TBzeOTTVsbG42UYZ4Y61DwU4u3AmH8hKX0BxIu68ERXnBlXNce+VZnPuxQmx589hhPtrjjcTYmw==",
+      "path": "hotchocolate.utilities/15.1.5",
+      "hashPath": "hotchocolate.utilities.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Utilities.DependencyInjection/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-F8XucpOKaJ6/mVp5gey7lZi5tjMr4IpYn421hCzranhBewddZJ2ryiho5YJRGxIE7pEuSkIIO69pq+Fh43gcnw==",
+      "path": "hotchocolate.utilities.dependencyinjection/15.1.5",
+      "hashPath": "hotchocolate.utilities.dependencyinjection.15.1.5.nupkg.sha512"
+    },
+    "HotChocolate.Validation/15.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QCreBpr/cnVSi+i/sQpKOjgkA0iEqjRRN8O+O7jLMnBS3DBJ10X4QG99BtBZrHrn3E+i7QTnuXTCK0QKRCGCyA==",
+      "path": "hotchocolate.validation/15.1.5",
+      "hashPath": "hotchocolate.validation.15.1.5.nupkg.sha512"
+    },
+    "librdkafka.redist/2.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Gg8nPjn9+Sp6X+O1g9duKarCteFQjpkCVJS06ihVQf4PVnR/jPXkN3vwvWe5zP4L47xiEfU+6wIp4pbIvaQ6rQ==",
+      "path": "librdkafka.redist/2.8.0",
+      "hashPath": "librdkafka.redist.2.8.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ckb5EDBUNJdFWyajfXzUIMRkhf52fHZOQuuZg/oiu8y7zDCVwD0iHhew6MnThjHmevanpxL3f5ci2TtHQEN6bw==",
+      "path": "microsoft.extensions.apidescription.server/6.0.5",
+      "hashPath": "microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KIVBrMbItnCJDd1RF4KEaE8jZwDJcDUJW5zXpbwQ05HNYTK1GveHxHK0B3SjgDJuR48GRACXAO+BLhL8h34S7g==",
+      "path": "microsoft.extensions.configuration/9.0.4",
+      "hashPath": "microsoft.extensions.configuration.9.0.4.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0LN/DiIKvBrkqp7gkF3qhGIeZk6/B63PthAHjQsxymJfIBcz0kbf4/p/t4lMgggVxZ+flRi5xvTwlpPOoZk8fg==",
+      "path": "microsoft.extensions.configuration.abstractions/9.0.4",
+      "hashPath": "microsoft.extensions.configuration.abstractions.9.0.4.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Binder/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mBMoXLsr5s1y2zOHWmKsE9veDcx8h1x/c3rz4baEdQKTeDcmQAPNbB54Pi/lhFO3K431eEq6PFbMgLaa6PHFfA==",
+      "path": "microsoft.extensions.configuration.binder/8.0.0",
+      "hashPath": "microsoft.extensions.configuration.binder.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.CommandLine/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NZuZMz3Q8Z780nKX3ifV1fE7lS+6pynDHK71OfU4OZ1ItgvDOhyOC7E6z+JMZrAj63zRpwbdldYFk499t3+1dQ==",
+      "path": "microsoft.extensions.configuration.commandline/8.0.0",
+      "hashPath": "microsoft.extensions.configuration.commandline.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.EnvironmentVariables/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-plvZ0ZIpq+97gdPNNvhwvrEZ92kNml9hd1pe3idMA7svR0PztdzVLkoWLcRFgySYXUJc3kSM3Xw3mNFMo/bxRA==",
+      "path": "microsoft.extensions.configuration.environmentvariables/8.0.0",
+      "hashPath": "microsoft.extensions.configuration.environmentvariables.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.FileExtensions/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UY864WQ3AS2Fkc8fYLombWnjrXwYt+BEHHps0hY4sxlgqaVW06AxbpgRZjfYf8PyRbplJqruzZDB/nSLT+7RLQ==",
+      "path": "microsoft.extensions.configuration.fileextensions/9.0.4",
+      "hashPath": "microsoft.extensions.configuration.fileextensions.9.0.4.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Json/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vVXI70CgT/dmXV3MM+n/BR2rLXEoAyoK0hQT+8MrbCMuJBiLRxnTtSrksNiASWCwOtxo/Tyy7CO8AGthbsYxnw==",
+      "path": "microsoft.extensions.configuration.json/9.0.4",
+      "hashPath": "microsoft.extensions.configuration.json.9.0.4.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.UserSecrets/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ihDHu2dJYQird9pl2CbdwuNDfvCZdOS0S7SPlNfhPt0B81UTT+yyZKz2pimFZGUp3AfuBRnqUCxB2SjsZKHVUw==",
+      "path": "microsoft.extensions.configuration.usersecrets/8.0.0",
+      "hashPath": "microsoft.extensions.configuration.usersecrets.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V8S3bsm50ig6JSyrbcJJ8bW2b9QLGouz+G1miK3UTaOWmMtFwNNNzUf4AleyDWUmTrWMLNnFSLEQtxmxgNQnNQ==",
+      "path": "microsoft.extensions.dependencyinjection/8.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cjWrLkJXK0rs4zofsK4bSdg+jhDLTaxrkXu4gS6Y7MAlCvRyNNgwY/lJi5RDlQOnSZweHqoyvgvbdvQsRIW+hg==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3PZp/YSkIXrF7QK7PfC1bkyRYwqOHpWFad8Qx+4wkuumAeXo1NHaxpS9LboNA9OvNSAu+QOVlXbMyoY+pHSqcw==",
+      "path": "microsoft.extensions.diagnostics/8.0.0",
+      "hashPath": "microsoft.extensions.diagnostics.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JHYCQG7HmugNYUhOl368g+NMxYE/N/AiclCYRNlgCY9eVyiBkOHMwK4x60RYMxv9EL3+rmj1mqHvdCiPpC+D4Q==",
+      "path": "microsoft.extensions.diagnostics.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.diagnostics.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileProviders.Abstractions/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gQN2o/KnBfVk6Bd71E2YsvO5lsqrqHmaepDGk+FB/C4aiQY9B0XKKNKfl5/TqcNOs9OEithm4opiMHAErMFyEw==",
+      "path": "microsoft.extensions.fileproviders.abstractions/9.0.4",
+      "hashPath": "microsoft.extensions.fileproviders.abstractions.9.0.4.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileProviders.Physical/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qkQ9V7KFZdTWNThT7ke7E/Jad38s46atSs3QUYZB8f3thBTrcrousdY4Y/tyCtcH5YjsPSiByjuN+L8W/ThMQg==",
+      "path": "microsoft.extensions.fileproviders.physical/9.0.4",
+      "hashPath": "microsoft.extensions.fileproviders.physical.9.0.4.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileSystemGlobbing/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-05Lh2ItSk4mzTdDWATW9nEcSybwprN8Tz42Fs5B+jwdXUpauktdAQUI1Am4sUQi2C63E5hvQp8gXvfwfg9mQGQ==",
+      "path": "microsoft.extensions.filesystemglobbing/9.0.4",
+      "hashPath": "microsoft.extensions.filesystemglobbing.9.0.4.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Hosting/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ItYHpdqVp5/oFLT5QqbopnkKlyFG9EW/9nhM6/yfObeKt6Su0wkBio6AizgRHGNwhJuAtlE5VIjow5JOTrip6w==",
+      "path": "microsoft.extensions.hosting/8.0.0",
+      "hashPath": "microsoft.extensions.hosting.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Hosting.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AG7HWwVRdCHlaA++1oKDxLsXIBxmDpMPb3VoyOoAghEWnkUvEAdYQUwnV4jJbAaa/nMYNiEh5ByoLauZBEiovg==",
+      "path": "microsoft.extensions.hosting.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.hosting.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Http/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-15+pa2G0bAMHbHewaQIdr/y6ag2H3yh4rd9hTXavtWDzQBkvpe2RMqFg8BxDpcQWssmjmBApGPcw93QRz6YcMg==",
+      "path": "microsoft.extensions.http/6.0.0",
+      "hashPath": "microsoft.extensions.http.6.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tvRkov9tAJ3xP51LCv3FJ2zINmv1P8Hi8lhhtcKGqM+ImiTCC84uOPEI4z8Cdq2C3o9e+Aa0Gw0rmrsJD77W+w==",
+      "path": "microsoft.extensions.logging/8.0.0",
+      "hashPath": "microsoft.extensions.logging.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-arDBqTgFCyS0EvRV7O3MZturChstm50OJ0y9bDJvAcmEPJm0FFpFyjU/JLYyStNGGey081DvnQYlncNX5SJJGA==",
+      "path": "microsoft.extensions.logging.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Configuration/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ixXXV0G/12g6MXK65TLngYN9V5hQQRuV+fZi882WIoVJT7h5JvoYoxTEwCgdqwLjSneqh1O+66gM8sMr9z/rsQ==",
+      "path": "microsoft.extensions.logging.configuration/8.0.0",
+      "hashPath": "microsoft.extensions.logging.configuration.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Console/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e+48o7DztoYog+PY430lPxrM4mm3PbA6qucvQtUDDwVo4MO+ejMw7YGc/o2rnxbxj4isPxdfKFzTxvXMwAz83A==",
+      "path": "microsoft.extensions.logging.console/8.0.0",
+      "hashPath": "microsoft.extensions.logging.console.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Debug/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dt0x21qBdudHLW/bjMJpkixv858RRr8eSomgVbU8qljOyfrfDGi1JQvpF9w8S7ziRPtRKisuWaOwFxJM82GxeA==",
+      "path": "microsoft.extensions.logging.debug/8.0.0",
+      "hashPath": "microsoft.extensions.logging.debug.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.EventLog/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3X9D3sl7EmOu7vQp5MJrmIJBl5XSdOhZPYXUeFfYa6Nnm9+tok8x3t3IVPLhm7UJtPOU61ohFchw8rNm9tIYOQ==",
+      "path": "microsoft.extensions.logging.eventlog/8.0.0",
+      "hashPath": "microsoft.extensions.logging.eventlog.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.EventSource/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oKcPMrw+luz2DUAKhwFXrmFikZWnyc8l2RKoQwqU3KIZZjcfoJE0zRHAnqATfhRZhtcbjl/QkiY2Xjxp0xu+6w==",
+      "path": "microsoft.extensions.logging.eventsource/8.0.0",
+      "hashPath": "microsoft.extensions.logging.eventsource.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.ObjectPool/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4pm+XgxSukskwjzDDfSjG4KNUIOdFF2VaqZZDtTzoyQMOVSnlV6ZM8a9aVu5dg9LVZTB//utzSc8fOi0b0Mb2Q==",
+      "path": "microsoft.extensions.objectpool/8.0.0",
+      "hashPath": "microsoft.extensions.objectpool.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JOVOfqpnqlVLUzINQ2fox8evY2SKLYJ3BV8QDe/Jyp21u1T7r45x/R/5QdteURMR5r01GxeJSBBUOCOyaNXA3g==",
+      "path": "microsoft.extensions.options/8.0.0",
+      "hashPath": "microsoft.extensions.options.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options.ConfigurationExtensions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0f4DMRqEd50zQh+UyJc+/HiBsZ3vhAQALgdkcQEalSH1L2isdC7Yj54M3cyo5e+BeO5fcBQ7Dxly8XiBBcvRgw==",
+      "path": "microsoft.extensions.options.configurationextensions/8.0.0",
+      "hashPath": "microsoft.extensions.options.configurationextensions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SPFyMjyku1nqTFFJ928JAMd0QnRe4xjE7KeKnZMWXf3xk+6e0WiOZAluYtLdbJUXtsl2cCRSi8cBquJ408k8RA==",
+      "path": "microsoft.extensions.primitives/9.0.4",
+      "hashPath": "microsoft.extensions.primitives.9.0.4.nupkg.sha512"
+    },
+    "Microsoft.OpenApi/1.6.14": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tTaBT8qjk3xINfESyOPE2rIellPvB7qpVqiWiyA/lACVvz+xOGiXhFUfohcx82NLbi5avzLW0lx+s6oAqQijfw==",
+      "path": "microsoft.openapi/1.6.14",
+      "hashPath": "microsoft.openapi.1.6.14.nupkg.sha512"
+    },
+    "Pipelines.Sockets.Unofficial/2.2.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zG2FApP5zxSx6OcdJQLbZDk2AVlN2BNQD6MorwIfV6gVj0RRxWPEp2LXAxqDGZqeNV1Zp0BNPcNaey/GXmTdvQ==",
+      "path": "pipelines.sockets.unofficial/2.2.8",
+      "hashPath": "pipelines.sockets.unofficial.2.2.8.nupkg.sha512"
+    },
+    "prometheus-net/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-A9sOtQB2gEhujBxPKw+KcGScBiPvBmy4lYVM5OlETMj4xjVD5r/ixIg52HHg2P0lcImJTpfeWnD0/9tpQsRQTA==",
+      "path": "prometheus-net/8.0.1",
+      "hashPath": "prometheus-net.8.0.1.nupkg.sha512"
+    },
+    "prometheus-net.AspNetCore/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KYM1abaC+V4KwF+pdJOxNsrec7AIORqRYFC5idemIKyQWmmI7v+WMu45mTR2CZV2CPoUQXuAP4ufNBK6ce1v0w==",
+      "path": "prometheus-net.aspnetcore/8.0.1",
+      "hashPath": "prometheus-net.aspnetcore.8.0.1.nupkg.sha512"
+    },
+    "RabbitMQ.Client/6.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9hY5HiWPtCla1/l0WmXmLnqoX7iKE3neBQUWnetIJrRpOvTbO//XQfQDh++xgHCshL40Kv/6bR0HDkmJz46twg==",
+      "path": "rabbitmq.client/6.5.0",
+      "hashPath": "rabbitmq.client.6.5.0.nupkg.sha512"
+    },
+    "StackExchange.Redis/2.8.37": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ULscDAQR+z132IsLczXcM/PG+EyfQMNxhvqjG1Xd/h/J1O9prsUU4pG9d95xv77lUF8v3X6owpf/11Uh0uvZAQ==",
+      "path": "stackexchange.redis/2.8.37",
+      "hashPath": "stackexchange.redis.2.8.37.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore/6.6.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+NB4UYVYN6AhDSjW0IJAd1AGD8V33gemFNLPaxKTtPkHB+HaKAKf9MGAEUPivEWvqeQfcKIw8lJaHq6LHljRuw==",
+      "path": "swashbuckle.aspnetcore/6.6.2",
+      "hashPath": "swashbuckle.aspnetcore.6.6.2.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.Swagger/6.6.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ovgPTSYX83UrQUWiS5vzDcJ8TEX1MAxBgDFMK45rC24MorHEPQlZAHlaXj/yth4Zf6xcktpUgTEBvffRQVwDKA==",
+      "path": "swashbuckle.aspnetcore.swagger/6.6.2",
+      "hashPath": "swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.SwaggerGen/6.6.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zv4ikn4AT1VYuOsDCpktLq4QDq08e7Utzbir86M5/ZkRaLXbCPF11E1/vTmOiDzRTl0zTZINQU2qLKwTcHgfrA==",
+      "path": "swashbuckle.aspnetcore.swaggergen/6.6.2",
+      "hashPath": "swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.SwaggerUI/6.6.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mBBb+/8Hm2Q3Wygag+hu2jj69tZW5psuv0vMRXY07Wy+Rrj40vRP8ZTbKBhs91r45/HXT4aY4z0iSBYx1h6JvA==",
+      "path": "swashbuckle.aspnetcore.swaggerui/6.6.2",
+      "hashPath": "swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512"
+    },
+    "System.Diagnostics.DiagnosticSource/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-c9xLpVz6PL9lp/djOWtk5KPDZq3cSYpmXoJQY524EOtuFl5z9ZtsotpsyrDW40U1DRnQSYvcPKEUV0X//u6gkQ==",
+      "path": "system.diagnostics.diagnosticsource/8.0.0",
+      "hashPath": "system.diagnostics.diagnosticsource.8.0.0.nupkg.sha512"
+    },
+    "System.Diagnostics.EventLog/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fdYxcRjQqTTacKId/2IECojlDSFvp7LP5N78+0z/xH7v/Tuw5ZAxu23Y6PTCRinqyu2ePx+Gn1098NC6jM6d+A==",
+      "path": "system.diagnostics.eventlog/8.0.0",
+      "hashPath": "system.diagnostics.eventlog.8.0.0.nupkg.sha512"
+    },
+    "System.IO.Hashing/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ne1843evDugl0md7Fjzy6QjJrzsjh46ZKbhf8GwBXb5f/gw97J4bxMs0NQKifDuThh/f0bZ0e62NPl1jzTuRqA==",
+      "path": "system.io.hashing/8.0.0",
+      "hashPath": "system.io.hashing.8.0.0.nupkg.sha512"
+    },
+    "System.IO.Pipelines/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-luF2Xba+lTe2GOoNQdZLe8q7K6s7nSpWZl9jIwWNMszN4/Yv0lmxk9HISgMmwdyZ83i3UhAGXaSY9o6IJBUuuA==",
+      "path": "system.io.pipelines/9.0.4",
+      "hashPath": "system.io.pipelines.9.0.4.nupkg.sha512"
+    },
+    "System.Memory/4.5.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",
+      "path": "system.memory/4.5.5",
+      "hashPath": "system.memory.4.5.5.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V+5cCPpk1S2ngekUs9nDrQLHGiWFZMg8BthADQr+Fwi59a8DdHFu26S2oi9Bfgv+d67bqmkPqctJXMEXiimXUg==",
+      "path": "system.text.encodings.web/9.0.4",
+      "hashPath": "system.text.encodings.web.9.0.4.nupkg.sha512"
+    },
+    "System.Text.Json/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pYtmpcO6R3Ef1XilZEHgXP2xBPVORbYEzRP7dl0IAAbN8Dm+kfwio8aCKle97rAWXOExr292MuxWYurIuwN62g==",
+      "path": "system.text.json/9.0.4",
+      "hashPath": "system.text.json.9.0.4.nupkg.sha512"
+    },
+    "System.Threading.Channels/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qmeeYNROMsONF6ndEZcIQ+VxR4Q/TX/7uIVLJqtwIWL7dDWeh0l1UIqgo4wYyjG//5lUNhwkLDSFl+pAWO6oiA==",
+      "path": "system.threading.channels/7.0.0",
+      "hashPath": "system.threading.channels.7.0.0.nupkg.sha512"
+    },
+    "Yarp.ReverseProxy/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gxtkN3a+9biu9V9Zd5NaTO6VZWXAnS2mhQ0R/VXmSPoTuiQNZsakKikrKpDtKxrL5nUYzbRsHtl40WNq+ZBKKg==",
+      "path": "yarp.reverseproxy/2.3.0",
+      "hashPath": "yarp.reverseproxy.2.3.0.nupkg.sha512"
+    },
+    "Communication.Tech.Gateway/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

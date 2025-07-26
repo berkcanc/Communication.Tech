@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>communication_tech</RootNamespace>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Confluent.Kafka" Version="2.8.0" />
+        <PackageReference Include="Grpc.Core.Api" Version="2.70.0" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.70.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.1" />
+        <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
+        <PackageReference Include="StackExchange.Redis" Version="2.8.37" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="..\Communication.Tech.Server\Protos\greeter.proto" GrpcServices="Client" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>
