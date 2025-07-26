@@ -22,6 +22,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>Gateway/appsettings.json</TargetPath>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
         <Protobuf Include="..\Communication.Tech.Server\Protos\greeter.proto" GrpcServices="Client" />
     </ItemGroup>
 

@@ -12,7 +12,7 @@
       <Content Update="appsettings.json">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <TargetPath>Consumer/appsettings.json</TargetPath>
       </Content>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
