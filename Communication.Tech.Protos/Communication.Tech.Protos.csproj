@@ -6,6 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\*.proto" />
+        <None Include="Protos\*.proto">
+            <Pack>true</Pack>
+            <PackagePath>contentFiles\any\any\Protos\</PackagePath>
+        </None>
     </ItemGroup>
 </Project>
