@@ -15,6 +15,7 @@ RUN dotnet restore "Communication.Tech.Consumer/Communication.Tech.Consumer.cspr
 
 COPY Communication.Tech.Consumer/ ./Communication.Tech.Consumer/
 COPY Communication.Tech.Gateway/ ./Communication.Tech.Gateway/
+COPY Communication.Tech.Protos/ ./Communication.Tech.Protos/
 
 WORKDIR "/src/Communication.Tech.Consumer"
 RUN dotnet build "./Communication.Tech.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
