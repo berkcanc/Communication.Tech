@@ -26,20 +26,17 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Server/appsettings.json</TargetPath>
         </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Protobuf Include="Protos\greeter.proto" GrpcServices="Server" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Communication.Tech.Gateway\Communication.Tech.Gateway.csproj" />
+        <Protobuf Include="../Communication.Tech.Protos/Protos/greeter.proto" GrpcServices="Server" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Communication.Tech.Protos\Communication.Tech.Protos.csproj" />
     </ItemGroup>
 
 </Project>

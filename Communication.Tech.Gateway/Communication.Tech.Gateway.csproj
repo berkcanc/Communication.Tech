@@ -22,13 +22,15 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Communication.Tech.Protos\Communication.Tech.Protos.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <None Update="appsettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Gateway/appsettings.json</TargetPath>
         </None>
-    </ItemGroup>
-    <ItemGroup>
-        <Protobuf Include="..\Communication.Tech.Server\Protos\greeter.proto" GrpcServices="Client" />
+        <Protobuf Include="../Communication.Tech.Protos/Protos/greeter.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>

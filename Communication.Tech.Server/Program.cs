@@ -1,5 +1,4 @@
-using communication_tech.Interfaces;
-using communication_tech.Services;
+using Communication.Tech.Protos;
 using Communication.Tech.Server;
 using Communication.Tech.Server.Interfaces;
 using Communication.Tech.Server.Services;
@@ -14,7 +13,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IGreeterService, GreeterService>();
 builder.Services.AddSingleton<BookRepository>();
 builder.Services.AddSingleton<WebSocketService>();
 builder.Services.AddSingleton<IPayloadGeneratorService, PayloadGeneratorService>();
@@ -86,11 +84,10 @@ app.Map("/ws", async context =>
 
 app.UseAuthorization();
 
-app.MapControllers();
-
 app.MapGrpcService<GreeterService>();
-app.MapGrpcReflectionService();
 app.MapGraphQL();
+
+app.MapControllers();
 
 app.UseWebSockets();
 

@@ -1,12 +1,11 @@
-using communication_tech;
 using communication_tech.Interfaces;
 using communication_tech.Middlewares;
 using communication_tech.Models;
 using communication_tech.Services;
+using Communication.Tech.Protos;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Prometheus;
 using StackExchange.Redis;
-using Communication.Tech.Server;
 
 
 var builder = WebApplication.CreateBuilder(args);

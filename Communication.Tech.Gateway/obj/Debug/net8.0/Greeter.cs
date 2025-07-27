@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Communication.Tech.Server {
+namespace Communication.Tech.Protos {
 
   /// <summary>Holder for reflection information generated from greeter.proto</summary>
   public static partial class GreeterReflection {
@@ -27,13 +27,13 @@ namespace Communication.Tech.Server {
             "Cg1ncmVldGVyLnByb3RvEgdncmVldGVyIhwKDEhlbGxvUmVxdWVzdBIMCgRu",
             "YW1lGAEgASgJIh0KCkhlbGxvUmVwbHkSDwoHbWVzc2FnZRgBIAEoCTJBCgdH",
             "cmVldGVyEjYKCFNheUhlbGxvEhUuZ3JlZXRlci5IZWxsb1JlcXVlc3QaEy5n",
-            "cmVldGVyLkhlbGxvUmVwbHlCHKoCGUNvbW11bmljYXRpb24uVGVjaC5TZXJ2",
-            "ZXJiBnByb3RvMw=="));
+            "cmVldGVyLkhlbGxvUmVwbHlCHKoCGUNvbW11bmljYXRpb24uVGVjaC5Qcm90",
+            "b3NiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Communication.Tech.Server.HelloRequest), global::Communication.Tech.Server.HelloRequest.Parser, new[]{ "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Communication.Tech.Server.HelloReply), global::Communication.Tech.Server.HelloReply.Parser, new[]{ "Message" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Communication.Tech.Protos.HelloRequest), global::Communication.Tech.Protos.HelloRequest.Parser, new[]{ "Name" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Communication.Tech.Protos.HelloReply), global::Communication.Tech.Protos.HelloReply.Parser, new[]{ "Message" }, null, null, null, null)
           }));
     }
     #endregion
@@ -55,7 +55,7 @@ namespace Communication.Tech.Server {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Communication.Tech.Server.GreeterReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Communication.Tech.Protos.GreeterReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -253,7 +253,7 @@ namespace Communication.Tech.Server {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Communication.Tech.Server.GreeterReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Communication.Tech.Protos.GreeterReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

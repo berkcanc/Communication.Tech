@@ -676,6 +676,7 @@
       "System.Threading.Channels/7.0.0": {},
       "Communication.Tech.Gateway/1.0.0": {
         "dependencies": {
+          "Communication.Tech.Protos": "1.0.0",
           "Confluent.Kafka": "2.8.0",
           "Grpc.AspNetCore": "2.70.0",
           "Grpc.AspNetCore.Server.Reflection": "2.70.0",
@@ -689,6 +690,14 @@
         },
         "runtime": {
           "Communication.Tech.Gateway.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Communication.Tech.Protos/1.0.0": {
+        "runtime": {
+          "Communication.Tech.Protos.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1130,6 +1139,11 @@
       "hashPath": "system.threading.channels.7.0.0.nupkg.sha512"
     },
     "Communication.Tech.Gateway/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Communication.Tech.Protos/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

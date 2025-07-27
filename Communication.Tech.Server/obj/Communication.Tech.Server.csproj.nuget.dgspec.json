@@ -4,14 +4,14 @@
     "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Server/Communication.Tech.Server.csproj": {}
   },
   "projects": {
-    "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Gateway/Communication.Tech.Gateway.csproj": {
+    "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Protos/Communication.Tech.Protos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Gateway/Communication.Tech.Gateway.csproj",
-        "projectName": "Communication.Tech.Gateway",
-        "projectPath": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Gateway/Communication.Tech.Gateway.csproj",
+        "projectUniqueName": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Protos/Communication.Tech.Protos.csproj",
+        "projectName": "Communication.Tech.Protos",
+        "projectPath": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Protos/Communication.Tech.Protos.csproj",
         "packagesPath": "/Users/berkcanciftci/.nuget/packages/",
-        "outputPath": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Gateway/obj/",
+        "outputPath": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Protos/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/berkcanciftci/.nuget/NuGet/NuGet.Config"
@@ -42,48 +42,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "dependencies": {
-            "Confluent.Kafka": {
-              "target": "Package",
-              "version": "[2.8.0, )"
-            },
-            "Grpc.AspNetCore": {
-              "target": "Package",
-              "version": "[2.70.0, )"
-            },
-            "Grpc.AspNetCore.Server.Reflection": {
-              "target": "Package",
-              "version": "[2.70.0, )"
-            },
-            "Grpc.Core.Api": {
-              "target": "Package",
-              "version": "[2.70.0, )"
-            },
-            "Microsoft.Extensions.Configuration.Json": {
-              "target": "Package",
-              "version": "[9.0.4, )"
-            },
-            "Microsoft.Extensions.Hosting": {
-              "target": "Package",
-              "version": "[8.0.0, )"
-            },
-            "RabbitMQ.Client": {
-              "target": "Package",
-              "version": "[6.5.0, )"
-            },
-            "StackExchange.Redis": {
-              "target": "Package",
-              "version": "[2.8.37, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.6.2, )"
-            },
-            "prometheus-net.AspNetCore": {
-              "target": "Package",
-              "version": "[8.0.1, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
@@ -96,9 +54,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
@@ -129,8 +84,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Gateway/Communication.Tech.Gateway.csproj": {
-                "projectPath": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Gateway/Communication.Tech.Gateway.csproj"
+              "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Protos/Communication.Tech.Protos.csproj": {
+                "projectPath": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Protos/Communication.Tech.Protos.csproj"
               }
             }
           }

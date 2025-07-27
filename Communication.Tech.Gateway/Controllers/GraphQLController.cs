@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using communication_tech.Models;
 using communication_tech.Services;
+using Communication.Tech.Protos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace communication_tech.Controllers;

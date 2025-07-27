@@ -1,23 +1,11 @@
 {
   "Version": 1,
-  "Hash": "iQtw5NY5GpU9bkZWtMZAgPTJRdAP8KXQ7yMViqKXnc4=",
+  "Hash": "MJH3GbKnOsxMnS2zix/GM5xIZvM69c6MQPgOdN4jSFM=",
   "Source": "Communication.Tech.Server",
   "BasePath": "_content/Communication.Tech.Server",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [
-    {
-      "Identity": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Gateway/Communication.Tech.Gateway.csproj",
-      "Version": 2,
-      "Source": "Communication.Tech.Gateway",
-      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
-      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
-    }
-  ],
+  "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
   "Assets": []
 }

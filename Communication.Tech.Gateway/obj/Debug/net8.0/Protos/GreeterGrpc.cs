@@ -64,35 +64,59 @@ namespace Communication.Tech.Gateway {
       get { return global::Communication.Tech.Gateway.GreeterReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Base class for server-side implementations of Greeter</summary>
-    [grpc::BindServiceMethod(typeof(Greeter), "BindService")]
-    public abstract partial class GreeterBase
+    /// <summary>Client for Greeter</summary>
+    public partial class GreeterClient : grpc::ClientBase<GreeterClient>
     {
+      /// <summary>Creates a new client for Greeter</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Communication.Tech.Gateway.HelloReply> SayHello(global::Communication.Tech.Gateway.HelloRequest request, grpc::ServerCallContext context)
+      public GreeterClient(grpc::ChannelBase channel) : base(channel)
       {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+      /// <summary>Creates a new client for Greeter that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public GreeterClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      {
+      }
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected GreeterClient() : base()
+      {
+      }
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected GreeterClient(ClientBaseConfiguration configuration) : base(configuration)
+      {
       }
 
-    }
-
-    /// <summary>Creates service definition that can be registered with a server</summary>
-    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    public static grpc::ServerServiceDefinition BindService(GreeterBase serviceImpl)
-    {
-      return grpc::ServerServiceDefinition.CreateBuilder()
-          .AddMethod(__Method_SayHello, serviceImpl.SayHello).Build();
-    }
-
-    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
-    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
-    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
-    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    public static void BindService(grpc::ServiceBinderBase serviceBinder, GreeterBase serviceImpl)
-    {
-      serviceBinder.AddMethod(__Method_SayHello, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Communication.Tech.Gateway.HelloRequest, global::Communication.Tech.Gateway.HelloReply>(serviceImpl.SayHello));
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Communication.Tech.Gateway.HelloReply SayHello(global::Communication.Tech.Gateway.HelloRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SayHello(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Communication.Tech.Gateway.HelloReply SayHello(global::Communication.Tech.Gateway.HelloRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_SayHello, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Communication.Tech.Gateway.HelloReply> SayHelloAsync(global::Communication.Tech.Gateway.HelloRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SayHelloAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Communication.Tech.Gateway.HelloReply> SayHelloAsync(global::Communication.Tech.Gateway.HelloRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_SayHello, null, options, request);
+      }
+      /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected override GreeterClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new GreeterClient(configuration);
+      }
     }
 
   }

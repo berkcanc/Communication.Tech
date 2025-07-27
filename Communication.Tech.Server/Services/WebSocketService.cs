@@ -1,6 +1,6 @@
 using System.Net.WebSockets;
 using System.Text;
-using communication_tech.Interfaces;
+using Communication.Tech.Server.Interfaces;
 
 namespace Communication.Tech.Server.Services;
 

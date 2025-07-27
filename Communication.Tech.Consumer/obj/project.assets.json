@@ -1231,6 +1231,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Communication.Tech.Protos": "1.0.0",
           "Confluent.Kafka": "2.8.0",
           "Grpc.AspNetCore": "2.70.0",
           "Grpc.AspNetCore.Server.Reflection": "2.70.0",
@@ -1251,6 +1252,16 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "Communication.Tech.Protos/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Communication.Tech.Protos.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Communication.Tech.Protos.dll": {}
+        }
       }
     }
   },
@@ -3218,6 +3229,11 @@
       "type": "project",
       "path": "../Communication.Tech.Gateway/Communication.Tech.Gateway.csproj",
       "msbuildProject": "../Communication.Tech.Gateway/Communication.Tech.Gateway.csproj"
+    },
+    "Communication.Tech.Protos/1.0.0": {
+      "type": "project",
+      "path": "../Communication.Tech.Protos/Communication.Tech.Protos.csproj",
+      "msbuildProject": "../Communication.Tech.Protos/Communication.Tech.Protos.csproj"
     }
   },
   "projectFileDependencyGroups": {

@@ -1205,6 +1205,16 @@
         "build": {
           "buildTransitive/net6.0/_._": {}
         }
+      },
+      "Communication.Tech.Protos/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Communication.Tech.Protos.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Communication.Tech.Protos.dll": {}
+        }
       }
     }
   },
@@ -3177,10 +3187,16 @@
         "system.threading.channels.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Communication.Tech.Protos/1.0.0": {
+      "type": "project",
+      "path": "../Communication.Tech.Protos/Communication.Tech.Protos.csproj",
+      "msbuildProject": "../Communication.Tech.Protos/Communication.Tech.Protos.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Communication.Tech.Protos >= 1.0.0",
       "Confluent.Kafka >= 2.8.0",
       "Grpc.AspNetCore >= 2.70.0",
       "Grpc.AspNetCore.Server.Reflection >= 2.70.0",
@@ -3217,7 +3233,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Protos/Communication.Tech.Protos.csproj": {
+              "projectPath": "/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Protos/Communication.Tech.Protos.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

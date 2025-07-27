@@ -1,6 +1,7 @@
 using communication_tech.Interfaces;
 using communication_tech.Models;
 using communication_tech.Services;
+using Communication.Tech.Protos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace communication_tech.Controllers;

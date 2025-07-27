@@ -64,7 +64,9 @@
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/bin/Debug/net8.0/runtimes/win-x86/native/zstd.dll
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/bin/Debug/net8.0/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/bin/Debug/net8.0/Communication.Tech.Gateway.dll
+/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/bin/Debug/net8.0/Communication.Tech.Protos.dll
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/bin/Debug/net8.0/Communication.Tech.Gateway.pdb
+/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/bin/Debug/net8.0/Communication.Tech.Protos.pdb
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communication.Tech.Consumer.csproj.AssemblyReference.cache
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communication.Tech.Consumer.GeneratedMSBuildEditorConfig.editorconfig
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communication.Tech.Consumer.AssemblyInfoInputs.cache
