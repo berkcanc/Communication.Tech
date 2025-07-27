@@ -1,9 +1,8 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5010
-EXPOSE 5060
+EXPOSE 5059
+EXPOSE 7257
 EXPOSE 6011
-EXPOSE 5273
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -22,7 +21,10 @@ RUN dotnet build "./Communication.Tech.Server.csproj" -c $BUILD_CONFIGURATION -o
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Communication.Tech.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:PublishReferencesDocumentationFile=false
+RUN dotnet publish "./Communication.Tech.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-dependencies
+RUN dotnet build "../Communication.Tech.Gateway/Communication.Tech.Gateway.csproj" -c $BUILD_CONFIGURATION -o /app/temp
+RUN cp /app/temp/*.dll /app/publish/ || true
+RUN cp /app/temp/*.pdb /app/publish/ || true
 
 FROM base AS final
 WORKDIR /app
