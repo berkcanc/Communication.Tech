@@ -12,7 +12,6 @@ WORKDIR /src
 COPY ["Communication.Tech.Server/Communication.Tech.Server.csproj", "Communication.Tech.Server/"]
 COPY ["Communication.Tech.Gateway/Communication.Tech.Gateway.csproj", "Communication.Tech.Gateway/"]
 
-# Restore 
 RUN dotnet restore "Communication.Tech.Server/Communication.Tech.Server.csproj"
 
 COPY Communication.Tech.Server/ ./Communication.Tech.Server/
@@ -23,7 +22,7 @@ RUN dotnet build "./Communication.Tech.Server.csproj" -c $BUILD_CONFIGURATION -o
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Communication.Tech.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Communication.Tech.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:PublishReferencesDocumentationFile=false
 
 FROM base AS final
 WORKDIR /app
