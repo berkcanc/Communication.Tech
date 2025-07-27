@@ -7,10 +7,16 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
 COPY ["Communication.Tech.Server/Communication.Tech.Server.csproj", "Communication.Tech.Server/"]
 COPY ["Communication.Tech.Gateway/Communication.Tech.Gateway.csproj", "Communication.Tech.Gateway/"]
+
+# Restore
 RUN dotnet restore "Communication.Tech.Server/Communication.Tech.Server.csproj"
-COPY . .
+
+COPY Communication.Tech.Server/ ./Communication.Tech.Server/
+COPY Communication.Tech.Gateway/ ./Communication.Tech.Gateway/
+
 WORKDIR "/src/Communication.Tech.Server"
 RUN dotnet build "./Communication.Tech.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
