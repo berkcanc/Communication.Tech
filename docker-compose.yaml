@@ -6,13 +6,13 @@ services:
       context: .
       dockerfile: Communication.Tech.Server/Dockerfile
     ports:
-      - "5010:5010"     # HTTP/2 (gRPC)
-      - "5060:5060"     # HTTP/1 (metrics, http, websocket)
-      - "6011:6011"     # GraphQL
-      - "5273:5273"     # WebSocket
+      - "5010:5010"  # HTTP/2 (gRPC)
+      - "5060:5060"  # HTTP/1 (metrics, http, websocket)
+      - "6011:6011"  # GraphQL
+      - "5273:5273"  # WebSocket
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5059;https://+:5010;http://+:5273;http://+:6011
+      - ASPNETCORE_URLS=http://+:5060;https://+:5010;http://+:5273;http://+:6011
     depends_on:
       - kafka
       - redis
@@ -25,7 +25,10 @@ services:
       context: .
       dockerfile: Communication.Tech.Gateway/Dockerfile
     ports:
-      - "5000:5000"     # metrics ve routing port
+      - "5000:5000"  # metrics ve routing port
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
     depends_on:
       - redis
     networks:
@@ -36,7 +39,10 @@ services:
       context: .
       dockerfile: Communication.Tech.Consumer/Dockerfile
     ports:
-      - "80:80"         # metrics
+      - "80:80"  # metrics
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     depends_on:
       - communication.tech.server
     networks:
@@ -68,7 +74,7 @@ services:
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
-      - "15672:15672"   # Web UI
+      - "15672:15672"  # Web UI
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest

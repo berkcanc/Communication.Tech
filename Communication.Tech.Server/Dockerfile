@@ -1,8 +1,9 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
-USER $APP_UID
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 5010
+EXPOSE 5060
+EXPOSE 6011
+EXPOSE 5273
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -11,7 +12,7 @@ WORKDIR /src
 COPY ["Communication.Tech.Server/Communication.Tech.Server.csproj", "Communication.Tech.Server/"]
 COPY ["Communication.Tech.Gateway/Communication.Tech.Gateway.csproj", "Communication.Tech.Gateway/"]
 
-# Restore
+# Restore 
 RUN dotnet restore "Communication.Tech.Server/Communication.Tech.Server.csproj"
 
 COPY Communication.Tech.Server/ ./Communication.Tech.Server/
