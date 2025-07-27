@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Communication.Tech.Consumer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7864ac6a9a5ebc990583cf50f111a4ff662bf568")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f4e7e40dd799e2f50468aebef9532862f8c83b71")]
 [assembly: System.Reflection.AssemblyProductAttribute("Communication.Tech.Consumer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Communication.Tech.Consumer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

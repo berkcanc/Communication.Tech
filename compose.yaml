@@ -2,7 +2,6 @@
 
 services:
   communication.tech.server:
-    image: communication.tech.server
     build:
       context: .
       dockerfile: Communication.Tech.Server/Dockerfile
@@ -21,9 +20,7 @@ services:
     networks:
       - tech-net
 
-  # Gateway
   communication.tech.gateway:
-    image: communication.tech.gateway
     build:
       context: .
       dockerfile: Communication.Tech.Gateway/Dockerfile
@@ -34,9 +31,7 @@ services:
     networks:
       - tech-net
 
-  # Consumer
   communication.tech.consumer:
-    image: communication.tech.consumer
     build:
       context: .
       dockerfile: Communication.Tech.Consumer/Dockerfile
