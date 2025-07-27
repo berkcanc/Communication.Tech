@@ -70,6 +70,7 @@
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communication.Tech.Consumer.AssemblyInfoInputs.cache
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communication.Tech.Consumer.AssemblyInfo.cs
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communication.Tech.Consumer.csproj.CoreCompileInputs.cache
+/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communication.Tech.Consumer.sourcelink.json
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communic.BB400F0D.Up2Date
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/Communication.Tech.Consumer.dll
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Consumer/obj/Debug/net8.0/refint/Communication.Tech.Consumer.dll

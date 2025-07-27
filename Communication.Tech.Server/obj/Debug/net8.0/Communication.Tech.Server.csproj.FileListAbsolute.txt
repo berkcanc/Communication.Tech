@@ -112,6 +112,7 @@
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Server/obj/Debug/net8.0/Communication.Tech.Server.csproj.CoreCompileInputs.cache
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Server/obj/Debug/net8.0/Communication.Tech.Server.MvcApplicationPartsAssemblyInfo.cs
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Server/obj/Debug/net8.0/Communication.Tech.Server.MvcApplicationPartsAssemblyInfo.cache
+/Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Server/obj/Debug/net8.0/Communication.Tech.Server.sourcelink.json
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Server/obj/Debug/net8.0/staticwebassets.build.json
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Server/obj/Debug/net8.0/staticwebassets.development.json
 /Users/berkcanciftci/RiderProjects/communication-tech/Communication.Tech.Server/obj/Debug/net8.0/staticwebassets/msbuild.Communication.Tech.Server.Microsoft.AspNetCore.StaticWebAssets.props
