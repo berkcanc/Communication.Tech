@@ -27,28 +27,20 @@ builder.Services
 
 builder.WebHost.ConfigureKestrel(options =>
 {
+    //HTTP
+    options.ListenLocalhost(Constants.HttpServerPort, o =>
+    {
+        o.Protocols = HttpProtocols.Http1AndHttp2;
+    });
+    
     //gRPC
-    options.ListenLocalhost(5010, o =>
+    options.ListenLocalhost(Constants.GrpcServerPort, o =>
     {
         o.Protocols = HttpProtocols.Http2;
-        o.UseHttps();
-    });
-    
-    //HTTP
-    options.ListenLocalhost(5060, o =>
-    {
-        o.Protocols = HttpProtocols.Http1AndHttp2;
-    });
-    
-    //HTTP2
-    options.ListenLocalhost(6011, o =>
-    {
-        o.Protocols = HttpProtocols.Http1AndHttp2;
-        o.UseHttps();
     });
     
     //WebSocket
-    options.ListenLocalhost(5273, o =>
+    options.ListenLocalhost(Constants.WebSocketServerPort, o =>
     {
         options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(60);
         // for inactive connection
@@ -81,8 +73,6 @@ app.Map("/ws", async context =>
         context.Response.StatusCode = 400;
     }
 });
-
-app.UseAuthorization();
 
 app.MapGrpcService<GreeterService>();
 app.MapGraphQL();

@@ -25,6 +25,6 @@ public class GraphQLController : ControllerBase
         {
             query = @"query { books { title author } }"
         };
-        return _httpClientService.PostAsync<object, object>("graphql", requestBody, Constants.HTTPBaseAddress);
+        return _httpClientService.PostAsync<object, object>("graphql", requestBody, Constants.HttpServerBaseAddress);
     }
 }

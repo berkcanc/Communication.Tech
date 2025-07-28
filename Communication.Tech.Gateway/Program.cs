@@ -22,17 +22,15 @@ builder.WebHost.ConfigureKestrel(options =>
     options.Limits.MinResponseDataRate = null;
     
     //Kafka, RabbitMQ, GraphQL Trigger, Redis
-    options.ListenLocalhost(5059, o =>
+    options.ListenLocalhost(Constants.HttpGatewayPort, o =>
     {
         o.Protocols = HttpProtocols.Http1AndHttp2;
     });
     
-    
-    //HTTP2
-    options.ListenLocalhost(6001, o =>
+    // gRPC
+    options.ListenLocalhost(Constants.GrpcGatewayPort, o =>
     {
         o.Protocols = HttpProtocols.Http1AndHttp2;
-        o.UseHttps();
     });
 });
 
@@ -63,7 +61,7 @@ builder.Services.AddGrpc(options =>
 
 builder.Services.AddGrpcClient<Greeter.GreeterClient>(options =>
 {
-    options.Address = new Uri(Constants.GPRCBaseAddress);
+    options.Address = new Uri(Constants.GprcServerBaseAddress);
 });
 
 builder.Services.AddGrpcReflection();
@@ -77,12 +75,8 @@ app.UseWebSockets();
 app.UseMiddleware<HttpMetricsMiddleware>();
 
 
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
 //app.UseAuthorization();

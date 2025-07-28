@@ -24,6 +24,6 @@ public class HTTPController : ControllerBase
     {
         var payload = _payloadGeneratorService.GenerateMessage(message, sizeInKB);
         var request = new ApiRequest { Message = payload };
-        return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTPServer", request, Constants.HTTPBaseAddress);
+        return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTPServer", request, Constants.HttpServerBaseAddress);
     }
 }

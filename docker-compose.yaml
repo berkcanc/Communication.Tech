@@ -6,12 +6,10 @@ services:
       context: .
       dockerfile: Communication.Tech.Server/Dockerfile
     ports:
-      - "5059:5059"  # HTTP
-      - "7257:7257"  # HTTPS
-      - "6011:6011"  # HTTP/2 (GraphQL/gRPC)
+      - "5060:5060"  # HTTP
+      - "6011:6011"  # gRPC
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:7257;http://+:5059;http://+:6011
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
@@ -27,15 +25,16 @@ services:
       context: .
       dockerfile: Communication.Tech.Gateway/Dockerfile
     ports:
-      - "5000:5000"  # metrics ve routing port
+      - "5059:5059"  # metrics ve routing port
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5000
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
     depends_on:
       - redis
+      - kafka
+      - rabbitmq
     networks:
       - tech-net
 
@@ -43,16 +42,16 @@ services:
     build:
       context: .
       dockerfile: Communication.Tech.Consumer/Dockerfile
-    ports:
-      - "80:80"  # metrics
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
     depends_on:
       - communication.tech.server
+      - redis
+      - kafka
+      - rabbitmq
     networks:
       - tech-net
 

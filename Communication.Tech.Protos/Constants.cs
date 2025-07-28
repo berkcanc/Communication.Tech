@@ -1,8 +1,12 @@
 namespace Communication.Tech.Protos;
 
-public class Constants
+public static class Constants
 {
-    public const string HTTPBaseAddress = "http://localhost:5060/";
-    public const string HTTP2BaseAddress = "https://localhost:6011/";
-    public const string GPRCBaseAddress = "https://localhost:5010/";
+    public const int HttpGatewayPort = 5059;
+    public const int GrpcGatewayPort = 6010;
+    public const int HttpServerPort = 5060;
+    public const int GrpcServerPort = 6011;
+    public const int WebSocketServerPort = 5273;
+    public static readonly string HttpServerBaseAddress = $"http://localhost:{HttpServerPort}/";
+    public static readonly string GprcServerBaseAddress = $"https://localhost:{GrpcServerPort}/";
 }

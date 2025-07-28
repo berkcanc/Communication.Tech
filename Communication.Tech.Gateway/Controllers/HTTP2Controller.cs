@@ -23,6 +23,6 @@ public class HTTP2Controller : ControllerBase
     {
         var payload = _payloadGeneratorService.GenerateMessage(message, sizeInKB);
         var request = new ApiRequest { Message = payload };
-        return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTP2Server", request, Constants.HTTP2BaseAddress);
+        return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTP2Server", request, Constants.HttpServerBaseAddress);
     }
 }
