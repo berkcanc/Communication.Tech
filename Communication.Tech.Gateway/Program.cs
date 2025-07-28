@@ -11,6 +11,9 @@ using StackExchange.Redis;
 
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
+Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "http://+:5059");
+Environment.SetEnvironmentVariable("ASPNETCORE_HTTPS_PORT", "");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<RabbitMqSettings>(

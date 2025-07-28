@@ -9,6 +9,8 @@ services:
       - "5059:5059"  # metrics ve routing port
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5059
+      - ASPNETCORE_HTTPS_PORT=
       - DOTNET_RUNNING_IN_CONTAINER=true
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
