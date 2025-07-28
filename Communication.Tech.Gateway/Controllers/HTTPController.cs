@@ -12,11 +12,13 @@ public class HTTPController : ControllerBase
 {
     private readonly IPayloadGeneratorService _payloadGeneratorService;
     private readonly HttpClientService _httpClientService;
+    private readonly IConfiguration _configuration;
 
-    public HTTPController(IPayloadGeneratorService payloadGeneratorService, HttpClientService httpClientService)
+    public HTTPController(IPayloadGeneratorService payloadGeneratorService, HttpClientService httpClientService, IConfiguration configuration)
     {
         _payloadGeneratorService = payloadGeneratorService;
         _httpClientService = httpClientService;
+        _configuration = configuration;
     }
     
     [HttpGet(Name = "HelloMessage")]
@@ -24,6 +26,6 @@ public class HTTPController : ControllerBase
     {
         var payload = _payloadGeneratorService.GenerateMessage(message, sizeInKB);
         var request = new ApiRequest { Message = payload };
-        return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTPServer", request, Constants.HttpServerBaseAddress);
+        return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTPServer", request, _configuration["GeneralSettings:HttpServerBaseAddress"]);
     }
 }

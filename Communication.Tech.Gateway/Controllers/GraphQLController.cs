@@ -12,10 +12,12 @@ namespace communication_tech.Controllers;
 public class GraphQLController : ControllerBase
 {
     private readonly HttpClientService _httpClientService;
+    private readonly IConfiguration _configuration;
 
-    public GraphQLController(HttpClientService httpClientService)
+    public GraphQLController(HttpClientService httpClientService, IConfiguration configuration)
     {
         _httpClientService = httpClientService;
+        _configuration = configuration;
     }
 
     [HttpGet(Name = "GetBooks")]
@@ -25,6 +27,6 @@ public class GraphQLController : ControllerBase
         {
             query = @"query { books { title author } }"
         };
-        return _httpClientService.PostAsync<object, object>("graphql", requestBody, Constants.HttpServerBaseAddress);
+        return _httpClientService.PostAsync<object, object>("graphql", requestBody, _configuration["GeneralSettings:HttpServerBaseAddress"]);
     }
 }

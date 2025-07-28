@@ -30,6 +30,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Gateway/appsettings.json</TargetPath>
         </None>
+        <None Include="appsettings.Development.json" />
         <Protobuf Include="../Communication.Tech.Protos/Protos/greeter.proto" GrpcServices="Client" />
     </ItemGroup>
 

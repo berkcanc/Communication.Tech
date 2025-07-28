@@ -11,11 +11,13 @@ public class HTTP2Controller : ControllerBase
 {
     private readonly IPayloadGeneratorService _payloadGeneratorService;
     private readonly HttpClientService _httpClientService;
+    private readonly IConfiguration _configuration;
     
-    public HTTP2Controller(IPayloadGeneratorService payloadGeneratorService, HttpClientService httpClientService)
+    public HTTP2Controller(IPayloadGeneratorService payloadGeneratorService, HttpClientService httpClientService, IConfiguration configuration)
     {
         _payloadGeneratorService = payloadGeneratorService;
         _httpClientService = httpClientService;
+        _configuration = configuration;
     }
     
     [HttpGet(Name = "GetHelloMessage")]
@@ -23,6 +25,6 @@ public class HTTP2Controller : ControllerBase
     {
         var payload = _payloadGeneratorService.GenerateMessage(message, sizeInKB);
         var request = new ApiRequest { Message = payload };
-        return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTP2Server", request, Constants.HttpServerBaseAddress);
+        return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTP2Server", request, _configuration["GeneralSettings:HttpServerBaseAddress"]);
     }
 }

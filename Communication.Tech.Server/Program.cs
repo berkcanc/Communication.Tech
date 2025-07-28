@@ -28,19 +28,19 @@ builder.Services
 builder.WebHost.ConfigureKestrel(options =>
 {
     //HTTP
-    options.ListenLocalhost(Constants.HttpServerPort, o =>
+    options.ListenAnyIP(Constants.HttpServerPort, o =>
     {
         o.Protocols = HttpProtocols.Http1AndHttp2;
     });
     
     //gRPC
-    options.ListenLocalhost(Constants.GrpcServerPort, o =>
+    options.ListenAnyIP(Constants.GrpcServerPort, o =>
     {
         o.Protocols = HttpProtocols.Http2;
     });
     
     //WebSocket
-    options.ListenLocalhost(Constants.WebSocketServerPort, o =>
+    options.ListenAnyIP(Constants.WebSocketServerPort, o =>
     {
         options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(60);
         // for inactive connection
@@ -50,13 +50,6 @@ builder.WebHost.ConfigureKestrel(options =>
 
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 // WebSocket endpoint
 app.Map("/ws", async context =>

@@ -12,7 +12,8 @@ using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(builder.Configuration["Redis:ConnectionString"]));
+var redisConnectionString = builder.Configuration["Redis:ConnectionString"];
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(redisConnectionString));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -57,24 +58,17 @@ if (redisSettingsModel.IsEnabled)
     builder.Services.Configure<RedisSettings>(redisSettings);
     builder.WebHost.ConfigureKestrel(options =>
     {
-        options.ListenAnyIP(5280); // redis
+        options.ListenAnyIP(6379); // redis
     });
     builder.Services.AddHostedService<RedisQueueConsumer>();
 }
 
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 Metrics.SuppressDefaultMetrics();     // ⛔ .NET default Meter'ları devre dışı bırak
 app.UseMetricServer();               // ✅ /metrics endpoint
 app.UseHttpMetrics();                // HTTP request metrikleri
-
-//app.UseHttpsRedirection();
 
 app.Run();
 

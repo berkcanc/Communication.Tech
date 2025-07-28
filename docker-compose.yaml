@@ -1,25 +1,6 @@
 ﻿version: '3.8'
 
 services:
-  communication.tech.server:
-    build:
-      context: .
-      dockerfile: Communication.Tech.Server/Dockerfile
-    ports:
-      - "5060:5060"  # HTTP
-      - "6011:6011"  # gRPC
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - Kafka__BootstrapServers=kafka:9092
-      - RabbitMQ__HostName=rabbitmq
-      - Redis__ConnectionString=redis:6379
-    depends_on:
-      - kafka
-      - redis
-      - rabbitmq
-    networks:
-      - tech-net
-
   communication.tech.gateway:
     build:
       context: .
@@ -27,13 +8,38 @@ services:
     ports:
       - "5059:5059"  # metrics ve routing port
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DOTNET_RUNNING_IN_CONTAINER=true
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
     depends_on:
       - redis
       - kafka
+      - rabbitmq
+    networks:
+      - tech-net
+        
+  communication.tech.server:
+    build:
+      context: .
+      dockerfile: Communication.Tech.Server/Dockerfile
+    ports:
+      - "5060:5060"  # HTTP
+      - "6011:6011"  # gRPC
+      - "5273:5273"  # WebSocket
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTPS_PORT=
+      - Kestrel__Endpoints__Http__Url=http://+:5060
+      - Kestrel__Endpoints__Grpc__Url=http://+:6011
+      - Kestrel__Endpoints__WebSocket__Url=http://+:5273
+      - Kafka__BootstrapServers=kafka:9092
+      - RabbitMQ__HostName=rabbitmq
+      - Redis__ConnectionString=redis:6379
+    depends_on:
+      - kafka
+      - redis
       - rabbitmq
     networks:
       - tech-net
@@ -42,8 +48,10 @@ services:
     build:
       context: .
       dockerfile: Communication.Tech.Consumer/Dockerfile
+    ports:
+      - "80:80"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379

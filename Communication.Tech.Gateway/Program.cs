@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Security;
 using communication_tech.Interfaces;
 using communication_tech.Middlewares;
 using communication_tech.Models;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Prometheus;
 using StackExchange.Redis;
 
+AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,13 +25,13 @@ builder.WebHost.ConfigureKestrel(options =>
     options.Limits.MinResponseDataRate = null;
     
     //Kafka, RabbitMQ, GraphQL Trigger, Redis
-    options.ListenLocalhost(Constants.HttpGatewayPort, o =>
+    options.ListenAnyIP(Constants.HttpGatewayPort, o =>
     {
         o.Protocols = HttpProtocols.Http1AndHttp2;
     });
     
     // gRPC
-    options.ListenLocalhost(Constants.GrpcGatewayPort, o =>
+    options.ListenAnyIP(Constants.GrpcGatewayPort, o =>
     {
         o.Protocols = HttpProtocols.Http1AndHttp2;
     });
@@ -61,7 +64,7 @@ builder.Services.AddGrpc(options =>
 
 builder.Services.AddGrpcClient<Greeter.GreeterClient>(options =>
 {
-    options.Address = new Uri(Constants.GprcServerBaseAddress);
+    options.Address = new Uri(builder.Configuration["GeneralSettings:GrpcServerBaseAddress"]);
 });
 
 builder.Services.AddGrpcReflection();

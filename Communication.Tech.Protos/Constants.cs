@@ -7,6 +7,4 @@ public static class Constants
     public const int HttpServerPort = 5060;
     public const int GrpcServerPort = 6011;
     public const int WebSocketServerPort = 5273;
-    public static readonly string HttpServerBaseAddress = $"http://localhost:{HttpServerPort}/";
-    public static readonly string GprcServerBaseAddress = $"https://localhost:{GrpcServerPort}/";
 }
