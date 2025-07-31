@@ -6,10 +6,10 @@ services:
       context: .
       dockerfile: Communication.Tech.Gateway/Dockerfile
     ports:
-      - "5059:5059"  # metrics ve routing port
+      - "5059:5059"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_HTTPS_PORT=
+      - ASPNETCORE_URLS=http://+:5059
       - DOTNET_RUNNING_IN_CONTAINER=true
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
@@ -23,7 +23,8 @@ services:
         condition: service_healthy
     networks:
       - tech-net
-        
+    restart: unless-stopped
+  
   communication.tech.server:
     build:
       context: .
@@ -34,7 +35,8 @@ services:
       - "5273:5273"  # WebSocket
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_HTTPS_PORT=
+      - ASPNETCORE_URLS=http://+:5060
+      - DOTNET_RUNNING_IN_CONTAINER=true
       - Kestrel__Endpoints__Http__Url=http://+:5060
       - Kestrel__Endpoints__Grpc__Url=http://+:6011
       - Kestrel__Endpoints__WebSocket__Url=http://+:5273
@@ -50,14 +52,18 @@ services:
         condition: service_healthy
     networks:
       - tech-net
+    restart: unless-stopped
+
   communication.tech.consumer:
     build:
       context: .
       dockerfile: Communication.Tech.Consumer/Dockerfile
     ports:
-      - "80:80"
+      - "8080:80"  # Host port değiştirildi çakışma olmasın
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_RUNNING_IN_CONTAINER=true
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
@@ -70,6 +76,7 @@ services:
         condition: service_healthy
     networks:
       - tech-net
+    restart: unless-stopped
 
   # Prometheus monitoring
   prometheus:
@@ -83,6 +90,7 @@ services:
       - communication.tech.consumer
     networks:
       - tech-net
+    restart: unless-stopped
 
   # Redis
   redis:
@@ -97,6 +105,7 @@ services:
       start_period: 10s
     networks:
       - tech-net
+    restart: unless-stopped
 
   # RabbitMQ
   rabbitmq:
@@ -115,21 +124,13 @@ services:
       start_period: 30s
     networks:
       - tech-net
+    restart: unless-stopped
 
-  # Zookeeper (Kafka)
-  zookeeper:
-    image: bitnami/zookeeper:latest
-    ports:
-      - "2181:2181"
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    networks:
-      - tech-net
-
-  # Kafka
+  # Kafka (KRaft mode - Zookeeper yok)
   kafka:
-    image: bitnami/kafka:latest
-    container_name: communicationtech-kafka-1
+    image: bitnami/kafka:3.6
+    ports:
+      - "9092:9092"
     environment:
       # KRaft Mode Configuration
       KAFKA_CFG_PROCESS_ROLES: controller,broker
@@ -146,15 +147,19 @@ services:
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
       KAFKA_CFG_LOG_RETENTION_HOURS: 168
       
-    ports:
-      - "9092:9092"
+      # Memory optimization for t3.small
+      KAFKA_HEAP_OPTS: "-Xmx512m -Xms256m"
+    
     networks:
       - tech-net
     healthcheck:
-      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
+      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list"]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
 networks:
   tech-net:
     driver: bridge
