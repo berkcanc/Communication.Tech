@@ -31,7 +31,7 @@ services:
       dockerfile: Communication.Tech.Server/Dockerfile
     ports:
       - "6061:5060"  # HTTP
-      - "6011:6011"  # gRPC
+      - "6062:6011"  # gRPC
       - "5273:5273"  # WebSocket
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
