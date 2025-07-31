@@ -32,14 +32,14 @@ services:
     ports:
       - "6061:5060"  # HTTP
       - "6062:6012"  # gRPC
-      - "5273:5273"  # WebSocket
+      - "5275:5274"  # WebSocket
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:5060
       - DOTNET_RUNNING_IN_CONTAINER=true
       - Kestrel__Endpoints__Http__Url=http://+:5060
       - Kestrel__Endpoints__Grpc__Url=http://+:6012
-      - Kestrel__Endpoints__WebSocket__Url=http://+:5273
+      - Kestrel__Endpoints__WebSocket__Url=http://+:5274
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
