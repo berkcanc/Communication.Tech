@@ -27,13 +27,13 @@ builder.WebHost.ConfigureKestrel(options =>
     options.Limits.MinResponseDataRate = null;
     
     //Kafka, RabbitMQ, GraphQL Trigger, Redis
-    options.Listen(IPAddress.Any, Constants.HttpGatewayPort, o =>
+    options.ListenAnyIP(Constants.HttpGatewayPort, o =>
     {
         o.Protocols = HttpProtocols.Http1AndHttp2;
     });
     
     // gRPC
-    options.Listen(IPAddress.Any, Constants.GrpcGatewayPort, o =>
+    options.ListenAnyIP(Constants.GrpcGatewayPort, o =>
     {
         o.Protocols = HttpProtocols.Http1AndHttp2;
     });
