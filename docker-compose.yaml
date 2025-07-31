@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Communication.Tech.Gateway/Dockerfile
     ports:
-      - "5059:5059"
+      - "6060:5059"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:5059
@@ -30,7 +30,7 @@ services:
       context: .
       dockerfile: Communication.Tech.Server/Dockerfile
     ports:
-      - "5060:5060"  # HTTP
+      - "6061:5060"  # HTTP
       - "6011:6011"  # gRPC
       - "5273:5273"  # WebSocket
     environment:
