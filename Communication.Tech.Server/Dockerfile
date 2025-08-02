@@ -2,7 +2,7 @@
 USER $APP_UID
 WORKDIR /app
 EXPOSE 5060
-EXPOSE 6012
+EXPOSE 6013
 EXPOSE 5274
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
