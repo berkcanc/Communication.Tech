@@ -23,7 +23,7 @@ public class GrpcController : ControllerBase
         var payload = _payloadGeneratorService.GenerateMessage(message, sizeInKB);
         var request = new HelloRequest { Name = payload};
         var reply = await _grpcClient.SayHelloAsync(request);
-        return Ok(new { response = reply.Message });
+        return Ok(new { message = reply.Message });
         
     }
 }
