@@ -32,7 +32,7 @@ services:
     ports:
       - "6061:5060"  # HTTP
       - "6062:6013"  # gRPC
-      - "5275:5276"  # WebSocket
+      - "5277:5276"  # WebSocket
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:5060
