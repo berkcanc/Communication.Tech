@@ -16,9 +16,11 @@ public class HttpMetricsMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        List<string> excludePaths = new() { "swagger", "favicon", "/metrics", "produce" };
+        List<string> excludePaths = new() { "swagger", "favicon", "/metrics", "produce", "grpc" };
 
-        if (excludePaths.Any(p => context.Request.Path.HasValue && context.Request.Path.Value.Contains(p, StringComparison.OrdinalIgnoreCase)))
+        if (excludePaths.Any(p => 
+                context.Request.Path.HasValue 
+                && context.Request.Path.Value.Contains(p, StringComparison.OrdinalIgnoreCase)))
         {
             await _next(context);
             return;
