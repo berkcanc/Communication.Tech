@@ -11,7 +11,7 @@ public class RedisQueueService : IRedisQueueService
     public RedisQueueService(IPrometheusMetricService prometheusMetricService, IConfiguration configuration)
     {
         _prometheusMetricService = prometheusMetricService;
-        var redis = ConnectionMultiplexer.Connect(configuration["Redis:ConnectionString"]);
+        var redis = ConnectionMultiplexer.Connect(configuration["Redis:ConnectionString"] ?? string.Empty);
         _db = redis.GetDatabase();
     }
 

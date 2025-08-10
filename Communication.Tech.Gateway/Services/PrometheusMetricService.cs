@@ -2,29 +2,30 @@ using System.Globalization;
 using System.Text.Json;
 using communication_tech.Interfaces;
 using communication_tech.Models;
-using communication_tech.Services;
 using Grpc.Core;
 using Microsoft.Extensions.Options;
 using Prometheus;
+
+namespace communication_tech.Services;
 
 public class PrometheusMetricService : IPrometheusMetricService
 {
     private readonly Histogram _turnaroundMessageQueueHistogram = Metrics.CreateHistogram("queue_turnaround_duration_seconds", "Turnaround duration", new HistogramConfiguration
     {
         Buckets = Histogram.LinearBuckets(0.01, 0.01, 100), // 10ms'den başlayarak 100 bucket = 1 saniyeye kadar
-        LabelNames = new[] { "message_type", "source" }
+        LabelNames = ["message_type", "source"]
     });
     
     private readonly Histogram _httpHistogram = Metrics.CreateHistogram("http_turnaround_duration_seconds", "HTTP turnaround", new HistogramConfiguration
     {
         Buckets = Histogram.ExponentialBuckets(0.01, 2, 10), // 10ms to ~10s
-        LabelNames = new[] { "method", "path", "status_code" }
+        LabelNames = ["method", "path", "status_code"]
     });
 
     private readonly Histogram _grpcHistogram = Metrics.CreateHistogram("grpc_turnaround_duration_seconds", "gRPC turnaround", new HistogramConfiguration
     {
         Buckets = Histogram.ExponentialBuckets(0.01, 2, 10),
-        LabelNames = new[] { "service", "method", "status_code" }
+        LabelNames = ["service", "method", "status_code"]
     });
     
     private readonly HttpClientService _httpClientService;
@@ -89,7 +90,7 @@ public class PrometheusMetricService : IPrometheusMetricService
                 var parsedValue = decimal.Parse(metricValueStr, CultureInfo.InvariantCulture);
                 var roundedValue = Math.Round(parsedValue, 2);
                         
-                return new MetricDataPoint()
+                return new MetricDataPoint
                 {
                     Value = roundedValue
                 };

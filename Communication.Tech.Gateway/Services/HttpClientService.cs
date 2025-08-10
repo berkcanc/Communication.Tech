@@ -42,11 +42,9 @@ public class HttpClientService
             Console.WriteLine(e);
             throw;
         }
-
-        return default;
     }
     
-    public async Task<TResponse?> PostAsync<TRequest, TResponse>(string route, TRequest requestBody, string baseAddress)
+    public async Task<TResponse?> PostAsync<TRequest, TResponse>(string route, TRequest requestBody, string? baseAddress)
     {
         var client = _httpClientFactory.CreateClient();
         var baseUri = new Uri(baseAddress ?? throw new InvalidOperationException("BaseAddress is null"));

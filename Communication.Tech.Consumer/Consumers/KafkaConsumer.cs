@@ -1,30 +1,28 @@
 using communication_tech.Interfaces;
+using communication_tech.Models;
 using StackExchange.Redis;
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Communication.Tech.Consumer.Consumers;
 
 public class KafkaConsumer : BackgroundService
 {
-    private readonly string _bootstrapServers;
-    private readonly string _topic;
-    private readonly string _groupId;
+    private readonly KafkaSettings _settings;
     private readonly ILogger<KafkaConsumer> _logger;
     private readonly IDatabase _redisDb;
     private readonly IPrometheusMetricService _prometheusMetricService;
 
     public KafkaConsumer(
-        IConfiguration configuration, 
+        IOptions<KafkaSettings> options, 
         ILogger<KafkaConsumer> logger,
         IConnectionMultiplexer redisConnection,
         IPrometheusMetricService prometheusMetricService)
     {
-        _bootstrapServers = configuration["Kafka:BootstrapServers"];
-        _topic = configuration["Kafka:Topic"];
-        _groupId = configuration["Kafka:GroupId"];
+        _settings = options.Value;
         _logger = logger;
         _redisDb = redisConnection.GetDatabase();
         _prometheusMetricService = prometheusMetricService;
@@ -34,15 +32,15 @@ public class KafkaConsumer : BackgroundService
     {
         var config = new ConsumerConfig
         {
-            BootstrapServers = _bootstrapServers,
-            GroupId = _groupId,
+            BootstrapServers = _settings.BootstrapServers,
+            GroupId = _settings.GroupId,
             AutoOffsetReset = AutoOffsetReset.Earliest
         };
 
         using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
-        consumer.Subscribe(_topic);
+        consumer.Subscribe(_settings.Topic);
 
-        _logger.LogInformation("Kafka Consumer started for topic: {Topic}", _topic);
+        _logger.LogInformation("Kafka Consumer started for topic: {Topic}", _settings.Topic);
 
         try
         {

@@ -16,7 +16,7 @@ public class HttpMetricsMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        List<string> excludePaths = new() { "swagger", "favicon", "/metrics", "produce", "grpc" };
+        List<string> excludePaths = ["swagger", "favicon", "/metrics", "produce", "grpc", "export"];
 
         if (excludePaths.Any(p => 
                 context.Request.Path.HasValue 

@@ -6,10 +6,10 @@ services:
       context: .
       dockerfile: Communication.Tech.Gateway/Dockerfile
     ports:
-      - "6060:5059"
+      - "6060:5061"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:5059
+      - ASPNETCORE_URLS=http://+:5061
       - DOTNET_RUNNING_IN_CONTAINER=true
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq

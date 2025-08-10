@@ -21,12 +21,12 @@ public class GraphQLController : ControllerBase
     }
 
     [HttpGet(Name = "GetBooks")]
-    public Task<object> GetBooks()
+    public async Task<object?> GetBooks()
     {
         var requestBody = new
         {
             query = @"query { books { title author } }"
         };
-        return _httpClientService.PostAsync<object, object>("graphql", requestBody, _configuration["GeneralSettings:HttpServerBaseAddress"]);
+        return await _httpClientService.PostAsync<object, object>("graphql", requestBody, _configuration["GeneralSettings:HttpServerBaseAddress"]);
     }
 }

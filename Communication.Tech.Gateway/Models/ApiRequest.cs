@@ -1,6 +1,6 @@
 namespace communication_tech.Models;
 
-public class ApiRequest
+public class ApiRequest(string message)
 {
-    public string Message { get; set; }
+    public string Message { get; set; } = message;
 }

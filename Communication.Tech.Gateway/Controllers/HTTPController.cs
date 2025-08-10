@@ -22,10 +22,10 @@ public class HTTPController : ControllerBase
     }
     
     [HttpGet(Name = "HelloMessage")]
-    public async Task<ApiResponse> HelloMessage([FromQuery] string message, [FromQuery] int sizeInKB)
+    public async Task<ApiResponse?> HelloMessage([FromQuery] string message, [FromQuery] int sizeInKB)
     {
         var payload = _payloadGeneratorService.GenerateMessage(message, sizeInKB);
-        var request = new ApiRequest { Message = payload };
+        var request = new ApiRequest(payload);
         return await _httpClientService.PostAsync<ApiRequest, ApiResponse>("HTTPServer", request, _configuration["GeneralSettings:HttpServerBaseAddress"]);
     }
 }

@@ -41,10 +41,9 @@ builder.WebHost.ConfigureKestrel(options =>
 
 
 
+builder.Services.AddSingleton<IConnectionMultiplexer>(
+    ConnectionMultiplexer.Connect(builder.Configuration["Redis:ConnectionString"] ?? string.Empty));
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp => 
-    ConnectionMultiplexer.Connect(builder.Configuration["Redis:ConnectionString"])
-    );
 builder.Services.Configure<PrometheusSettings>(builder.Configuration.GetSection("Prometheus"));
 builder.Services.AddGrpc(options =>
 {
@@ -69,7 +68,7 @@ builder.Services.AddScoped<GrpcMetricsInterceptor>();
 
 builder.Services.AddGrpcClient<Greeter.GreeterClient>(options =>
 {
-    options.Address = new Uri(builder.Configuration["GeneralSettings:GrpcServerBaseAddress"]);
+    options.Address = new Uri(builder.Configuration["GeneralSettings:GrpcServerBaseAddress"] ?? string.Empty);
 }).AddInterceptor<GrpcMetricsInterceptor>();
 
 builder.Services.AddGrpcReflection();

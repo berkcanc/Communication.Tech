@@ -5,7 +5,7 @@ scrape_configs:
   - job_name: 'communication-tech-gateway'
     metrics_path: /metrics
     static_configs:
-      - targets: ['communication.tech.gateway:5059']
+      - targets: ['communication.tech.gateway:5061']
         
   - job_name: 'communication-tech-server'
     metrics_path: /metrics
