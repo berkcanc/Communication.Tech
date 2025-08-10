@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using communication_tech.Helper;
 using communication_tech.Interfaces;
 using communication_tech.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,10 @@ public class ExportController : ControllerBase
         [FromQuery] DateTime? endTime = null,
         [FromQuery] string step = "5s")
     {
-        var end = endTime ?? DateTime.UtcNow;
-        var start = startTime ?? end.AddHours(-1); // default last hour
-
         try
         {
+            var (start, end) = TimeHelper.GetUtcStartEndFromTurkeyTime(startTime, endTime);
+
             var dataPoints = await _prometheusService.GetMetricRangeDataAsync(query, start, end, step);
 
             var metricDataPoints = dataPoints as MetricDataPoint[] ?? dataPoints.ToArray();

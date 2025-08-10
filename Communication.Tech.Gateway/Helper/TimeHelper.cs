@@ -2,17 +2,16 @@ namespace communication_tech.Helper;
 
 public static class TimeHelper
 {
-    public static long ConvertUtcToUnixTimeWithTurkeyTime(DateTime dateTime)
+    private static readonly TimeZoneInfo TurkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+
+    public static (DateTime startUtc, DateTime endUtc) GetUtcStartEndFromTurkeyTime(DateTime? startTimeTr, DateTime? endTimeTr)
     {
-        if (dateTime.Kind != DateTimeKind.Utc)
-            throw new ArgumentException("DateTime must be UTC", nameof(dateTime));
+        var endTr = endTimeTr ?? TimeZoneInfo.ConvertTime(DateTime.Now, TurkeyTimeZone);
+        var startTr = startTimeTr ?? endTr.AddHours(-1);
 
-        // UTC+3 offset
-        var offset = TimeSpan.FromHours(3);
-        var localDateTime = DateTime.SpecifyKind(dateTime.AddHours(3), DateTimeKind.Unspecified);
-        var dto = new DateTimeOffset(localDateTime, offset);
+        var startUtc = TimeZoneInfo.ConvertTimeToUtc(startTr, TurkeyTimeZone);
+        var endUtc = TimeZoneInfo.ConvertTimeToUtc(endTr, TurkeyTimeZone);
 
-        return dto.ToUnixTimeSeconds();
+        return (startUtc, endUtc);
     }
-
 }
