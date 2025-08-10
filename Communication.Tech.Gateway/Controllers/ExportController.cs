@@ -31,7 +31,7 @@ public class ExportController : ControllerBase
 
             var dataPoints = await _prometheusService.GetMetricRangeDataAsync(query, start, end, step);
 
-            var metricDataPoints = dataPoints as MetricDataPoint[] ?? dataPoints.ToArray();
+            var metricDataPoints = dataPoints as MetricDataPoint[] ?? dataPoints.Where(p => p.Value != 0).ToArray();
             if (metricDataPoints.Length == 0)
                 return NotFound("Data Not Found By Given Range.");
 
