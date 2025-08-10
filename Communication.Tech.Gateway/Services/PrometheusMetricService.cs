@@ -30,10 +30,12 @@ public class PrometheusMetricService : IPrometheusMetricService
     
     private readonly HttpClientService _httpClientService;
     private readonly PrometheusSettings _prometheusSettings;
+    private readonly ILogger<PrometheusMetricService> _logger;
 
-    public PrometheusMetricService(HttpClientService httpClientService, IOptions<PrometheusSettings> settings)
+    public PrometheusMetricService(HttpClientService httpClientService, IOptions<PrometheusSettings> settings, ILogger<PrometheusMetricService> logger)
     {
         _httpClientService = httpClientService;
+        _logger = logger;
         _prometheusSettings = settings.Value;
     }
 
@@ -70,11 +72,20 @@ public class PrometheusMetricService : IPrometheusMetricService
             { "end", endUnix.ToString() },
             { "step", step }
         };
-
+        
+        var queryString = string.Join("&", queryParams.Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value)}"));
+        var fullUrl = $"{_prometheusSettings.Url}/{route}?{queryString}";
+        _logger.LogInformation("Prometheus URL: {FullUrl}", fullUrl);
+        _logger.LogInformation("Start time: {StartTime} -> Unix: {StartUnix}", startTime, startUnix);
+        _logger.LogInformation("End time: {DateTime} -> Unix: {EndUnix}", endTime, endUnix);
+        
         var response = await _httpClientService.GetAsyncWithQueryString<PrometheusQueryResponse>(
             _prometheusSettings.Url
             , route
             , queryParams);
+        
+        _logger.LogInformation("Response status: {ResponseStatus}", response?.Status);
+        _logger.LogInformation("Result count: {ResultCount}", response?.Data?.Result?.Count ?? 0);
         
         if (response?.Data.Result == null || response.Data.Result.Count == 0)
             return [];
