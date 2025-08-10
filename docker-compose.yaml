@@ -23,15 +23,15 @@ services:
     networks:
       - tech-net
     restart: unless-stopped
-  
+
   communication.tech.server:
     build:
       context: .
       dockerfile: Communication.Tech.Server/Dockerfile
     ports:
-      - "6061:5060"  # HTTP
-      - "6062:6013"  # gRPC
-      - "5277:5276"  # WebSocket
+      - "6061:5060"
+      - "6062:6013"
+      - "5277:5276"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - DOTNET_RUNNING_IN_CONTAINER=true
@@ -54,7 +54,7 @@ services:
       context: .
       dockerfile: Communication.Tech.Consumer/Dockerfile
     ports:
-      - "8080:80" 
+      - "8080:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - DOTNET_RUNNING_IN_CONTAINER=true
@@ -72,7 +72,6 @@ services:
       - tech-net
     restart: unless-stopped
 
-  # Prometheus monitoring
   prometheus:
     image: prom/prometheus:latest
     ports:
@@ -82,11 +81,13 @@ services:
     depends_on:
       - communication.tech.gateway
       - communication.tech.consumer
+      - redis-exporter
+      - kafka-exporter
+      - rabbitmq-exporter
     networks:
       - tech-net
     restart: unless-stopped
 
-  # Redis
   redis:
     image: redis:alpine
     ports:
@@ -101,12 +102,21 @@ services:
       - tech-net
     restart: unless-stopped
 
-  # RabbitMQ
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    ports:
+      - "9121:9121"
+    environment:
+      - REDIS_ADDR=redis:6379
+    networks:
+      - tech-net
+    restart: unless-stopped
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
-      - "15672:15672"  # Web UI
+      - "15672:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
@@ -120,30 +130,31 @@ services:
       - tech-net
     restart: unless-stopped
 
-  # Kafka (KRaft mode)
+  rabbitmq-exporter:
+    image: kbudde/rabbitmq-exporter:latest
+    ports:
+      - "9419:9419"
+    environment:
+      - RABBITMQ_URL=http://guest:guest@rabbitmq:15672/
+    networks:
+      - tech-net
+    restart: unless-stopped
+
   kafka:
     image: bitnami/kafka:3.6
     ports:
       - "9092:9092"
     environment:
-      # KRaft Mode Configuration
       KAFKA_CFG_PROCESS_ROLES: controller,broker
       KAFKA_CFG_NODE_ID: 1
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      
-      # Listener Configuration
       KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
       KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
-      
-      # Other settings
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
       KAFKA_CFG_LOG_RETENTION_HOURS: 168
-      
-      # Memory optimization for t3.small
       KAFKA_HEAP_OPTS: "-Xmx512m -Xms256m"
-    
     networks:
       - tech-net
     healthcheck:
@@ -154,6 +165,19 @@ services:
       start_period: 60s
     restart: unless-stopped
 
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    ports:
+      - "9308:9308"
+    environment:
+      - KAFKA_SERVER=kafka:9092
+    networks:
+      - tech-net
+    restart: unless-stopped
+
 networks:
   tech-net:
     driver: bridge
+
+volumes:
+  prometheus_data:
