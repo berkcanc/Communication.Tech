@@ -20,12 +20,12 @@ public class ExportController : ControllerBase
     [HttpGet("ExportCsv")]
     public async Task<IActionResult> ExportMetricsAsCsv(
         [FromQuery] string query,
-        [FromQuery] DateTime? startTimeUtc = null,
-        [FromQuery] DateTime? endTimeUtc = null,
+        [FromQuery] DateTime? startTime = null,
+        [FromQuery] DateTime? endTime = null,
         [FromQuery] string step = "5s")
     {
-        var end = endTimeUtc ?? DateTime.UtcNow;
-        var start = startTimeUtc ?? end.AddHours(-1); // default last hour
+        var end = endTime ?? DateTime.UtcNow;
+        var start = startTime ?? end.AddHours(-1); // default last hour
 
         try
         {

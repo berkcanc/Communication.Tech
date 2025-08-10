@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using communication_tech.Helper;
 using communication_tech.Interfaces;
 using communication_tech.Models;
 using Grpc.Core;
@@ -62,9 +63,9 @@ public class PrometheusMetricService : IPrometheusMetricService
     {
         const string route = "api/v1/query_range";
         
-        var offset = TimeSpan.FromHours(3); // UTC+3
-        var startUnix = new DateTimeOffset(startTime, offset).ToUnixTimeSeconds();
-        var endUnix = new DateTimeOffset(endTime, offset).ToUnixTimeSeconds();
+        var startUnix = TimeHelper.ConvertUtcToUnixTimeWithTurkeyTime(startTime);
+        var endUnix = TimeHelper.ConvertUtcToUnixTimeWithTurkeyTime(endTime);
+
         
         var queryParams = new Dictionary<string, string>
         {
