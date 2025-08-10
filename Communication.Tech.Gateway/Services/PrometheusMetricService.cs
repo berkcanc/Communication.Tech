@@ -62,8 +62,9 @@ public class PrometheusMetricService : IPrometheusMetricService
     {
         const string route = "api/v1/query_range";
         
-        var startUnix = new DateTimeOffset(startTime).ToUnixTimeSeconds();
-        var endUnix = new DateTimeOffset(endTime).ToUnixTimeSeconds();
+        var offset = TimeSpan.FromHours(3); // UTC+3
+        var startUnix = new DateTimeOffset(startTime, offset).ToUnixTimeSeconds();
+        var endUnix = new DateTimeOffset(endTime, offset).ToUnixTimeSeconds();
         
         var queryParams = new Dictionary<string, string>
         {
