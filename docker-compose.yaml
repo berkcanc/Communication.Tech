@@ -6,21 +6,20 @@ services:
       context: .
       dockerfile: Communication.Tech.Gateway/Dockerfile
     ports:
-      - "6060:5061"
+      - "6060:6060"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:5061
       - DOTNET_RUNNING_IN_CONTAINER=true
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
     depends_on:
       redis:
-        condition: service_healthy
+        condition: service_started
       kafka:
-        condition: service_healthy
+        condition: service_started
       rabbitmq:
-        condition: service_healthy
+        condition: service_started
     networks:
       - tech-net
     restart: unless-stopped
@@ -35,18 +34,17 @@ services:
       - "5277:5276"  # WebSocket
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:5060
       - DOTNET_RUNNING_IN_CONTAINER=true
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
     depends_on:
       redis:
-        condition: service_healthy
+        condition: service_started
       kafka:
-        condition: service_healthy
+        condition: service_started
       rabbitmq:
-        condition: service_healthy
+        condition: service_started
     networks:
       - tech-net
     restart: unless-stopped
@@ -56,21 +54,20 @@ services:
       context: .
       dockerfile: Communication.Tech.Consumer/Dockerfile
     ports:
-      - "8080:80"  # Host port değiştirildi çakışma olmasın
+      - "8080:80" 
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:80
       - DOTNET_RUNNING_IN_CONTAINER=true
       - Kafka__BootstrapServers=kafka:9092
       - RabbitMQ__HostName=rabbitmq
       - Redis__ConnectionString=redis:6379
     depends_on:
       redis:
-        condition: service_healthy
+        condition: service_started
       kafka:
-        condition: service_healthy
+        condition: service_started
       rabbitmq:
-        condition: service_healthy
+        condition: service_started
     networks:
       - tech-net
     restart: unless-stopped
@@ -123,7 +120,7 @@ services:
       - tech-net
     restart: unless-stopped
 
-  # Kafka (KRaft mode - Zookeeper yok)
+  # Kafka (KRaft mode)
   kafka:
     image: bitnami/kafka:3.6
     ports:

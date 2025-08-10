@@ -13,9 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-var redisConnectionString = configuration["Redis:ConnectionString"];
-if (redisConnectionString != null)
-    builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var config = builder.Configuration["Redis:ConnectionString"];
+    return ConnectionMultiplexer.Connect(config + ",abortConnect=false");
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,16 +29,13 @@ builder.Services.AddSingleton<IRedisQueueService, RedisQueueService>();
 builder.Services.AddSingleton<MessageStoreService>();
 
 builder.Services.Configure<PrometheusSettings>(configuration.GetSection("Prometheus"));
+
 var rabbitMqSettings = configuration.GetSection("RabbitMQ");
 var rabbitMqSettingsModel = rabbitMqSettings.Get<RabbitMqSettings>();
 
 if (rabbitMqSettingsModel is { IsEnabled: true })
 {
     builder.Services.Configure<RabbitMqSettings>(rabbitMqSettings);
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenAnyIP(15692); // rabbitmq
-    });
     builder.Services.AddHostedService<RabbitMQConsumer>();
 }
 
@@ -46,10 +45,6 @@ var kafkaSettingsModel = kafkaSettings.Get<KafkaSettings>();
 if (kafkaSettingsModel is { IsEnabled: true })
 {
     builder.Services.Configure<KafkaSettings>(kafkaSettings);
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenAnyIP(9092); // kafka
-    });
     builder.Services.AddHostedService<KafkaConsumer>();
 }
 
@@ -59,13 +54,13 @@ var redisSettingsModel = redisSettings.Get<RedisSettings>();
 if (redisSettingsModel is { IsEnabled: true })
 {
     builder.Services.Configure<RedisSettings>(redisSettings);
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenAnyIP(6379); // redis
-    });
     builder.Services.AddHostedService<RedisQueueConsumer>();
 }
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080);
+});
 
 var app = builder.Build();
 

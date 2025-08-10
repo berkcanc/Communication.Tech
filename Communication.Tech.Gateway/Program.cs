@@ -11,12 +11,19 @@ using StackExchange.Redis;
 
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
-Environment.SetEnvironmentVariable("ASPNETCORE_HTTPS_PORT", "");
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<RabbitMqSettings>(
-    builder.Configuration.GetSection("RabbitMQ"));
+var configuration = builder.Configuration;
+
+builder.Services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMQ"));
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var config = configuration["Redis:ConnectionString"];
+    return ConnectionMultiplexer.Connect(config + ",abortConnect=false");
+});
+
+builder.Services.Configure<PrometheusSettings>(configuration.GetSection("Prometheus"));
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -41,10 +48,8 @@ builder.WebHost.ConfigureKestrel(options =>
 
 
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(
-    ConnectionMultiplexer.Connect(builder.Configuration["Redis:ConnectionString"] ?? string.Empty));
 
-builder.Services.Configure<PrometheusSettings>(builder.Configuration.GetSection("Prometheus"));
+
 builder.Services.AddGrpc(options =>
 {
     options.Interceptors.Add<GrpcMetricsInterceptor>();
@@ -68,7 +73,7 @@ builder.Services.AddScoped<GrpcMetricsInterceptor>();
 
 builder.Services.AddGrpcClient<Greeter.GreeterClient>(options =>
 {
-    options.Address = new Uri(builder.Configuration["GeneralSettings:GrpcServerBaseAddress"] ?? string.Empty);
+    options.Address = new Uri(configuration["GeneralSettings:GrpcServerBaseAddress"] ?? string.Empty);
 }).AddInterceptor<GrpcMetricsInterceptor>();
 
 builder.Services.AddGrpcReflection();
