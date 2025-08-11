@@ -23,32 +23,39 @@ public class RedisQueueConsumer : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("✅ Redis Queue Consumer started");
-
-        while (!stoppingToken.IsCancellationRequested)
+        try
         {
-            _logger.LogDebug("🔄 Redis kuyruğu kontrol ediliyor: message_queue");
+            _logger.LogInformation("✅ Redis Queue Consumer started");
+            
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogDebug("🔄 Redis kuyruğu kontrol ediliyor: message_queue");
 
-            try
-            {
-                var result = await DequeueMessageAsync();
-                if (!string.IsNullOrWhiteSpace(result.Message))
+                try
                 {
-                    _logger.LogInformation($"📥 Message received: {result.MessageId} {result.Message}");
+                    var result = await DequeueMessageAsync();
+                    if (!string.IsNullOrWhiteSpace(result.Message))
+                    {
+                        _logger.LogInformation($"📥 Message received: {result.MessageId} {result.Message}");
+                    }
+                    else
+                    {
+                        // If the queue is empty, then wait
+                        await Task.Delay(50, stoppingToken);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    // Kuyruk boşsa bir süre bekle
-                    await Task.Delay(50, stoppingToken);
+                    _logger.LogError(ex, "❌ Redis consumer error");
+                    await Task.Delay(1000, stoppingToken);
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "❌ Redis consumer error");
-                await Task.Delay(1000, stoppingToken); // hata varsa biraz bekle
             }
         }
-
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
         _logger.LogWarning("🛑 Redis Queue Consumer stopped.");
     }
     

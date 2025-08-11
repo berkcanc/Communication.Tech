@@ -2,6 +2,7 @@ using communication_tech.Models;
 using Communication.Tech.Consumer.Interfaces;
 using StackExchange.Redis;
 using Confluent.Kafka;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,12 +17,12 @@ public class KafkaConsumer : BackgroundService
     private readonly IPrometheusConsumerMetricService _prometheusConsumerMetricService;
 
     public KafkaConsumer(
-        IOptions<KafkaSettings> options, 
+        IConfiguration configuration,
         ILogger<KafkaConsumer> logger,
         IConnectionMultiplexer redisConnection,
         IPrometheusConsumerMetricService prometheusConsumerMetricService)
     {
-        _settings = options.Value;
+        _settings = configuration.GetSection("Kafka").Get<KafkaSettings>()!;
         _logger = logger;
         _redisDb = redisConnection.GetDatabase();
         _prometheusConsumerMetricService = prometheusConsumerMetricService;
@@ -33,7 +34,8 @@ public class KafkaConsumer : BackgroundService
         {
             BootstrapServers = _settings.BootstrapServers,
             GroupId = _settings.GroupId,
-            AutoOffsetReset = AutoOffsetReset.Earliest
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+            BrokerAddressFamily = BrokerAddressFamily.V6
         };
 
         using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
@@ -76,6 +78,11 @@ public class KafkaConsumer : BackgroundService
                 catch (ConsumeException ex)
                 {
                     _logger.LogError(ex, "Kafka consume error: {ErrorReason}", ex.Error.Reason);
+                }
+                catch (KafkaException ex)
+                {
+                    _logger.LogError(ex, "Kafka consume error: {ErrorReason}", ex.Error.Reason);
+                    await Task.Delay(5000, stoppingToken);
                 }
             }
         }
