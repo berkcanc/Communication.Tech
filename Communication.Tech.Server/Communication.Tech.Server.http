@@ -1,4 +1,4 @@
-@Communication.Tech.Server_HostAddress = http://localhost:5060
+@Communication.Tech.Server_HostAddress = http://localhost:6061
 
 GET {{Communication.Tech.Server_HostAddress}}/weatherforecast/
 Accept: application/json

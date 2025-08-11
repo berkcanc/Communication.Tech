@@ -1,6 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5060
+EXPOSE 6061
 EXPOSE 6013
 EXPOSE 5276
 

@@ -29,7 +29,7 @@ services:
       context: .
       dockerfile: Communication.Tech.Server/Dockerfile
     ports:
-      - "6061:5060"
+      - "6061:6061"
       - "6062:6013"
       - "5277:5276"
     environment:

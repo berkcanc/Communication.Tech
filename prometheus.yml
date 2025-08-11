@@ -8,7 +8,7 @@ scrape_configs:
 
   - job_name: 'communication-tech-server'
     static_configs:
-      - targets: ['communication.tech.server:5060']
+      - targets: ['communication.tech.server:6061']
 
   - job_name: 'communication-tech-consumer'
     static_configs:
