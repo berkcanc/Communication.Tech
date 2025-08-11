@@ -12,6 +12,8 @@ AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
 var configuration = builder.Configuration;
 
 builder.Services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMQ"));
