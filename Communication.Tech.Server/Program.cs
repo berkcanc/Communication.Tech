@@ -25,6 +25,11 @@ builder.Services
     .AddQueryType<Query>()
     .AddMutationType<Mutation>();
 
+builder.Services.Configure<WebSocketOptions>(options =>
+{
+    options.KeepAliveInterval = TimeSpan.FromMinutes(2);
+});
+
 builder.WebHost.ConfigureKestrel(options =>
 {
     //HTTP
@@ -39,17 +44,26 @@ builder.WebHost.ConfigureKestrel(options =>
         o.Protocols = HttpProtocols.Http2;
     });
     
-    //WebSocket
+    // WebSocket
     options.ListenAnyIP(Constants.WebSocketServerPort, o =>
     {
-        options.Limits.RequestHeadersTimeout = TimeSpan.FromSeconds(60);
-        // for inactive connection
-        options.Limits.KeepAliveTimeout = TimeSpan.FromSeconds(60);
+        o.Protocols = HttpProtocols.Http1AndHttp2;
     });
+    
+    options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(3);
+    options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(3);
+    
+    options.Limits.MaxConcurrentConnections = 1000;
+    options.Limits.MaxConcurrentUpgradedConnections = 1000;
 });
 
 
 var app = builder.Build();
+
+app.UseWebSockets(new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+});
 
 // WebSocket endpoint
 app.Map("/ws", async context =>
