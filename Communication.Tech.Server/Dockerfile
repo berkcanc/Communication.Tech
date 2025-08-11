@@ -1,5 +1,4 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
 WORKDIR /app
 EXPOSE 5060
 EXPOSE 6013
@@ -9,7 +8,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Communication.Tech.Server/Communication.Tech.Server.csproj", "Communication.Tech.Server/"]
-COPY ["Communication.Tech.Protos/Communication.Tech.Protos.csproj", "Communication.Tech.Protos/"]
 RUN dotnet restore "Communication.Tech.Server/Communication.Tech.Server.csproj"
 COPY . .
 WORKDIR "/src/Communication.Tech.Server"

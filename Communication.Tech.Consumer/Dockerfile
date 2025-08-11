@@ -1,13 +1,10 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
-EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Communication.Tech.Consumer/Communication.Tech.Consumer.csproj", "Communication.Tech.Consumer/"]
-COPY ["Communication.Tech.Gateway/Communication.Tech.Gateway.csproj", "Communication.Tech.Gateway/"]
-COPY ["Communication.Tech.Protos/Communication.Tech.Protos.csproj", "Communication.Tech.Protos/"]
 RUN dotnet restore "Communication.Tech.Consumer/Communication.Tech.Consumer.csproj"
 COPY . .
 WORKDIR "/src/Communication.Tech.Consumer"

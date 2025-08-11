@@ -1,7 +1,7 @@
-﻿using communication_tech.Interfaces;
-using communication_tech.Models;
-using communication_tech.Services;
+﻿using communication_tech.Models;
 using Communication.Tech.Consumer.Consumers;
+using Communication.Tech.Consumer.Interfaces;
+using Communication.Tech.Consumer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,11 +22,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHttpClient<HttpClientService>();
-builder.Services.AddSingleton<HttpClientService>();
-builder.Services.AddSingleton<IPrometheusMetricService, PrometheusMetricService>();
-builder.Services.AddSingleton<IRedisQueueService, RedisQueueService>();
-builder.Services.AddSingleton<MessageStoreService>();
+builder.Services.AddSingleton<IPrometheusConsumerMetricService, PrometheusConsumerMetricService>();
 
 builder.Services.Configure<PrometheusSettings>(configuration.GetSection("Prometheus"));
 
@@ -65,8 +61,8 @@ builder.WebHost.ConfigureKestrel(options =>
 var app = builder.Build();
 
 Metrics.SuppressDefaultMetrics();     // ⛔ .NET default metrics disable
-app.UseMetricServer();               // ✅ /metrics endpoint
-app.UseHttpMetrics();                // HTTP request metrics
+/*app.UseMetricServer();               // ✅ /metrics endpoint
+app.UseHttpMetrics();     */           // HTTP request metrics
 
 app.Run();
 

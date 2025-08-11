@@ -1,5 +1,5 @@
 using communication_tech.Interfaces;
-using Communication.Tech.Protos;
+using Communication.Tech.Gateway.Protos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace communication_tech.Controllers;
@@ -24,6 +24,5 @@ public class GrpcController : ControllerBase
         var request = new HelloRequest { Name = payload};
         var reply = await _grpcClient.SayHelloAsync(request);
         return Ok(new { message = reply.Message });
-        
     }
 }

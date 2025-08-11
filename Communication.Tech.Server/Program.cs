@@ -1,8 +1,8 @@
-using Communication.Tech.Protos;
 using Communication.Tech.Server;
 using Communication.Tech.Server.Interfaces;
 using Communication.Tech.Server.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Constants = Communication.Tech.Server.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,8 +1,7 @@
-using communication_tech.Interfaces;
 using communication_tech.Models;
+using Communication.Tech.Consumer.Interfaces;
 using StackExchange.Redis;
 using Confluent.Kafka;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,18 +13,18 @@ public class KafkaConsumer : BackgroundService
     private readonly KafkaSettings _settings;
     private readonly ILogger<KafkaConsumer> _logger;
     private readonly IDatabase _redisDb;
-    private readonly IPrometheusMetricService _prometheusMetricService;
+    private readonly IPrometheusConsumerMetricService _prometheusConsumerMetricService;
 
     public KafkaConsumer(
         IOptions<KafkaSettings> options, 
         ILogger<KafkaConsumer> logger,
         IConnectionMultiplexer redisConnection,
-        IPrometheusMetricService prometheusMetricService)
+        IPrometheusConsumerMetricService prometheusConsumerMetricService)
     {
         _settings = options.Value;
         _logger = logger;
         _redisDb = redisConnection.GetDatabase();
-        _prometheusMetricService = prometheusMetricService;
+        _prometheusConsumerMetricService = prometheusConsumerMetricService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -64,7 +63,7 @@ public class KafkaConsumer : BackgroundService
                         var durationMs = nowMs - enqueueMs;
                         var durationSec = durationMs / 1000.0;
 
-                        _prometheusMetricService.RecordMessageQueueTurnaround(messageId, "default", "kafka", durationSec);
+                        _prometheusConsumerMetricService.RecordMessageQueueTurnaround(messageId, "default", "kafka", durationSec);
                         await _redisDb.KeyDeleteAsync(tsKey);
 
                         _logger.LogInformation("✅  Consumed message: {MessageId}, turnaround = {Duration}ms", messageId, durationSec.ToString("F3"));

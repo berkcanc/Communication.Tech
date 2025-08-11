@@ -2,6 +2,7 @@ using communication_tech.Interfaces;
 using communication_tech.Models;
 using communication_tech.Services;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace communication_tech.Controllers;
 
@@ -9,12 +10,14 @@ namespace communication_tech.Controllers;
 [Route("[controller]")]
 public class RedisController : ControllerBase
 {
-    private readonly IRedisQueueService _queueService;
+    private readonly IDatabase _db;
+    private const string QueueKey = "message_queue";
     private readonly IPayloadGeneratorService _payloadGeneratorService;
 
-    public RedisController(IRedisQueueService queueService, IPayloadGeneratorService payloadGeneratorService)
+    public RedisController(IPayloadGeneratorService payloadGeneratorService, IConfiguration configuration)
     {
-        _queueService = queueService;
+        var redis = ConnectionMultiplexer.Connect(configuration["Redis:ConnectionString"] ?? string.Empty);
+        _db = redis.GetDatabase();
         _payloadGeneratorService = payloadGeneratorService;
     }
     
@@ -23,14 +26,19 @@ public class RedisController : ControllerBase
     {
         var id = Guid.NewGuid().ToString();
         var payload = _payloadGeneratorService.GenerateMessage(request.Message, request.SizeInKB);
-        await _queueService.EnqueueMessageAsync(id, payload);
+        await _db.ListLeftPushAsync(QueueKey, $"{id}:{payload}");
+
+        var nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        await _db.StringSetAsync($"enqueue:{id}", nowMs);
+
+        Console.WriteLine($"✅ Enqueued: {id}, Timestamp set: enqueue:{id} = {nowMs}ms");
         return Ok(new { status = "queued", messageId = id, payload });
     }
     
     [HttpGet("count")]
     public async Task<IActionResult> GetQueueMessageCount()
     {
-        var count = await _queueService.MessageCountAsync();
+        var count = await _db.ListLengthAsync(QueueKey);
         return Ok(new { messageCount = count });
     }
 }

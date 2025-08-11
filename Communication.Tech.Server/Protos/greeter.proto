@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option csharp_namespace = "Communication.Tech.Protos";
+option csharp_namespace = "Communication.Tech.Server.Protos";
 
-package greeter;
+package greet;
 
 service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply);

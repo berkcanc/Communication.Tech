@@ -1,4 +1,4 @@
-using Communication.Tech.Protos;
+using Communication.Tech.Server.Protos;
 using Grpc.Core;
 
 namespace Communication.Tech.Server.Services;

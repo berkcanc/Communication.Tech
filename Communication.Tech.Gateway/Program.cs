@@ -1,13 +1,12 @@
-using System.Net;
-using System.Net.Security;
 using communication_tech.Interfaces;
 using communication_tech.Middlewares;
 using communication_tech.Models;
 using communication_tech.Services;
-using Communication.Tech.Protos;
+using Communication.Tech.Gateway.Protos;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Prometheus;
 using StackExchange.Redis;
+using Constants = communication_tech.Constants;
 
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
@@ -62,7 +61,6 @@ builder.Services.AddSingleton<IPayloadGeneratorService, PayloadGeneratorService>
 builder.Services.AddSingleton<IPrometheusMetricService, PrometheusMetricService>();
 builder.Services.AddSingleton<KafkaProducerService>();
 builder.Services.AddSingleton<RabbitMQProducerService>();
-builder.Services.AddSingleton<IRedisQueueService, RedisQueueService>();
 
 
 builder.Services.AddControllers();

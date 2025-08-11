@@ -1,9 +1,7 @@
-namespace Communication.Tech.Protos;
+namespace Communication.Tech.Server;
 
 public static class Constants
 {
-    public const int HttpGatewayPort = 6060;
-    public const int GrpcGatewayPort = 6010;
     public const int HttpServerPort = 6061;
     public const int GrpcServerPort = 6013;
     public const int WebSocketServerPort = 5276;

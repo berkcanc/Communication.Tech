@@ -1,6 +1,6 @@
 using System.Text;
-using communication_tech.Interfaces;
 using communication_tech.Models;
+using Communication.Tech.Consumer.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,7 +14,7 @@ public class RabbitMQConsumer : BackgroundService
 {
     private readonly ILogger<RabbitMQConsumer> _logger;
     private readonly RabbitMqSettings _settings;
-    private readonly IPrometheusMetricService _prometheusMetricService;
+    private readonly IPrometheusConsumerMetricService _prometheusConsumerMetricService;
     private readonly IDatabase _redisDb;
     private IConnection? _connection;
     private IModel? _channel;
@@ -23,11 +23,11 @@ public class RabbitMQConsumer : BackgroundService
         IOptions<RabbitMqSettings> options,
         ILogger<RabbitMQConsumer> logger,
         IConnectionMultiplexer redis,
-        IPrometheusMetricService prometheusMetricService)
+        IPrometheusConsumerMetricService prometheusConsumerMetricService)
     {
         _settings = options.Value;
         _logger = logger;
-        _prometheusMetricService = prometheusMetricService;
+        _prometheusConsumerMetricService = prometheusConsumerMetricService;
         _redisDb = redis.GetDatabase();
         _logger.LogInformation("🟢 RabbitMQConsumer constructor initialized.");
     }
@@ -52,7 +52,6 @@ public class RabbitMQConsumer : BackgroundService
             autoDelete: false,
             arguments: null);
         
-        // Prefetch count ayarla (örneğin 10)
         _channel.BasicQos(0, 1, false);
 
         _logger.LogInformation("✅ Connected to RabbitMQ queue: {Queue}", _settings.QueueName);
@@ -85,7 +84,7 @@ public class RabbitMQConsumer : BackgroundService
                     var durationMs = nowMs - enqueueMs;
                     var durationSec = durationMs / 1000.0;
 
-                    _prometheusMetricService.RecordMessageQueueTurnaround(messageId, "default", "rabbitmq", durationSec);
+                    _prometheusConsumerMetricService.RecordMessageQueueTurnaround(messageId, "default", "rabbitmq", durationSec);
                     await _redisDb.KeyDeleteAsync(tsKey);
 
                     _logger.LogInformation("✅ MessageId: {MessageId}, turnaround = {DurationMs}ms", messageId, durationMs);

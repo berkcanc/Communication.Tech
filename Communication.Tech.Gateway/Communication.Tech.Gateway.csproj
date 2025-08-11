@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Protobuf Include="Protos\greeter.proto" GrpcServices="Client" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <PackageReference Include="Confluent.Kafka" Version="2.8.0" />
         <PackageReference Include="Grpc.Core.Api" Version="2.70.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
@@ -20,10 +24,6 @@
         <PackageReference Include="StackExchange.Redis" Version="2.8.37" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Communication.Tech.Protos\Communication.Tech.Protos.csproj" />
-    </ItemGroup>
     
     <ItemGroup>
         <None Update="appsettings.json">
@@ -31,9 +31,8 @@
             <TargetPath>Gateway/appsettings.json</TargetPath>
         </None>
         <None Include="appsettings.Development.json" />
-        <Protobuf Include="../Communication.Tech.Protos/Protos/greeter.proto" GrpcServices="Client" />
     </ItemGroup>
-
+    
     <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
