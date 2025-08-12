@@ -1,5 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
+EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
