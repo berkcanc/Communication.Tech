@@ -13,11 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var config = builder.Configuration["Redis:ConnectionString"];
-    return ConnectionMultiplexer.Connect(config + ",abortConnect=false");
-});
+var redisConnectionString = configuration["Redis:ConnectionString"];
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(redisConnectionString));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

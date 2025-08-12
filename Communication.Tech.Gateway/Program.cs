@@ -18,11 +18,8 @@ var configuration = builder.Configuration;
 
 builder.Services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMQ"));
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var config = configuration["Redis:ConnectionString"];
-    return ConnectionMultiplexer.Connect(config + ",abortConnect=false");
-});
+var redisConnectionString = configuration["Redis:ConnectionString"];
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(redisConnectionString));
 
 builder.Services.Configure<PrometheusSettings>(configuration.GetSection("Prometheus"));
 
