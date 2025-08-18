@@ -1,27 +1,19 @@
 global:
-  scrape_interval: 15s
+  scrape_interval: 5s
 
 scrape_configs:
-  - job_name: 'communication-tech-gateway'
+  - job_name: 'gateway'
     static_configs:
-      - targets: ['communication.tech.gateway:6060']
+      - targets: ['gateway:6060']
 
-  - job_name: 'communication-tech-server'
+  - job_name: 'server'
     static_configs:
-      - targets: ['communication.tech.server:6061']
+      - targets: ['server:6061']
 
-  - job_name: 'communication-tech-consumer'
+  - job_name: 'consumer'
     static_configs:
-      - targets: ['communication.tech.consumer:80']
+      - targets: ['consumer:8080']
 
   - job_name: 'redis'
     static_configs:
-      - targets: ['redis-exporter:9121']
-
-  - job_name: 'rabbitmq'
-    static_configs:
-      - targets: ['rabbitmq-exporter:9419']
-
-  - job_name: 'kafka'
-    static_configs:
-      - targets: ['kafka-exporter:9308']
+      - targets: ['redis:6379']
