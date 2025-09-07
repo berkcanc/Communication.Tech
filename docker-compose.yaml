@@ -1,117 +1,6 @@
 ﻿version: '3.8'
 
 services:
-  communication.tech.gateway:
-    build:
-      context: .
-      dockerfile: Communication.Tech.Gateway/Dockerfile
-    ports:
-      - "6060:6060"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - DOTNET_RUNNING_IN_CONTAINER=true
-      - Kafka__BootstrapServers=kafka:9092
-      - RabbitMQ__HostName=rabbitmq
-      - Redis__ConnectionString=redis:6379
-    depends_on:
-      redis:
-        condition: service_healthy
-      kafka:
-        condition: service_started
-      rabbitmq:
-        condition: service_started
-    networks:
-      - tech-net
-    restart: unless-stopped
-
-  communication.tech.server:
-    build:
-      context: .
-      dockerfile: Communication.Tech.Server/Dockerfile
-    ports:
-      - "6061:6061"
-      - "6062:6013"
-      - "5277:5276"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - DOTNET_RUNNING_IN_CONTAINER=true
-      - Kafka__BootstrapServers=kafka:9092
-      - RabbitMQ__HostName=rabbitmq
-      - Redis__ConnectionString=redis:6379
-    depends_on:
-      redis:
-        condition: service_healthy
-      kafka:
-        condition: service_started
-      rabbitmq:
-        condition: service_started
-    networks:
-      - tech-net
-    restart: unless-stopped
-
-  communication.tech.consumer:
-    build:
-      context: .
-      dockerfile: Communication.Tech.Consumer/Dockerfile
-    ports:
-      - "8080:80"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - DOTNET_RUNNING_IN_CONTAINER=true
-      - Kafka__BootstrapServers=kafka:9092
-      - RabbitMQ__HostName=rabbitmq
-      - Redis__ConnectionString=redis:6379
-    depends_on:
-      redis:
-        condition: service_healthy
-      kafka:
-        condition: service_started
-      rabbitmq:
-        condition: service_started
-    networks:
-      - tech-net
-    restart: unless-stopped
-
-  prometheus:
-    image: prom/prometheus:latest
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    depends_on:
-      - communication.tech.gateway
-      - communication.tech.consumer
-      - redis-exporter
-      - kafka-exporter
-      - rabbitmq-exporter
-    networks:
-      - tech-net
-    restart: unless-stopped
-
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    networks:
-      - tech-net
-    restart: unless-stopped
-
-  redis-exporter:
-    image: oliver006/redis_exporter:latest
-    ports:
-      - "9121:9121"
-    environment:
-      - REDIS_ADDR=redis:6379
-    networks:
-      - tech-net
-    restart: unless-stopped
-
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -127,7 +16,7 @@ services:
       retries: 10
       start_period: 30s
     networks:
-      - tech-net
+      - communication-net
     restart: unless-stopped
 
   rabbitmq-exporter:
@@ -135,49 +24,121 @@ services:
     ports:
       - "9419:9419"
     environment:
-      - RABBITMQ_URL=http://guest:guest@rabbitmq:15672/
+      - RABBITMQ_URI=amqp://guest:guest@rabbitmq:5672/
     networks:
-      - tech-net
+      - communication-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     restart: unless-stopped
 
-  kafka:
-    image: bitnami/kafka:3.6
+  redis:
+    image: redis:latest
     ports:
-      - "9092:9092"
-    environment:
-      KAFKA_CFG_PROCESS_ROLES: controller,broker
-      KAFKA_CFG_NODE_ID: 1
-      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
-      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
-      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
-      KAFKA_CFG_LOG_RETENTION_HOURS: 168
-      KAFKA_HEAP_OPTS: "-Xmx512m -Xms256m"
-    networks:
-      - tech-net
+      - "6379:6379"
     healthcheck:
-      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list"]
-      interval: 30s
-      timeout: 10s
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
       retries: 5
-      start_period: 60s
+      start_period: 10s
+    networks:
+      - communication-net
     restart: unless-stopped
 
-  kafka-exporter:
-    image: danielqsj/kafka-exporter:latest
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
     ports:
-      - "9308:9308"
+      - "9121:9121"
     environment:
-      - KAFKA_SERVER=kafka:9092
+      - REDIS_ADDR=redis:6379
     networks:
-      - tech-net
+      - communication-net
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  consumer:
+    image: consumer:latest
+    environment:
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+      - RabbitMQ__VirtualHost=/
+      - RabbitMQ__QueueName=message_queue
+      - RabbitMQ__ExchangeName=messages-exchange
+      - RabbitMQ__RoutingKey=messages.routing
+      - RabbitMQ__IsEnabled=true
+      - Redis__ConnectionString=redis:6379
+      - Redis__IsEnabled=true
+      - Kafka__IsEnabled=false
+    networks:
+      - communication-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  server:
+    image: server:latest
+    ports:
+      - "6061:6061"
+      - "6062:6013"
+      - "5277:5276"
+    networks:
+      - communication-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  gateway:
+    image: gateway:latest
+    environment:
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+      - RabbitMQ__VirtualHost=/
+      - RabbitMQ__QueueName=message_queue
+      - RabbitMQ__ExchangeName=messages-exchange
+      - RabbitMQ__RoutingKey=messages.routing
+      - RabbitMQ__IsEnabled=true
+      - Redis__ConnectionString=redis:6379
+      - Redis__IsEnabled=true
+      - Kafka__IsEnabled=false
+    ports:
+      - "6060:6060"
+    networks:
+      - communication-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - communication-net
+    depends_on:
+      - gateway
+      - consumer
+      - redis-exporter
+      - rabbitmq-exporter
     restart: unless-stopped
 
 networks:
-  tech-net:
-    driver: bridge
-
-volumes:
-  prometheus_data:
+  communication-net:
+    driver: overlay
