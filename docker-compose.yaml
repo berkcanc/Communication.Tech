@@ -28,8 +28,7 @@ services:
     networks:
       - communication-net
     depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - rabbitmq
     restart: unless-stopped
 
   redis:
@@ -55,8 +54,7 @@ services:
     networks:
       - communication-net
     depends_on:
-      redis:
-        condition: service_healthy
+      - redis
     restart: unless-stopped
 
   consumer:
@@ -77,10 +75,8 @@ services:
     networks:
       - communication-net
     depends_on:
-      rabbitmq:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - rabbitmq
+      - redis
     restart: unless-stopped
 
   server:
@@ -92,10 +88,8 @@ services:
     networks:
       - communication-net
     depends_on:
-      rabbitmq:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - rabbitmq
+      - redis
     restart: unless-stopped
 
   gateway:
@@ -118,10 +112,8 @@ services:
     networks:
       - communication-net
     depends_on:
-      rabbitmq:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - rabbitmq
+      - redis
     restart: unless-stopped
 
   prometheus:
