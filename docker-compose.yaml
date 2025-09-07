@@ -24,7 +24,7 @@ services:
     ports:
       - "9419:9419"
     environment:
-      - RABBITMQ_URI=amqp://guest:guest@rabbitmq:5672/
+      - RABBITMQ_URL=http://guest:guest@rabbitmq:15672/
     networks:
       - communication-net
     depends_on:
