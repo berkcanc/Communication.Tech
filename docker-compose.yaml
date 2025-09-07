@@ -7,8 +7,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_USER=exporter
+      - RABBITMQ_DEFAULT_PASS=mypassword
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
       interval: 15s
@@ -24,7 +24,7 @@ services:
     ports:
       - "9419:9419"
     environment:
-      - RABBITMQ_URL=http://guest:guest@rabbitmq:15672/
+      - RABBIT_URL=http://exporter:mypassword@rabbitmq:15672
     networks:
       - communication-net
     depends_on:
@@ -62,8 +62,8 @@ services:
     environment:
       - RabbitMQ__HostName=rabbitmq
       - RabbitMQ__Port=5672
-      - RabbitMQ__UserName=guest
-      - RabbitMQ__Password=guest
+      - RabbitMQ__UserName=exporter
+      - RabbitMQ__Password=mypassword
       - RabbitMQ__VirtualHost=/
       - RabbitMQ__QueueName=message_queue
       - RabbitMQ__ExchangeName=messages-exchange
@@ -97,8 +97,8 @@ services:
     environment:
       - RabbitMQ__HostName=rabbitmq
       - RabbitMQ__Port=5672
-      - RabbitMQ__UserName=guest
-      - RabbitMQ__Password=guest
+      - RabbitMQ__UserName=exporter
+      - RabbitMQ__Password=mypassword
       - RabbitMQ__VirtualHost=/
       - RabbitMQ__QueueName=message_queue
       - RabbitMQ__ExchangeName=messages-exchange
