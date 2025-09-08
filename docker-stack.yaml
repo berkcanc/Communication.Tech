@@ -81,7 +81,7 @@ services:
         protocol: tcp
         mode: host
     environment:
-      - REDIS_ADDR=redis:6379
+      - REDIS_ADDR=communication-tech_redis:6379
     networks:
       - communication-net
     deploy:
@@ -110,7 +110,7 @@ services:
     networks:
       - communication-net
     deploy:
-      replicas: 1
+      replicas: 2
       restart_policy:
         condition: any
         delay: 5s
@@ -130,7 +130,7 @@ services:
         max_failure_ratio: 0.3
 
   server:
-    image: server:latest
+    image: localhost:5000/server:latest
     ports:
       - target: 6061
         published: 6061
@@ -147,7 +147,7 @@ services:
     networks:
       - communication-net
     deploy:
-      replicas: 1
+      replicas: 2
       restart_policy:
         condition: any
         delay: 5s
@@ -167,7 +167,7 @@ services:
         max_failure_ratio: 0.3
 
   gateway:
-    image: gateway:latest
+    image: localhost:5000/gateway:latest
     environment:
       - RabbitMQ__HostName=communication-tech_rabbitmq
       - RabbitMQ__Port=5672
@@ -189,7 +189,7 @@ services:
     networks:
       - communication-net
     deploy:
-      replicas: 1
+      replicas: 3
       restart_policy:
         condition: any
         delay: 5s
