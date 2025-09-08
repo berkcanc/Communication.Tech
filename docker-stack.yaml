@@ -32,7 +32,7 @@ services:
         window: 120s
 
   rabbitmq-exporter:
-    image: kbudde/rabbitmq-exporter:v1.0.0-RC19
+    image: kbudde/rabbitmq-exporter:latest
     ports:
       - target: 9419
         published: 9419
