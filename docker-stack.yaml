@@ -32,14 +32,19 @@ services:
         window: 120s
 
   rabbitmq-exporter:
-    image: kbudde/rabbitmq-exporter:latest
+    image: kbudde/rabbitmq-exporter:v1.0.0-RC19
     ports:
       - target: 9419
         published: 9419
         protocol: tcp
         mode: host
     environment:
-      - RABBIT_URL=http://exporter:mypassword@communication-tech_rabbitmq:15672/
+      - RABBIT_URL=http://communication-tech_rabbitmq:15672
+      - RABBIT_USER=exporter
+      - RABBIT_PASSWORD=mypassword
+      - PUBLISH_PORT=9419
+      - OUTPUT_FORMAT=TEXT
+      - RABBIT_CAPABILITIES=bert,no_sort
     networks:
       - communication-net
     deploy:
