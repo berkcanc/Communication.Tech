@@ -1,0 +1,240 @@
+﻿version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - target: 5672
+        published: 5672
+        protocol: tcp
+        mode: host
+      - target: 15672
+        published: 15672
+        protocol: tcp
+        mode: host
+    environment:
+      - RABBITMQ_DEFAULT_USER=exporter
+      - RABBITMQ_DEFAULT_PASS=mypassword
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  rabbitmq-exporter:
+    image: kbudde/rabbitmq-exporter:latest
+    ports:
+      - target: 9419
+        published: 9419
+        protocol: tcp
+        mode: host
+    environment:
+      - RABBIT_URL=http://exporter:mypassword@rabbitmq:15672/
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  redis:
+    image: redis:latest
+    ports:
+      - target: 6379
+        published: 6379
+        protocol: tcp
+        mode: host
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    ports:
+      - target: 9121
+        published: 9121
+        protocol: tcp
+        mode: host
+    environment:
+      - REDIS_ADDR=redis:6379
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  consumer:
+    image: consumer:latest
+    environment:
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=exporter
+      - RabbitMQ__Password=mypassword
+      - RabbitMQ__VirtualHost=/
+      - RabbitMQ__QueueName=message_queue
+      - RabbitMQ__ExchangeName=messages-exchange
+      - RabbitMQ__RoutingKey=messages.routing
+      - RabbitMQ__IsEnabled=true
+      - Redis__ConnectionString=redis:6379
+      - Redis__IsEnabled=true
+      - Kafka__IsEnabled=false
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        monitor: 60s
+        max_failure_ratio: 0.3
+      rollback_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: continue
+        monitor: 60s
+        max_failure_ratio: 0.3
+
+  server:
+    image: server:latest
+    ports:
+      - target: 6061
+        published: 6061
+        protocol: tcp
+        mode: ingress
+      - target: 6013
+        published: 6062
+        protocol: tcp
+        mode: ingress
+      - target: 5276
+        published: 5277
+        protocol: tcp
+        mode: ingress
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        monitor: 60s
+        max_failure_ratio: 0.3
+      rollback_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: continue
+        monitor: 60s
+        max_failure_ratio: 0.3
+
+  gateway:
+    image: gateway:latest
+    environment:
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=exporter
+      - RabbitMQ__Password=mypassword
+      - RabbitMQ__VirtualHost=/
+      - RabbitMQ__QueueName=message_queue
+      - RabbitMQ__ExchangeName=messages-exchange
+      - RabbitMQ__RoutingKey=messages.routing
+      - RabbitMQ__IsEnabled=true
+      - Redis__ConnectionString=redis:6379
+      - Redis__IsEnabled=true
+      - Kafka__IsEnabled=false
+    ports:
+      - target: 6060
+        published: 6060
+        protocol: tcp
+        mode: ingress
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        monitor: 60s
+        max_failure_ratio: 0.3
+      rollback_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: continue
+        monitor: 60s
+        max_failure_ratio: 0.3
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - target: 9090
+        published: 9090
+        protocol: tcp
+        mode: ingress
+    configs:
+      - source: prometheus_config
+        target: /etc/prometheus/prometheus.yml
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+networks:
+  communication-net:
+    driver: overlay
+    attachable: true
+    driver_opts:
+      encrypted: "true"
+
+configs:
+  prometheus_config:
+    file: ./prometheus.yml
