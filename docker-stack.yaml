@@ -39,7 +39,7 @@ services:
         protocol: tcp
         mode: host
     environment:
-      - RABBIT_URL=http://exporter:mypassword@rabbitmq:15672/
+      - RABBIT_URL=http://exporter:mypassword@communication-tech_rabbitmq:15672/
     networks:
       - communication-net
     deploy:
@@ -95,7 +95,7 @@ services:
   consumer:
     image: consumer:latest
     environment:
-      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__HostName=communication-tech_rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__UserName=exporter
       - RabbitMQ__Password=mypassword
@@ -104,7 +104,7 @@ services:
       - RabbitMQ__ExchangeName=messages-exchange
       - RabbitMQ__RoutingKey=messages.routing
       - RabbitMQ__IsEnabled=true
-      - Redis__ConnectionString=redis:6379
+      - Redis__ConnectionString=communication-tech_redis:6379
       - Redis__IsEnabled=true
       - Kafka__IsEnabled=false
     networks:
@@ -169,7 +169,7 @@ services:
   gateway:
     image: gateway:latest
     environment:
-      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__HostName=communication-tech_rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__UserName=exporter
       - RabbitMQ__Password=mypassword
