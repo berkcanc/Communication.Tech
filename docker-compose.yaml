@@ -24,7 +24,7 @@ services:
     ports:
       - "9419:9419"
     environment:
-      - RABBIT_URL=http://exporter:mypassword@rabbitmq:15672
+      - RABBIT_URL=http://exporter:mypassword@communication-tech_rabbitmq:15672/
     networks:
       - communication-net
     depends_on:
