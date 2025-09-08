@@ -60,7 +60,7 @@ services:
   consumer:
     image: consumer:latest
     environment:
-      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__HostName=communication-tech_rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__UserName=exporter
       - RabbitMQ__Password=mypassword
@@ -95,7 +95,7 @@ services:
   gateway:
     image: gateway:latest
     environment:
-      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__HostName=communication-tech_rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__UserName=exporter
       - RabbitMQ__Password=mypassword
