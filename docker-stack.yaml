@@ -101,7 +101,7 @@ services:
         window: 120s
 
   consumer:
-    image: consumer:latest
+    image: localhost:5000/consumer:latest
     environment:
       - RabbitMQ__HostName=communication-tech_rabbitmq
       - RabbitMQ__Port=5672
