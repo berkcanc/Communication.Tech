@@ -57,8 +57,8 @@ builder.WebHost.ConfigureKestrel(options =>
 
 var app = builder.Build();
 
-Metrics.SuppressDefaultMetrics();     // ⛔ .NET default metrics disable
-app.UseMetricServer();               // ✅ /metrics endpoint
+//Metrics.SuppressDefaultMetrics();     // ⛔ .NET default metrics disable
+app.UseMetricServer(8080, "0.0.0.0");  // ✅ /metrics endpoint
 
 app.Run();
 
