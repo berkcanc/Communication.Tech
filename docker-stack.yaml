@@ -228,6 +228,10 @@ networks:
   communication-net:
     driver: overlay
     attachable: true
+    
+volumes:
+  registry-data:
+    driver: local
 
 configs:
   prometheus_config:
