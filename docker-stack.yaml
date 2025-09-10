@@ -1,6 +1,23 @@
 ﻿version: '3.8'
 
 services:
+  registry:
+    image: registry:2
+    ports:
+      - target: 5000
+        published: 5000
+        protocol: tcp
+        mode: ingress
+    networks:
+      - communication-net
+    volumes:
+      - registry-data:/var/lib/registry
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+  
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -108,7 +125,7 @@ services:
         window: 120s
 
   consumer:
-    image: localhost:5000/consumer:latest
+    image: registry:5000/consumer:latest
     environment:
       - RabbitMQ__HostName=rabbitmq
       - RabbitMQ__Port=5672
@@ -133,7 +150,7 @@ services:
         window: 120s
 
   server:
-    image: localhost:5000/server:latest
+    image: registry:5000/server:latest
     ports:
       - target: 6061
         published: 6061
@@ -158,7 +175,7 @@ services:
         window: 120s
 
   gateway:
-    image: localhost:5000/gateway:latest
+    image: registry:5000/gateway:latest
     environment:
       - RabbitMQ__HostName=rabbitmq
       - RabbitMQ__Port=5672
