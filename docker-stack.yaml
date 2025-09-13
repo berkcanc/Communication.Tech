@@ -14,6 +14,9 @@ services:
       - registry-data:/var/lib/registry
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
   
   rabbitmq:
     image: rabbitmq:3-management
@@ -122,7 +125,7 @@ services:
         window: 120s
 
   consumer:
-    image: registry:5000/consumer:latest
+    image: localhost:5000/consumer:latest
     environment:
       - RabbitMQ__HostName=rabbitmq
       - RabbitMQ__Port=5672
@@ -147,7 +150,7 @@ services:
         window: 120s
 
   server:
-    image: registry:5000/server:latest
+    image: localhost:5000/server:latest
     ports:
       - target: 6061
         published: 6061
@@ -172,7 +175,7 @@ services:
         window: 120s
 
   gateway:
-    image: registry:5000/gateway:latest
+    image: localhost:5000/gateway:latest
     environment:
       - RabbitMQ__HostName=rabbitmq
       - RabbitMQ__Port=5672
