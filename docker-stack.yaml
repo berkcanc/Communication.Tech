@@ -229,6 +229,23 @@ services:
         max_attempts: 3
         window: 120s
 
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    deploy:
+      mode: global
+    ports:
+      - "9100:9100"
+    networks:
+      - communication-net
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($|/)"'
+
 networks:
   communication-net:
     driver: overlay
