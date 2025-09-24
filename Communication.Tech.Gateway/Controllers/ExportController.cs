@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using communication_tech.Enums;
 using communication_tech.Helper;
 using communication_tech.Interfaces;
 using communication_tech.Models;
@@ -12,6 +13,7 @@ namespace communication_tech.Controllers;
 public class ExportController : ControllerBase
 {
     private readonly IPrometheusMetricService _prometheusService;
+    private readonly ILogger<ExportController> _logger;
 
     public ExportController(IPrometheusMetricService prometheusService)
     {
@@ -51,5 +53,52 @@ public class ExportController : ControllerBase
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
+    }
+    
+    
+    /// <summary>
+    /// Collect metric for specific technology by ID (1=Http, 2=gRPC, 3=Redis, 4=RabbitMQ)
+    /// </summary>
+    [HttpPost("collect/{technologyId:int}")]
+    public async Task<IActionResult> CollectSpecificMetric(int technologyId)
+    {
+        try
+        {
+            if (!IsValidTechnologyId(technologyId))
+            {
+                return BadRequest(new
+                {
+                    Message = $"Invalid technology ID: {technologyId}",
+                    ValidIds = "1=Http, 2=gRPC, 3=Redis, 4=RabbitMQ",
+                    Status = "ValidationError"
+                });
+            }
+
+            var technologyType = (TechnologyType)technologyId;
+            await _prometheusService.CollectAndStoreMetricsAsync(technologyType);
+
+            return Ok(new
+            {
+                Message = $"Metric collected and stored for {technologyType}",
+                TechnologyName = technologyType.ToString(),
+                Status = "Success"
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error collecting metric for technology ID {TechnologyId}", technologyId);
+            return BadRequest(new
+            {
+                Message = "Error collecting metric",
+                TechnologyId = technologyId,
+                Error = ex.Message,
+                Status = "Failed"
+            });
+        }
+    }
+    
+    private static bool IsValidTechnologyId(int technologyId)
+    {
+        return Enum.IsDefined(typeof(TechnologyType), technologyId);
     }
 }

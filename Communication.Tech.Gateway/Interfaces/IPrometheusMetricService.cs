@@ -1,3 +1,4 @@
+using communication_tech.Enums;
 using communication_tech.Models;
 using Grpc.Core;
 
@@ -12,4 +13,6 @@ public interface IPrometheusMetricService
         DateTime startTime,
         DateTime endTime,
         string step);
+
+    Task CollectAndStoreMetricsAsync(TechnologyType technologyType);
 }

@@ -1,5 +1,7 @@
 using System.Globalization;
+using System.Reflection;
 using System.Text.Json;
+using communication_tech.Enums;
 using communication_tech.Helper;
 using communication_tech.Interfaces;
 using communication_tech.Models;
@@ -26,11 +28,15 @@ public class PrometheusMetricService : IPrometheusMetricService
     private readonly HttpClientService _httpClientService;
     private readonly PrometheusSettings _prometheusSettings;
     private readonly ILogger<PrometheusMetricService> _logger;
+    private readonly IMetricsFileStorageService _metricsFileStorageService;
+    private readonly IServiceProvider _serviceProvider;
 
-    public PrometheusMetricService(HttpClientService httpClientService, IOptions<PrometheusSettings> settings, ILogger<PrometheusMetricService> logger)
+    public PrometheusMetricService(HttpClientService httpClientService, IOptions<PrometheusSettings> settings, ILogger<PrometheusMetricService> logger, IMetricsFileStorageService metricsFileStorageService, IServiceProvider serviceProvider)
     {
         _httpClientService = httpClientService;
         _logger = logger;
+        _metricsFileStorageService = metricsFileStorageService;
+        _serviceProvider = serviceProvider;
         _prometheusSettings = settings.Value;
     }
 
@@ -95,5 +101,71 @@ public class PrometheusMetricService : IPrometheusMetricService
                     Value = roundedValue
                 };
             });
+    }
+    
+    public async Task CollectAndStoreMetricsAsync(TechnologyType technologyType)
+    {
+        var startTime = DateTime.UtcNow;
+        _logger.LogInformation(
+            "Starting metrics collection for {Technology} at {StartTime}",
+            technologyType, startTime
+        );
+
+        try
+        {
+            var metric = await CollectMetricForTechnologyAsync(technologyType);
+            if (metric == null)
+            {
+                _logger.LogWarning("No metric collected for {Technology}", technologyType);
+                return;
+            }
+
+            await _metricsFileStorageService.SaveMetricsAsync(metric);
+
+            var duration = DateTime.UtcNow - startTime;
+            _logger.LogInformation(
+                "Completed metrics collection for {Technology} in {Duration}ms. Metric saved to file",
+                technologyType, duration.TotalMilliseconds
+            );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error collecting metric for {Technology}", technologyType);
+            throw;
+        }
+    }
+
+
+    private async Task<EnumBasedMetric?> CollectMetricForTechnologyAsync(TechnologyType technologyType)
+    {
+        // TechnologyType -> EnumBasedMetric mapping
+        var typeMap = new Dictionary<TechnologyType, Type>
+        {
+            { TechnologyType.Http, typeof(HttpMetric) },
+            { TechnologyType.gRPC, typeof(GrpcMetric) },
+            { TechnologyType.Redis, typeof(RedisMetric) },
+            { TechnologyType.RabbitMQ, typeof(RabbitMqMetric) }
+        };
+
+        if (!typeMap.TryGetValue(technologyType, out var metricType))
+            return null;
+
+        // CollectMetricAsync<T> method call with reflection
+        var methodInfo = typeof(PrometheusMetricService)
+            .GetMethod(nameof(CollectMetricAsync), BindingFlags.Instance | BindingFlags.Public)!
+            .MakeGenericMethod(metricType);
+
+        var task = (Task<EnumBasedMetric>)methodInfo.Invoke(this, null)!;
+        return await task;
+    }
+
+    public async Task<T> CollectMetricAsync<T>() where T : EnumBasedMetric
+    {
+        var collector = _serviceProvider.GetRequiredService<IEnumMetricsCollector<T>>();
+        var metric = await collector.CollectAsync();
+
+        _logger.LogInformation("Collected single {TechnologyType} metric", metric.TechnologyType);
+
+        return metric;
     }
 }
