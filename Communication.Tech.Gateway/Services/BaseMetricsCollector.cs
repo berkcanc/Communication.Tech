@@ -5,10 +5,10 @@ using communication_tech.Models;
 
 namespace communication_tech.Services;
 
-public abstract class BaseEnumMetricsCollector<T> : IEnumMetricsCollector<T> where T : EnumBasedMetric
+public abstract class BaseMetricsCollector<T> : IMetricsCollector<T> where T : EnumBasedMetric
 {
-    protected readonly HttpClient _httpClient;
-    protected readonly string _prometheusHost;
+    private readonly HttpClient _httpClient;
+    private readonly string _prometheusHost;
     protected readonly ILogger _logger;
 
     public abstract TechnologyType TechnologyType { get; }
@@ -17,7 +17,7 @@ public abstract class BaseEnumMetricsCollector<T> : IEnumMetricsCollector<T> whe
     protected abstract string ResponseTimeQuery { get; }
     protected abstract string TurnaroundTimeQuery { get; }
 
-    protected BaseEnumMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger logger)
+    protected BaseMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger logger)
     {
         _httpClient = httpClient;
         _prometheusHost = config.GetValue<string>("Prometheus:Host", "http://127.0.0.1:9090");
@@ -40,7 +40,7 @@ public abstract class BaseEnumMetricsCollector<T> : IEnumMetricsCollector<T> whe
             });
 
             var result = prometheusResponse?.Data?.Result?.FirstOrDefault();
-            if (result != null && result.Values?.Count > 1)
+            if (result is { Values.Count: > 1 })
             {
                 return Convert.ToDouble(result.Values[1]);
             }

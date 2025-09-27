@@ -14,6 +14,7 @@ public class MetricsFileStorageService : IMetricsFileStorageService
     public MetricsFileStorageService(IConfiguration config, ILogger<MetricsFileStorageService> logger)
     {
         _storagePath = "/home/ubuntu/Communication.Tech/results";
+        //_storagePath = Path.Combine(AppContext.BaseDirectory, "results");
         _logger = logger;
         
         _jsonOptions = new JsonSerializerOptions
@@ -21,17 +22,19 @@ public class MetricsFileStorageService : IMetricsFileStorageService
             WriteIndented = true,
             Converters = { new JsonStringEnumConverter() }
         };
-
-        EnsureDirectoryExists();
     }
     
     public async Task SaveMetricsAsync(EnumBasedMetric metricInfo)
     {
         try
         {
+            EnsureDirectoryExists();
+            
             var timestamp = DateTime.UtcNow;
-            var fileName = $"metrics_{metricInfo.TechnologyType.ToString()}_{timestamp:yyyyMMdd_HHmmss}_{Guid.NewGuid():N[..8]}.json";
+            var timestampStr = timestamp.ToString("yyyyMMdd_HHmmss");
+            var guidPart = Guid.NewGuid().ToString("N")[..8];
 
+            var fileName = $"metrics_{metricInfo.TechnologyType}_{timestampStr}_{guidPart}.json";
             var filePath = Path.Combine(_storagePath, fileName);
 
             var json = JsonSerializer.Serialize(metricInfo, _jsonOptions);

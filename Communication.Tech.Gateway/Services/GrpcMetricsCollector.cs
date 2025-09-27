@@ -3,7 +3,7 @@ using communication_tech.Models;
 
 namespace communication_tech.Services;
 
-public class EnumGrpcMetricsCollector : BaseEnumMetricsCollector<GrpcMetric>
+public class GrpcMetricsCollector : BaseMetricsCollector<GrpcMetric>
 {
     public override TechnologyType TechnologyType => TechnologyType.gRPC;
     
@@ -12,7 +12,7 @@ public class EnumGrpcMetricsCollector : BaseEnumMetricsCollector<GrpcMetric>
     protected override string ResponseTimeQuery => "rate(grpc_server_handling_seconds_sum[5m]) / rate(grpc_server_handling_seconds_count[5m]) * 1000";
     protected override string TurnaroundTimeQuery => "histogram_quantile(0.95, rate(grpc_server_handling_seconds_bucket[5m])) * 1000";
 
-    public EnumGrpcMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<EnumGrpcMetricsCollector> logger)
+    public GrpcMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<GrpcMetricsCollector> logger)
         : base(httpClient, config, logger)
     {
     }

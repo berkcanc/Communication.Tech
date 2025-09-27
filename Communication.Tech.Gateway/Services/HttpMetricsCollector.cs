@@ -3,7 +3,7 @@ using communication_tech.Models;
 
 namespace communication_tech.Services;
 
-public class EnumHttpMetricsCollector : BaseEnumMetricsCollector<HttpMetric>
+public class HttpMetricsCollector : BaseMetricsCollector<HttpMetric>
 {
     public override TechnologyType TechnologyType => TechnologyType.Http;
     
@@ -12,7 +12,7 @@ public class EnumHttpMetricsCollector : BaseEnumMetricsCollector<HttpMetric>
     protected override string ResponseTimeQuery => "rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]) * 1000";
     protected override string TurnaroundTimeQuery => "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) * 1000";
 
-    public EnumHttpMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<EnumHttpMetricsCollector> logger)
+    public HttpMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<HttpMetricsCollector> logger)
         : base(httpClient, config, logger)
     {
     }

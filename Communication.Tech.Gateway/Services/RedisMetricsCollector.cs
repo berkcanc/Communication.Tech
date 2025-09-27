@@ -3,7 +3,7 @@ using communication_tech.Models;
 
 namespace communication_tech.Services;
 
-public class EnumRedisMetricsCollector : BaseEnumMetricsCollector<RedisMetric>
+public class RedisMetricsCollector : BaseMetricsCollector<RedisMetric>
 {
     public override TechnologyType TechnologyType => TechnologyType.Redis;
     
@@ -12,7 +12,7 @@ public class EnumRedisMetricsCollector : BaseEnumMetricsCollector<RedisMetric>
     protected override string ResponseTimeQuery => "avg_over_time(redis_slowlog_length[5m])";
     protected override string TurnaroundTimeQuery => "histogram_quantile(0.95, rate(redis_command_call_duration_seconds_bucket[5m])) * 1000";
 
-    public EnumRedisMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<EnumRedisMetricsCollector> logger)
+    public RedisMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<RedisMetricsCollector> logger)
         : base(httpClient, config, logger)
     {
     }

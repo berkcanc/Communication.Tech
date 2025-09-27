@@ -57,6 +57,16 @@ builder.Services.AddSingleton<HttpClientService>();
 
 // Services
 builder.Services.AddSingleton<IPayloadGeneratorService, PayloadGeneratorService>();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddSingleton<IMetricsCollector<HttpMetric>, HttpMetricsCollector>();
+builder.Services.AddSingleton<IMetricsCollector<GrpcMetric>, GrpcMetricsCollector>();
+builder.Services.AddSingleton<IMetricsCollector<RedisMetric>, RedisMetricsCollector>();
+builder.Services.AddSingleton<IMetricsCollector<RabbitMqMetric>, RabbitMqMetricsCollector>();
+
+
+builder.Services.AddSingleton<IMetricsFileStorageService, MetricsFileStorageService>();
 builder.Services.AddSingleton<IPrometheusMetricService, PrometheusMetricService>();
 builder.Services.AddSingleton<KafkaProducerService>();
 builder.Services.AddSingleton<RabbitMQProducerService>();

@@ -155,17 +155,28 @@ public class PrometheusMetricService : IPrometheusMetricService
             .GetMethod(nameof(CollectMetricAsync), BindingFlags.Instance | BindingFlags.Public)!
             .MakeGenericMethod(metricType);
 
-        var task = (Task<EnumBasedMetric>)methodInfo.Invoke(this, null)!;
-        return await task;
+        var task = (Task)methodInfo.Invoke(this, null)!;
+        var result = await (dynamic)task;
+
+        return (EnumBasedMetric)result;
     }
 
     public async Task<T> CollectMetricAsync<T>() where T : EnumBasedMetric
     {
-        var collector = _serviceProvider.GetRequiredService<IEnumMetricsCollector<T>>();
-        var metric = await collector.CollectAsync();
+        try
+        {
+            var collector = _serviceProvider.GetRequiredService<IMetricsCollector<T>>();
+            var metric = await collector.CollectAsync();
 
-        _logger.LogInformation("Collected single {TechnologyType} metric", metric.TechnologyType);
-
-        return metric;
+            _logger.LogInformation("Collected single {TechnologyType} metric", metric.TechnologyType);
+            
+            return metric;
+            
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
