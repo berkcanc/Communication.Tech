@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="Controllers\**\*.cs" />
         <Protobuf Include="Protos\greeter.proto" GrpcServices="Client" />
     </ItemGroup>
     
