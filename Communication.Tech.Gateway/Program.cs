@@ -95,7 +95,11 @@ app.UseMiddleware<HttpMetricsMiddleware>();
 
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Communication.Tech.Gateway v1");
+    c.RoutePrefix = "swagger";
+});
 
 //app.UseHttpsRedirection();
 //app.UseAuthorization();
