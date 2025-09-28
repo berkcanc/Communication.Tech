@@ -249,7 +249,7 @@ services:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--path.rootfs=/rootfs'
-      - '--collector.filesystem.mount-points-exclude="^/(sys|proc|dev|etc)($|/)"'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|etc)($$/)'
 
 networks:
   communication-net:
