@@ -1,5 +1,6 @@
 using communication_tech.Enums;
 using communication_tech.Models;
+using Microsoft.Extensions.Options;
 
 namespace communication_tech.Services;
 
@@ -12,8 +13,8 @@ public class GrpcMetricsCollector : BaseMetricsCollector<GrpcMetric>
     protected override string ResponseTimeQuery => "rate(grpc_server_handling_seconds_sum[5m]) / rate(grpc_server_handling_seconds_count[5m]) * 1000";
     protected override string TurnaroundTimeQuery => "histogram_quantile(0.95, rate(grpc_server_handling_seconds_bucket[5m])) * 1000";
 
-    public GrpcMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<GrpcMetricsCollector> logger)
-        : base(httpClient, config, logger)
+    public GrpcMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<GrpcMetricsCollector> logger, IOptions<PrometheusSettings> settings)
+        : base(httpClient, config, logger, settings)
     {
     }
 
@@ -29,7 +30,9 @@ public class GrpcMetricsCollector : BaseMetricsCollector<GrpcMetric>
             ExecuteSimpleQueryAsync(ThroughputQuery),
             ExecuteSimpleQueryAsync(LatencyQuery),
             ExecuteSimpleQueryAsync(ResponseTimeQuery),
-            ExecuteSimpleQueryAsync(TurnaroundTimeQuery)
+            ExecuteSimpleQueryAsync(TurnaroundTimeQuery),
+            ExecuteSimpleQueryAsync(CpuUsageQuery),
+            ExecuteSimpleQueryAsync(MemoryUsageQuery)
         };
 
         var results = await Task.WhenAll(tasks);
@@ -38,6 +41,8 @@ public class GrpcMetricsCollector : BaseMetricsCollector<GrpcMetric>
         metric.Latency = results[1];
         metric.ResponseTime = results[2];
         metric.TurnaroundTime = results[3];
+        metric.CpuUsage = results[4];
+        metric.MemoryUsage = results[5];
 
         _logger.LogDebug("Collected gRPC metrics - Throughput: {Throughput}, Latency: {Latency}ms", 
             metric.Throughput, metric.Latency);

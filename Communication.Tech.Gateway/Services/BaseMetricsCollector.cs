@@ -2,13 +2,14 @@ using System.Text.Json;
 using communication_tech.Enums;
 using communication_tech.Interfaces;
 using communication_tech.Models;
+using Microsoft.Extensions.Options;
 
 namespace communication_tech.Services;
 
 public abstract class BaseMetricsCollector<T> : IMetricsCollector<T> where T : EnumBasedMetric
 {
     private readonly HttpClient _httpClient;
-    private readonly string _prometheusHost;
+    private readonly PrometheusSettings _prometheusSettings;
     protected readonly ILogger _logger;
 
     public abstract TechnologyType TechnologyType { get; }
@@ -16,11 +17,16 @@ public abstract class BaseMetricsCollector<T> : IMetricsCollector<T> where T : E
     protected abstract string LatencyQuery { get; }
     protected abstract string ResponseTimeQuery { get; }
     protected abstract string TurnaroundTimeQuery { get; }
+    protected string CpuUsageQuery => 
+        "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)";
 
-    protected BaseMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger logger)
+    protected string MemoryUsageQuery => 
+        "100 * ((node_memory_active_bytes + node_memory_wired_bytes + node_memory_compressed_bytes) / node_memory_total_bytes)";
+
+    protected BaseMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger logger, IOptions<PrometheusSettings> settings)
     {
         _httpClient = httpClient;
-        _prometheusHost = config.GetValue<string>("Prometheus:Host", "http://127.0.0.1:9090");
+        _prometheusSettings = settings.Value;
         _logger = logger;
     }
 
@@ -31,7 +37,7 @@ public abstract class BaseMetricsCollector<T> : IMetricsCollector<T> where T : E
         try
         {
             var encodedQuery = Uri.EscapeDataString(query);
-            var url = $"{_prometheusHost}/api/v1/query?query={encodedQuery}";
+            var url = $"{_prometheusSettings.Url}/api/v1/query?query={encodedQuery}";
             
             var response = await _httpClient.GetStringAsync(url);
             var prometheusResponse = JsonSerializer.Deserialize<PrometheusQueryResponse>(response, new JsonSerializerOptions

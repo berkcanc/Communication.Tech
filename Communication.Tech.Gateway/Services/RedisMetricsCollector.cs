@@ -1,5 +1,6 @@
 using communication_tech.Enums;
 using communication_tech.Models;
+using Microsoft.Extensions.Options;
 
 namespace communication_tech.Services;
 
@@ -12,8 +13,8 @@ public class RedisMetricsCollector : BaseMetricsCollector<RedisMetric>
     protected override string ResponseTimeQuery => "avg_over_time(redis_slowlog_length[5m])";
     protected override string TurnaroundTimeQuery => "histogram_quantile(0.95, rate(redis_command_call_duration_seconds_bucket[5m])) * 1000";
 
-    public RedisMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<RedisMetricsCollector> logger)
-        : base(httpClient, config, logger)
+    public RedisMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<RedisMetricsCollector> logger, IOptions<PrometheusSettings> settings)
+        : base(httpClient, config, logger, settings)
     {
     }
 
@@ -29,7 +30,9 @@ public class RedisMetricsCollector : BaseMetricsCollector<RedisMetric>
             ExecuteSimpleQueryAsync(ThroughputQuery),
             ExecuteSimpleQueryAsync(LatencyQuery),
             ExecuteSimpleQueryAsync(ResponseTimeQuery),
-            ExecuteSimpleQueryAsync(TurnaroundTimeQuery)
+            ExecuteSimpleQueryAsync(TurnaroundTimeQuery),
+            ExecuteSimpleQueryAsync(CpuUsageQuery),
+            ExecuteSimpleQueryAsync(MemoryUsageQuery)
         };
 
         var results = await Task.WhenAll(tasks);
@@ -38,6 +41,8 @@ public class RedisMetricsCollector : BaseMetricsCollector<RedisMetric>
         metric.Latency = results[1];
         metric.ResponseTime = results[2];
         metric.TurnaroundTime = results[3];
+        metric.CpuUsage = results[4];
+        metric.MemoryUsage = results[5];
 
         _logger.LogDebug("Collected Redis metrics - Throughput: {Throughput}, Latency: {Latency}ms", 
             metric.Throughput, metric.Latency);

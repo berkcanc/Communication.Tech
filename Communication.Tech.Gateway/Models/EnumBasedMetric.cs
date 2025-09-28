@@ -8,11 +8,12 @@ public abstract class EnumBasedMetric
     public string ServiceName { get; set; } = string.Empty;
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     public string Environment { get; set; } = string.Empty;
-    public Dictionary<string, object> Tags { get; set; } = new();
     
-    // Core 4 metrics
+    // Core 6 metrics
     public double Throughput { get; set; }
     public double Latency { get; set; }
     public double ResponseTime { get; set; }
     public double TurnaroundTime { get; set; }
+    public double CpuUsage { get; set; }
+    public double MemoryUsage { get; set; }
 }

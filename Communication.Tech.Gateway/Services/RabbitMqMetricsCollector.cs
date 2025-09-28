@@ -1,5 +1,6 @@
 using communication_tech.Enums;
 using communication_tech.Models;
+using Microsoft.Extensions.Options;
 
 namespace communication_tech.Services;
 
@@ -15,8 +16,8 @@ public class RabbitMqMetricsCollector : BaseMetricsCollector<RabbitMqMetric>
     protected override string ResponseTimeQuery => "(rate(queue_turnaround_duration_seconds_sum{source=\"rabbitmq\"}[5m]) / clamp_min(rate(queue_turnaround_duration_seconds_count{source=\"rabbitmq\"}[5m]), 0.01)) * 1000";
     protected override string TurnaroundTimeQuery => "1000*(sum(rate(queue_turnaround_duration_seconds_sum{source=\"rabbitmq\"}[5m])) / sum(rate(queue_turnaround_duration_seconds_count{source=\"rabbitmq\"}[5m])))";
 
-    public RabbitMqMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<RabbitMqMetricsCollector> logger)
-        : base(httpClient, config, logger)
+    public RabbitMqMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<RabbitMqMetricsCollector> logger, IOptions<PrometheusSettings> settings)
+        : base(httpClient, config, logger, settings)
     {
         _queue = config.GetValue<string>("RabbitMQ:Queue", "message_queue");
         _vhost = config.GetValue<string>("RabbitMQ:VHost", "/");
@@ -34,7 +35,9 @@ public class RabbitMqMetricsCollector : BaseMetricsCollector<RabbitMqMetric>
             ExecuteSimpleQueryAsync(ThroughputQuery),
             ExecuteSimpleQueryAsync(LatencyQuery),
             ExecuteSimpleQueryAsync(ResponseTimeQuery),
-            ExecuteSimpleQueryAsync(TurnaroundTimeQuery)
+            ExecuteSimpleQueryAsync(TurnaroundTimeQuery),
+            ExecuteSimpleQueryAsync(CpuUsageQuery),
+            ExecuteSimpleQueryAsync(MemoryUsageQuery)
         };
 
         var results = await Task.WhenAll(tasks);
@@ -43,6 +46,8 @@ public class RabbitMqMetricsCollector : BaseMetricsCollector<RabbitMqMetric>
         metric.Latency = results[1];
         metric.ResponseTime = results[2];
         metric.TurnaroundTime = results[3];
+        metric.CpuUsage = results[4];
+        metric.MemoryUsage = results[5];
 
         _logger.LogDebug("Collected RabbitMQ metrics - Throughput: {Throughput}, Latency: {Latency}ms", 
             metric.Throughput, metric.Latency);
