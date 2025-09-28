@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using communication_tech.Helper;
 using communication_tech.Interfaces;
 using communication_tech.Models;
 
@@ -30,10 +31,10 @@ public class MetricsFileStorageService : IMetricsFileStorageService
             EnsureDirectoryExists();
             
             var timestamp = DateTime.UtcNow;
-            var timestampStr = timestamp.ToString("yyyyMMdd_HHmmss");
-            var guidPart = Guid.NewGuid().ToString("N")[..8];
+            var timestampStr = TimeHelper.GetTurkeyTimestamp(timestamp);
+            var shortGuid = Guid.NewGuid().ToString("N")[..3];
 
-            var fileName = $"metrics_{metricInfo.TechnologyType}_{timestampStr}_{guidPart}.json";
+            var fileName = $"{metricInfo.TechnologyType}_{timestampStr}_{shortGuid}.json";
             var filePath = Path.Combine(_storagePath, fileName);
 
             var json = JsonSerializer.Serialize(metricInfo, _jsonOptions);

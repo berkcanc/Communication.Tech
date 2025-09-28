@@ -17,4 +17,15 @@ public static class TimeHelper
 
         return (start, end);
     }
+    
+    /// <summary>
+    /// return "dd-MM-yyyy_HH-mm-ss" Turkey date and hour detail
+    /// </summary>
+    /// <returns>Formatted Türkiye hour string</returns>
+    public static string GetTurkeyTimestamp(DateTime? utcTime = null)
+    {
+        var time = utcTime ?? DateTime.UtcNow;
+        var turkeyTime = TimeZoneInfo.ConvertTime(time, TurkeyTimeZone);
+        return turkeyTime.ToString("dd-MM-yyyy_HH-mm-ss");
+    }
 }
