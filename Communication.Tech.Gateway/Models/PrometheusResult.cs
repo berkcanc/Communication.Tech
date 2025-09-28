@@ -10,7 +10,7 @@ public class PrometheusResult
 
     // "values" => [ [timestamp, "value"], [timestamp, "value"] ].
     [JsonPropertyName("value")]
-    public List<List<object>> Values { get; set; }
+    public object[] Value { get; set; }
 }
 
 public class MetricDataPoint
