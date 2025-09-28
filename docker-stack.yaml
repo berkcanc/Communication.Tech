@@ -182,6 +182,7 @@ services:
   gateway:
     image: localhost:5000/gateway:latest
     environment:
+      - Prometheus__Url=http://prometheus:9090
       - RabbitMQ__HostName=rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__UserName=exporter
