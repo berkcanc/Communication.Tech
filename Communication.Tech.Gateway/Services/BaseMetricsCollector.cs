@@ -18,10 +18,10 @@ public abstract class BaseMetricsCollector<T> : IMetricsCollector<T> where T : E
     protected abstract string ResponseTimeQuery { get; }
     protected abstract string TurnaroundTimeQuery { get; }
     protected string CpuUsageQuery => 
-        "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)";
+        @"100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=""idle""}[5m])) * 100)";
 
     protected string MemoryUsageQuery => 
-        "100 * ((node_memory_active_bytes + node_memory_wired_bytes + node_memory_compressed_bytes) / node_memory_total_bytes)";
+        @"100 * ((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes)";
 
     protected BaseMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger logger, IOptions<PrometheusSettings> settings)
     {
