@@ -19,8 +19,8 @@ public class RabbitMqMetricsCollector : BaseMetricsCollector<RabbitMqMetric>
     public RabbitMqMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<RabbitMqMetricsCollector> logger, IOptions<PrometheusSettings> settings)
         : base(httpClient, config, logger, settings)
     {
-        _queue = config.GetValue<string>("RabbitMQ:Queue", "message_queue");
-        _vhost = config.GetValue<string>("RabbitMQ:VHost", "/");
+        _queue = "message_queue";
+        _vhost = "/";
     }
 
     public override async Task<RabbitMqMetric> CollectAsync()

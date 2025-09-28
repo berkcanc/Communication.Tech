@@ -85,22 +85,23 @@ public class PrometheusMetricService : IPrometheusMetricService
         if (response?.Data.Result == null || response.Data.Result.Count == 0)
             return [];
 
-        return response.Data.Result
+        return [];
+        /*return response.Data.Result
             .SelectMany(r => r.Values)
             .Select(val =>
             {
                 var metricValueStr = ((JsonElement)val[1]).GetString();
                 if (metricValueStr == "NaN")
                     metricValueStr = "0";
-                    
+
                 var parsedValue = decimal.Parse(metricValueStr, CultureInfo.InvariantCulture);
                 var roundedValue = Math.Round(parsedValue, 2);
-                        
+
                 return new MetricDataPoint
                 {
                     Value = roundedValue
                 };
-            });
+            });*/
     }
     
     public async Task CollectAndStoreMetricsAsync(TechnologyType technologyType)

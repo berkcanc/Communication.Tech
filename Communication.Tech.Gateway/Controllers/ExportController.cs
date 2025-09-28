@@ -15,9 +15,10 @@ public class ExportController : ControllerBase
     private readonly IPrometheusMetricService _prometheusService;
     private readonly ILogger<ExportController> _logger;
 
-    public ExportController(IPrometheusMetricService prometheusService)
+    public ExportController(IPrometheusMetricService prometheusService, ILogger<ExportController> logger)
     {
         _prometheusService = prometheusService;
+        _logger = logger;
     }
 
     [HttpGet("ExportCsv")]
