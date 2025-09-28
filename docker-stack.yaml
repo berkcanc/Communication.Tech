@@ -200,6 +200,9 @@ services:
         published: 6060
         protocol: tcp
         mode: ingress
+    volumes:
+      # Host path -> Container path
+      - /home/ubuntu/Communication.Tech/results:/app/results
     networks:
       - communication-net
     deploy:

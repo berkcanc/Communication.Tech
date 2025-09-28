@@ -13,8 +13,7 @@ public class MetricsFileStorageService : IMetricsFileStorageService
 
     public MetricsFileStorageService(IConfiguration config, ILogger<MetricsFileStorageService> logger)
     {
-        _storagePath = "/home/ubuntu/Communication.Tech/results";
-        //_storagePath = Path.Combine(AppContext.BaseDirectory, "results");
+        _storagePath = "/app/results";
         _logger = logger;
         
         _jsonOptions = new JsonSerializerOptions
