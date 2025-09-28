@@ -46,10 +46,21 @@ public abstract class BaseMetricsCollector<T> : IMetricsCollector<T> where T : E
             });
 
             var result = prometheusResponse?.Data?.Result?.FirstOrDefault();
-            if (result is { Values.Count: > 1 })
+            if (result is not { Values.Count: > 1 })
             {
-                return Convert.ToDouble(result.Values[1]);
+                _logger.LogWarning("No valid result returned for query: {Query}", query);
+                return 0.0;
             }
+            
+            var strValue = result.Values[1].ToString();
+            if (!double.TryParse(strValue, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var metric))
+            {
+                _logger.LogWarning("Failed to parse metric value '{Value}' for query: {Query}", strValue, query);
+                return 0.0;
+            }
+            
+            _logger.LogInformation("Parsed metric value: {Metric} for query: {Query}", metric, query);
+            return metric;
         }
         catch (Exception ex)
         {
