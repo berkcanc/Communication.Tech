@@ -40,19 +40,33 @@ public abstract class BaseMetricsCollector<T> : IMetricsCollector<T> where T : E
             var url = $"{_prometheusSettings.Url}/api/v1/query?query={encodedQuery}";
             
             var response = await _httpClient.GetStringAsync(url);
-            var prometheusResponse = JsonSerializer.Deserialize<PrometheusQueryResponse>(response, new JsonSerializerOptions
+            _logger.LogDebug("Received JSON response: {JsonResponse}", response);
+            
+            // JSON deserialize
+            PrometheusQueryResponse? prometheusResponse = null;
+            try
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+                prometheusResponse = JsonSerializer.Deserialize<PrometheusQueryResponse>(response, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                });
+                _logger.LogDebug("Deserialized Prometheus response: {@PrometheusResponse}", prometheusResponse);
+            }
+            catch (JsonException jsonEx)
+            {
+                _logger.LogError(jsonEx, "Failed to deserialize JSON response: {JsonResponse}", response);
+                return 0.0;
+            }
 
             var result = prometheusResponse?.Data?.Result?.FirstOrDefault();
-            if (result is not { Values.Count: > 1 })
+            if (result is not { Value.Length: > 1 })
             {
                 _logger.LogWarning("No valid result returned for query: {Query}", query);
                 return 0.0;
             }
             
-            var strValue = result.Values[1].ToString();
+            var strValue = result.Value[1].ToString();
             if (!double.TryParse(strValue, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var metric))
             {
                 _logger.LogWarning("Failed to parse metric value '{Value}' for query: {Query}", strValue, query);
