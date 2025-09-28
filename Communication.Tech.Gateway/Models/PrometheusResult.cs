@@ -9,7 +9,7 @@ public class PrometheusResult
     public Dictionary<string, string>? Metric { get; set; }
 
     // "values" => [ [timestamp, "value"], [timestamp, "value"] ].
-    [JsonPropertyName("values")]
+    [JsonPropertyName("value")]
     public List<List<object>> Values { get; set; }
 }
 
