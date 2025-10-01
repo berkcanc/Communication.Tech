@@ -60,23 +60,23 @@ public class ExportController : ControllerBase
     /// <summary>
     /// Collect metric for specific technology by ID (1=Http, 2=gRPC, 3=Redis, 4=RabbitMQ)
     /// </summary>
-    [HttpPost("collect/{technologyId:int}")]
-    public async Task<IActionResult> CollectSpecificMetric(int technologyId)
+    [HttpPost("collect")]
+    public async Task<IActionResult> CollectSpecificMetric([FromBody] CollectMetricRequest request)
     {
         try
         {
-            if (!IsValidTechnologyId(technologyId))
+            if (!IsValidTechnologyId(request.TechnologyId))
             {
                 return BadRequest(new
                 {
-                    Message = $"Invalid technology ID: {technologyId}",
+                    Message = $"Invalid technology ID: {request.TechnologyId}",
                     ValidIds = "1=Http, 2=gRPC, 3=Redis, 4=RabbitMQ",
                     Status = "ValidationError"
                 });
             }
 
-            var technologyType = (TechnologyType)technologyId;
-            await _prometheusService.CollectAndStoreMetricsAsync(technologyType);
+            var technologyType = (TechnologyType)request.TechnologyId;
+            await _prometheusService.CollectAndStoreMetricsAsync(technologyType, request.Tps, request.PayloadSize);
 
             return Ok(new
             {
@@ -87,11 +87,11 @@ public class ExportController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error collecting metric for technology ID {TechnologyId}", technologyId);
+            _logger.LogError(ex, "Error collecting metric for technology ID {TechnologyId}", request.TechnologyId);
             return BadRequest(new
             {
                 Message = "Error collecting metric",
-                TechnologyId = technologyId,
+                TechnologyId = request.TechnologyId,
                 Error = ex.Message,
                 Status = "Failed"
             });

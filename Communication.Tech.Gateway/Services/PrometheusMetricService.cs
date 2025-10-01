@@ -104,7 +104,7 @@ public class PrometheusMetricService : IPrometheusMetricService
             });*/
     }
     
-    public async Task CollectAndStoreMetricsAsync(TechnologyType technologyType)
+    public async Task CollectAndStoreMetricsAsync(TechnologyType technologyType, int tps, int payloadSize)
     {
         var startTime = DateTime.UtcNow;
         _logger.LogInformation(
@@ -121,7 +121,7 @@ public class PrometheusMetricService : IPrometheusMetricService
                 return;
             }
 
-            await _metricsFileStorageService.SaveMetricsAsync(metric);
+            await _metricsFileStorageService.SaveMetricsAsync(metric, tps, payloadSize);
 
             var duration = DateTime.UtcNow - startTime;
             _logger.LogInformation(

@@ -24,7 +24,7 @@ public class MetricsFileStorageService : IMetricsFileStorageService
         };
     }
     
-    public async Task SaveMetricsAsync(EnumBasedMetric metricInfo)
+    public async Task SaveMetricsAsync(EnumBasedMetric metricInfo,  int tps, int payloadSize)
     {
         try
         {
@@ -34,7 +34,7 @@ public class MetricsFileStorageService : IMetricsFileStorageService
             var timestampStr = TimeHelper.GetTurkeyTimestamp(timestamp);
             var shortGuid = Guid.NewGuid().ToString("N")[..3];
 
-            var fileName = $"{metricInfo.TechnologyType}_{timestampStr}_{shortGuid}.json";
+            var fileName = $"{metricInfo.TechnologyType}_TPS{tps}_SIZE{payloadSize}KB_{timestampStr}_{shortGuid}.json";
             var filePath = Path.Combine(_storagePath, fileName);
 
             var json = JsonSerializer.Serialize(metricInfo, _jsonOptions);

@@ -4,5 +4,5 @@ namespace communication_tech.Interfaces;
 
 public interface IMetricsFileStorageService
 {
-    Task SaveMetricsAsync(EnumBasedMetric metricInfo);
+    Task SaveMetricsAsync(EnumBasedMetric metricInfo, int tps, int payloadSize);
 }

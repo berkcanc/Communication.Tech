@@ -14,5 +14,5 @@ public interface IPrometheusMetricService
         DateTime endTime,
         string step);
 
-    Task CollectAndStoreMetricsAsync(TechnologyType technologyType);
+    Task CollectAndStoreMetricsAsync(TechnologyType technologyType, int tps, int payloadSize);
 }
