@@ -90,6 +90,8 @@ var app = builder.Build();
 
 app.UseMetricServer();
 
+app.UseHttpMetrics();
+
 app.UseWebSockets();
 app.UseMiddleware<HttpMetricsMiddleware>();
 

@@ -8,10 +8,10 @@ public class HttpMetricsCollector : BaseMetricsCollector<HttpMetric>
 {
     public override TechnologyType TechnologyType => TechnologyType.Http;
     
-    protected override string ThroughputQuery => "rate(http_requests_total[5m])";
-    protected override string LatencyQuery => "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m])) * 1000";
-    protected override string ResponseTimeQuery => "rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]) * 1000";
-    protected override string TurnaroundTimeQuery => "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) * 1000";
+    protected override string ThroughputQuery => "sum(rate(http_turnaround_duration_seconds_count[5m]))";
+    protected override string LatencyQuery => "(sum(rate(http_requests_duration_seconds_sum[5m])) / sum(rate(http_requests_duration_seconds_count[5m]))) * 1000";
+    protected override string ResponseTimeQuery => "avg(rate(http_request_duration_seconds_sum[5m])) / avg(rate(http_request_duration_seconds_count[5m])) * 1000";
+    protected override string TurnaroundTimeQuery => "(sum(rate(http_turnaround_duration_seconds_sum[5m])) / sum(rate(http_turnaround_duration_seconds_count[5m]))) * 1000";
 
     public HttpMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<HttpMetricsCollector> logger, IOptions<PrometheusSettings> settings)
         : base(httpClient, config, logger, settings)
