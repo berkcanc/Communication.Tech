@@ -90,10 +90,11 @@ var app = builder.Build();
 
 app.UseMetricServer();
 
+app.UseMiddleware<HttpMetricsMiddleware>();
+
 app.UseHttpMetrics();
 
 app.UseWebSockets();
-app.UseMiddleware<HttpMetricsMiddleware>();
 
 
 app.UseSwagger();
