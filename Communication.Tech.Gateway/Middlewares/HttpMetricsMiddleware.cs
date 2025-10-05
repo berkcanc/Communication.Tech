@@ -27,14 +27,19 @@ public class HttpMetricsMiddleware
         }
 
         var sw = Stopwatch.StartNew();
-        await _next(context);
-        sw.Stop();
 
-        _metrics.RecordHttpTurnaround(
-            context.Request.Method,
-            context.Request.Path.Value ?? string.Empty,
-            context.Response.StatusCode,
-            sw.Elapsed.TotalSeconds
-        );
+        context.Response.OnCompleted(() =>
+        {
+            sw.Stop();
+            _metrics.RecordHttpTurnaround(
+                context.Request.Method,
+                context.Request.Path.Value ?? string.Empty,
+                context.Response.StatusCode,
+                sw.Elapsed.TotalSeconds
+            );
+            return Task.CompletedTask;
+        });
+        
+        await _next(context);
     }
 }
