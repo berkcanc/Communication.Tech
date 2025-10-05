@@ -8,10 +8,14 @@ public class HttpMetricsCollector : BaseMetricsCollector<HttpMetric>
 {
     public override TechnologyType TechnologyType => TechnologyType.Http;
     
-    protected override string ThroughputQuery => "sum(rate(http_turnaround_duration_seconds_count[5m]))";
-    protected override string LatencyQuery => "(sum(rate(http_requests_duration_seconds_sum[5m])) / sum(rate(http_requests_duration_seconds_count[5m]))) * 1000";
-    protected override string ResponseTimeQuery => "avg(rate(http_request_duration_seconds_sum[5m])) / avg(rate(http_request_duration_seconds_count[5m])) * 1000";
-    protected override string TurnaroundTimeQuery => "(sum(rate(http_turnaround_duration_seconds_sum[5m])) / sum(rate(http_turnaround_duration_seconds_count[5m]))) * 1000";
+    protected override string ThroughputQuery => 
+        "sum(rate(http_turnaround_duration_seconds_count[5m]))";
+    protected override string LatencyQuery => 
+        "sum(rate(microsoft_aspnetcore_hosting_http_server_request_duration_sum{http_request_method=\"GET\", http_response_status_code=\"200\"}[5m]))/sum(rate(microsoft_aspnetcore_hosting_http_server_request_duration_count{http_request_method=\"GET\", http_response_status_code=\"200\"}[5m]))* 1000";
+    protected override string ResponseTimeQuery =>
+        "sum(rate(http_request_duration_seconds_sum[5m])) / sum(rate(http_request_duration_seconds_count[5m])) * 1000";
+    protected override string TurnaroundTimeQuery => 
+        "sum(rate(http_turnaround_duration_seconds_sum[5m])) / sum(rate(http_turnaround_duration_seconds_count[5m])) * 1000";
 
     public HttpMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<HttpMetricsCollector> logger, IOptions<PrometheusSettings> settings)
         : base(httpClient, config, logger, settings)
