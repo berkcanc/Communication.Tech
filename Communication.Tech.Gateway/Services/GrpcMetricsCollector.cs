@@ -8,10 +8,14 @@ public class GrpcMetricsCollector : BaseMetricsCollector<GrpcMetric>
 {
     public override TechnologyType TechnologyType => TechnologyType.gRPC;
     
-    protected override string ThroughputQuery => "rate(grpc_server_handled_total[5m])";
-    protected override string LatencyQuery => "histogram_quantile(0.50, rate(grpc_server_handling_seconds_bucket[5m])) * 1000";
-    protected override string ResponseTimeQuery => "rate(grpc_server_handling_seconds_sum[5m]) / rate(grpc_server_handling_seconds_count[5m]) * 1000";
-    protected override string TurnaroundTimeQuery => "histogram_quantile(0.95, rate(grpc_server_handling_seconds_bucket[5m])) * 1000";
+    protected override string ThroughputQuery => 
+        "sum(rate(grpc_client_requests_total[5m]))";
+    protected override string LatencyQuery => 
+        "sum(rate(grpc_client_latency_seconds_sum[5m])) / sum(rate(grpc_client_latency_seconds_count[5m])) * 1000";
+    protected override string ResponseTimeQuery => 
+        "sum(rate(grpc_client_response_time_seconds_sum[5m])) / sum(rate(grpc_client_response_time_seconds_count[5m])) * 1000";
+    protected override string TurnaroundTimeQuery => 
+        "sum(rate(grpc_turnaround_duration_seconds_sum[5m])) / sum(rate(grpc_turnaround_duration_seconds_count[5m])) * 1000";
 
     public GrpcMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<GrpcMetricsCollector> logger, IOptions<PrometheusSettings> settings)
         : base(httpClient, config, logger, settings)
