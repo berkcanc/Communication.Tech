@@ -7,6 +7,9 @@ namespace communication_tech.Interfaces;
 public interface IPrometheusMetricService
 {
     void RecordHttpTurnaround(string method, string path, int statusCode, double durationSeconds);
+    void RecordGrpcThroughput(string service, string method, StatusCode statusCode, double durationSeconds);
+    void RecordGrpcLatency(string service, string method, StatusCode statusCode, double durationSeconds);
+    void RecordGrpcResponseTime(string service, string method, StatusCode statusCode, double durationSeconds);
     void RecordGrpcTurnaround(string service, string method, StatusCode statusCode, double durationSeconds);
     Task<IEnumerable<MetricDataPoint>> GetMetricRangeDataAsync(
         string query,

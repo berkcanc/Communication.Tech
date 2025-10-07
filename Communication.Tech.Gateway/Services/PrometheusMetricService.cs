@@ -1,8 +1,5 @@
-using System.Globalization;
 using System.Reflection;
-using System.Text.Json;
 using communication_tech.Enums;
-using communication_tech.Helper;
 using communication_tech.Interfaces;
 using communication_tech.Models;
 using Grpc.Core;
@@ -24,6 +21,36 @@ public class PrometheusMetricService : IPrometheusMetricService
         Buckets = Histogram.ExponentialBuckets(0.01, 2, 10),
         LabelNames = new[] { "service", "method", "status_code" }
     });
+    
+    private static readonly Counter _grpcRequestCounter = Metrics.CreateCounter(
+        "grpc_client_requests_total",
+        "Total gRPC requests made from client",
+        new CounterConfiguration
+        {
+            LabelNames = new[] { "grpc_service", "grpc_method", "status_code" }
+        }
+    );
+    
+    private static readonly Histogram _grpcLatencyHistogram = Metrics.CreateHistogram(
+        "grpc_client_latency_seconds",
+        "End-to-end gRPC request latency from client perspective",
+        new HistogramConfiguration
+        {
+            Buckets = new double[] {0.001,0.005,0.01,0.05,0.1,0.5,1,2,5},
+            LabelNames = new[] { "grpc_service", "grpc_method", "status_code" }
+        }
+    );
+    
+    private static readonly Histogram _grpcResponseTimeHistogram = Metrics.CreateHistogram(
+        "grpc_client_response_time_seconds",
+        "gRPC response time from client perspective",
+        new HistogramConfiguration
+        {
+            Buckets = new double[] {0.001,0.005,0.01,0.05,0.1,0.5,1,2,5},
+            LabelNames = new[] { "grpc_service", "grpc_method", "status_code" }
+        }
+    );
+
     
     private readonly HttpClientService _httpClientService;
     private readonly PrometheusSettings _prometheusSettings;
@@ -49,7 +76,25 @@ public class PrometheusMetricService : IPrometheusMetricService
     public void RecordGrpcTurnaround(string service, string method, StatusCode statusCode, double durationSeconds)
     {
         _grpcHistogram.WithLabels(service, method, statusCode.ToString()).Observe(durationSeconds);
-        Console.WriteLine($"📊 Observed Turnaround metric: {method}, {method}, {statusCode} = {durationSeconds:F3}s");
+        Console.WriteLine($"📊 Observed gRPC Turnaround metric: {method}, {method}, {statusCode} = {durationSeconds:F3}s");
+    }
+    
+    public void RecordGrpcThroughput(string service, string method, StatusCode statusCode, double durationSeconds)
+    {
+        _grpcRequestCounter.WithLabels(service, method, statusCode.ToString()).Inc();
+        Console.WriteLine($"📊 Observed gRPC Throughput metric: {method}, {method}, {statusCode} = {durationSeconds:F3}s");
+    }
+    
+    public void RecordGrpcLatency(string service, string method, StatusCode statusCode, double durationSeconds)
+    {
+        _grpcLatencyHistogram.WithLabels(service, method, statusCode.ToString()).Observe(durationSeconds);
+        Console.WriteLine($"📊 Observed gRPC Latency metric: {method}, {method}, {statusCode} = {durationSeconds:F3}s");
+    }
+    
+    public void RecordGrpcResponseTime(string service, string method, StatusCode statusCode, double durationSeconds)
+    {
+        _grpcResponseTimeHistogram .WithLabels(service, method, statusCode.ToString()).Observe(durationSeconds);
+        Console.WriteLine($"📊 Observed gRPC Response Time metric: {service}, {method}, {statusCode} = {durationSeconds:F3}s");
     }
 
     public async Task<IEnumerable<MetricDataPoint>> GetMetricRangeDataAsync(string query, DateTime startTime,
