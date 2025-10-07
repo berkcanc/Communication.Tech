@@ -8,10 +8,32 @@ using Prometheus;
 using StackExchange.Redis;
 using Constants = communication_tech.Constants;
 using System.Diagnostics;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Resources;
+using HistogramConfiguration = Prometheus.HistogramConfiguration;
 
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(r => r.AddService("GrpcGateway"))
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddPrometheusExporter();
+    })
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation()
+            .AddGrpcClientInstrumentation(); // ✅ doğru yer burası
+    });
+
 
 // Configuration
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -70,6 +92,8 @@ builder.Services.AddGrpcClient<Greeter.GreeterClient>(options =>
 builder.Services.AddGrpcReflection();
 
 var app = builder.Build();
+
+app.MapPrometheusScrapingEndpoint();
 
 // Prometheus metric server
 app.UseMetricServer();
