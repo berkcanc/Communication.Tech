@@ -51,6 +51,23 @@ public class PrometheusMetricService : IPrometheusMetricService
         }
     );
 
+    private static readonly Histogram _redisLatency = Metrics.CreateHistogram(
+        "redis_producer_command_duration_seconds",
+        "Redis command latency in seconds (producer side)",
+        new HistogramConfiguration
+        {
+            Buckets = Histogram.ExponentialBuckets(0.0001, 2, 15), // 0.1ms to ~3s
+            LabelNames = new[] { "command" }
+        });
+
+    private static readonly Histogram _redisResponseTime = Metrics.CreateHistogram(
+        "redis_producer_response_time_seconds",
+        "Redis operation response time in seconds (producer side)",
+        new HistogramConfiguration
+        {
+            Buckets = Histogram.ExponentialBuckets(0.0001, 2, 15),
+            LabelNames = new[] { "operation" }
+        });
     
     private readonly HttpClientService _httpClientService;
     private readonly PrometheusSettings _prometheusSettings;
@@ -95,6 +112,18 @@ public class PrometheusMetricService : IPrometheusMetricService
     {
         _grpcResponseTimeHistogram .WithLabels(service, method, statusCode.ToString()).Observe(durationSeconds);
         Console.WriteLine($"📊 Observed gRPC Response Time metric: {service}, {method}, {statusCode} = {durationSeconds:F3}s");
+    }
+    
+    public void RecordRedisLatency(string command, double durationSeconds)
+    {
+        _redisLatency.WithLabels(command).Observe(durationSeconds);
+        Console.WriteLine($"📊 Observed Redis Latency metric: {command}, {durationSeconds:F3}s");
+    }
+
+    public void RecordRedisResponseTime(string operation, double durationSeconds)
+    {
+        _redisResponseTime.WithLabels(operation).Observe(durationSeconds);
+        Console.WriteLine($"📊 Observed Redis Response Time metric: {operation}, {durationSeconds:F3}s");
     }
 
     public async Task<IEnumerable<MetricDataPoint>> GetMetricRangeDataAsync(string query, DateTime startTime,

@@ -11,6 +11,8 @@ public interface IPrometheusMetricService
     void RecordGrpcLatency(string service, string method, StatusCode statusCode, double durationSeconds);
     void RecordGrpcResponseTime(string service, string method, StatusCode statusCode, double durationSeconds);
     void RecordGrpcTurnaround(string service, string method, StatusCode statusCode, double durationSeconds);
+    void RecordRedisLatency(string command, double durationSeconds);
+    void RecordRedisResponseTime(string operation, double durationSeconds);
     Task<IEnumerable<MetricDataPoint>> GetMetricRangeDataAsync(
         string query,
         DateTime startTime,

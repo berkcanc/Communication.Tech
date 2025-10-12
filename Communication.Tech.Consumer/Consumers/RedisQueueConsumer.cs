@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Communication.Tech.Consumer.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -62,8 +63,15 @@ public class RedisQueueConsumer : BackgroundService
     
     private async Task<(string? MessageId, string? Message)> DequeueMessageAsync()
     {
+        // ⏱️ RPOP LATENCY
+        var rpopStopwatch = Stopwatch.StartNew();
         var result = await _redisDb.ListRightPopAsync(QueueKey);
-        if (!result.HasValue) return (null, null);
+        rpopStopwatch.Stop();
+        
+        if (!result.HasValue)
+        {
+            return (null, null);
+        }
 
         var split = result.ToString().Split(':', 2);
         if (split.Length < 2) return (null, result);
@@ -72,7 +80,26 @@ public class RedisQueueConsumer : BackgroundService
         var message = split[1];
 
         var enqueueKey = $"enqueue:{messageId}";
+        
+        // ⏱️ STRING GET LATENCY
+        var getStopwatch = Stopwatch.StartNew();
         var enqueueTimeStr = await _redisDb.StringGetAsync(enqueueKey);
+        getStopwatch.Stop();
+        
+        // ⏱️ KEY DELETE LATENCY
+        var deleteStopwatch = Stopwatch.StartNew();
+        await _redisDb.KeyDeleteAsync(enqueueKey);
+        deleteStopwatch.Stop();
+
+        _prometheusConsumerMetricService.RecordRedisLatency("rpop", rpopStopwatch.Elapsed.TotalSeconds);
+        _prometheusConsumerMetricService.RecordRedisLatency("get", getStopwatch.Elapsed.TotalSeconds);
+        _prometheusConsumerMetricService.RecordRedisLatency("delete", deleteStopwatch.Elapsed.TotalSeconds);
+        
+        // 📊 TOTAL RESPONSE TIME (RPOP + GET + DELETE)
+        var totalResponseTime = rpopStopwatch.Elapsed.TotalMilliseconds + 
+                               getStopwatch.Elapsed.TotalMilliseconds + 
+                               deleteStopwatch.Elapsed.TotalMilliseconds;
+        _prometheusConsumerMetricService.RecordRedisResponseTime("dequeue", totalResponseTime / 1000.0);
 
         if (long.TryParse(enqueueTimeStr, out var enqueueMs))
         {
@@ -81,9 +108,11 @@ public class RedisQueueConsumer : BackgroundService
             var durationSec = durationMs / 1000.0;
 
             _prometheusConsumerMetricService.RecordMessageQueueTurnaround(messageId, "default", Source, durationSec);
-            await _redisDb.KeyDeleteAsync(enqueueKey);
 
-            Console.WriteLine($"📥 Dequeued: {messageId}, Turnaround: {durationMs}ms ({durationSec:F3}s)");
+            Console.WriteLine($"📥 Dequeued: {messageId}, Turnaround: {durationMs}ms, " +
+                             $"RPOP: {rpopStopwatch.Elapsed.TotalMilliseconds:F3}ms, " +
+                             $"GET: {getStopwatch.Elapsed.TotalMilliseconds:F3}ms, " +
+                             $"DEL: {deleteStopwatch.Elapsed.TotalMilliseconds:F3}ms");
         }
         else
         {
