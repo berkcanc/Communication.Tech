@@ -112,6 +112,8 @@ services:
         mode: ingress
     environment:
       - REDIS_ADDR=redis:6379
+    command:
+      - '--include-system-metrics'
     networks:
       communication-net:
         aliases:
