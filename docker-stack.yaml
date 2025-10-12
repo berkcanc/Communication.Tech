@@ -94,7 +94,6 @@ services:
       communication-net:
         aliases:
           - redis
-          - communication-tech_redis
     deploy:
       replicas: 1
       restart_policy:
