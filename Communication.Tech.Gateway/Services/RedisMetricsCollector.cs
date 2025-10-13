@@ -8,10 +8,13 @@ public class RedisMetricsCollector : BaseMetricsCollector<RedisMetric>
 {
     public override TechnologyType TechnologyType => TechnologyType.Redis;
     
-    protected override string ThroughputQuery => "rate(redis_commands_processed_total[5m])";
-    protected override string LatencyQuery => "redis_command_call_duration_seconds_sum / redis_command_call_duration_seconds_count * 1000";
-    protected override string ResponseTimeQuery => "avg_over_time(redis_slowlog_length[5m])";
-    protected override string TurnaroundTimeQuery => "histogram_quantile(0.95, rate(redis_command_call_duration_seconds_bucket[5m])) * 1000";
+    protected override string ThroughputQuery => "sum(rate(redis_commands_total{cmd=~\"lpush|rpush\"}[1m]))";
+    protected override string LatencyQuery => 
+        "avg((rate(redis_producer_command_duration_seconds_sum{command=\"lpush\"}[5m]) / rate(redis_producer_command_duration_seconds_count{command=\"lpush\"}[5m])) or (rate(redis_consumer_command_duration_seconds_sum{command=\"rpop\"}[5m]) / rate(redis_consumer_command_duration_seconds_count{command=\"rpop\"}[5m]))) * 1000";
+    protected override string ResponseTimeQuery => 
+        "avg((rate(redis_producer_response_time_seconds_sum{operation=\"enqueue\"}[5m]) / rate(redis_producer_response_time_seconds_count{operation=\"enqueue\"}[5m])) or (rate(redis_consumer_response_time_seconds_sum{operation=\"dequeue\"}[5m]) / rate(redis_consumer_response_time_seconds_count{operation=\"dequeue\"}[5m]))) * 1000";
+    protected override string TurnaroundTimeQuery => 
+        "(sum(rate(queue_turnaround_duration_seconds_sum{source=\"redis\"}[5m])) / sum(rate(queue_turnaround_duration_seconds_count{source=\"redis\"}[5m]))) * 1000";
 
     public RedisMetricsCollector(HttpClient httpClient, IConfiguration config, ILogger<RedisMetricsCollector> logger, IOptions<PrometheusSettings> settings)
         : base(httpClient, config, logger, settings)
