@@ -17,8 +17,8 @@ AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddOpenTelemetry()
+// for gRPC
+/*builder.Services.AddOpenTelemetry()
     .ConfigureResource(r => r.AddService("GrpcGateway"))
     .WithMetrics(metrics =>
     {
@@ -31,8 +31,8 @@ builder.Services.AddOpenTelemetry()
     {
         tracing
             .AddAspNetCoreInstrumentation()
-            .AddGrpcClientInstrumentation(); // ✅ doğru yer burası
-    });
+            .AddGrpcClientInstrumentation(); 
+    });*/
 
 
 // Configuration
@@ -93,7 +93,7 @@ builder.Services.AddGrpcReflection();
 
 var app = builder.Build();
 
-app.MapPrometheusScrapingEndpoint();
+//app.MapPrometheusScrapingEndpoint(); for gRPC
 
 // Prometheus metric server
 app.UseMetricServer();
