@@ -29,7 +29,9 @@ services:
       - zookeeper-data:/var/lib/zookeeper/data
       - zookeeper-log:/var/lib/zookeeper/log
     networks:
-      - communication-net
+      communication-net:
+        aliases:
+          - zookeeper
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "2181" ]
       interval: 10s
@@ -59,7 +61,9 @@ services:
     volumes:
       - kafka-data:/var/lib/kafka/data
     networks:
-      - communication-net
+      communication-net:
+        aliases:
+          - kafka
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
       interval: 15s
