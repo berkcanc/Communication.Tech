@@ -26,8 +26,6 @@ public class KafkaConsumer : BackgroundService
         _logger = logger;
         _redisDb = redisConnection.GetDatabase();
         _prometheusConsumerMetricService = prometheusConsumerMetricService;
-        
-        WaitForKafkaAsync(_settings.BootstrapServers).GetAwaiter().GetResult();
     }
     
     private async Task WaitForKafkaAsync(string bootstrapServers)
@@ -62,6 +60,9 @@ public class KafkaConsumer : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await WaitForKafkaAsync(_settings.BootstrapServers);
+        _logger.LogInformation("Kafka is ready. Starting consumer loop...");
+
         var config = new ConsumerConfig
         {
             BootstrapServers = _settings.BootstrapServers,
