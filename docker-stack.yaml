@@ -22,27 +22,20 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     hostname: zookeeper
-    ports:
-      - target: 2181
-        published: 2181
-        protocol: tcp
-        mode: ingress
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     volumes:
-      - zookeeper-data:/var/lib/zookeeper/data  # Persistent data
-      - zookeeper-log:/var/lib/zookeeper/log    # Persistent logs
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
+    networks:
+      - communication-net
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "2181" ]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-    networks:
-      communication-net:
-        aliases:
-          - zookeeper
     deploy:
       replicas: 1
       restart_policy:
@@ -54,38 +47,25 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     hostname: kafka
-    ports:
-      - target: 9092
-        published: 9092
-        protocol: tcp
-        mode: ingress
-      - target: 9093
-        published: 9093
-        protocol: tcp
-        mode: ingress
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://35.156.189.47:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_DELETE_TOPIC_ENABLE: "true"
     volumes:
-      - kafka-data:/var/lib/kafka/data  # Persistent data
+      - kafka-data:/var/lib/kafka/data
+    networks:
+      - communication-net
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
       interval: 15s
       timeout: 10s
       retries: 5
       start_period: 30s
-    networks:
-      communication-net:
-        aliases:
-          - kafka
-    depends_on:
-      - zookeeper
     deploy:
       replicas: 1
       restart_policy:
@@ -361,11 +341,8 @@ volumes:
   registry-data:
     driver: local
   zookeeper-data:
-    driver: local
   zookeeper-log:
-    driver: local
   kafka-data:
-    driver: local
 
 configs:
   prometheus_config:
