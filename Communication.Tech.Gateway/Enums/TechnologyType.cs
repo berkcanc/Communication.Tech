@@ -5,5 +5,6 @@ public enum TechnologyType
     Http = 1,
     gRPC = 2,
     Redis = 3,
-    RabbitMQ = 4
+    RabbitMQ = 4,
+    Kafka = 5
 }

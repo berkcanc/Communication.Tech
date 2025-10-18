@@ -69,6 +69,22 @@ public class PrometheusMetricService : IPrometheusMetricService
             LabelNames = new[] { "operation" }
         });
     
+    private static readonly Histogram _kafkaLatencyHistogram = Metrics.CreateHistogram(
+        "kafka_producer_latency_seconds",
+        "Time taken for Kafka producer to send a message and receive acknowledgment",
+        new HistogramConfiguration
+        {
+            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15) // 1ms - 16s
+        });
+
+    private static readonly Histogram _kafkaResponseTimeHistogram = Metrics.CreateHistogram(
+        "kafka_producer_response_time_seconds",
+        "End-to-end Kafka producer response time including local processing",
+        new HistogramConfiguration
+        {
+            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15)
+        });
+    
     private readonly HttpClientService _httpClientService;
     private readonly PrometheusSettings _prometheusSettings;
     private readonly ILogger<PrometheusMetricService> _logger;
@@ -123,6 +139,18 @@ public class PrometheusMetricService : IPrometheusMetricService
     public void RecordRedisResponseTime(string operation, double durationSeconds)
     {
         _redisResponseTime.WithLabels(operation).Observe(durationSeconds);
+        Console.WriteLine($"📊 Observed Redis Response Time metric: {operation}, {durationSeconds:F3}s");
+    }
+    
+    public void RecordKafkaLatency(string command, double durationSeconds)
+    {
+        _kafkaLatencyHistogram.WithLabels(command).Observe(durationSeconds);
+        Console.WriteLine($"📊 Observed Redis Latency metric: {command}, {durationSeconds:F3}s");
+    }
+
+    public void RecordKafkaResponseTime(string operation, double durationSeconds)
+    {
+        _kafkaResponseTimeHistogram.WithLabels(operation).Observe(durationSeconds);
         Console.WriteLine($"📊 Observed Redis Response Time metric: {operation}, {durationSeconds:F3}s");
     }
 

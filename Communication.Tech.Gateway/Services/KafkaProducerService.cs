@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using communication_tech.Interfaces;
 using communication_tech.Models;
 using Confluent.Kafka;
 using StackExchange.Redis;
@@ -9,12 +11,14 @@ public class KafkaProducerService
     private readonly KafkaSettings _settings;
     private readonly IDatabase _redisDb;
     private readonly ILogger<KafkaProducerService> _logger;
+    private readonly IPrometheusMetricService _prometheusMetricService;
 
-    public KafkaProducerService(IConfiguration configuration,  IConnectionMultiplexer redisConnection,  ILogger<KafkaProducerService> logger)
+    public KafkaProducerService(IConfiguration configuration,  IConnectionMultiplexer redisConnection,  ILogger<KafkaProducerService> logger, IPrometheusMetricService prometheusMetricService)
     {
         _settings = configuration.GetSection("Kafka").Get<KafkaSettings>()!;
         _redisDb = redisConnection.GetDatabase();
         _logger = logger;
+        _prometheusMetricService = prometheusMetricService;
     }
 
     public async Task ProduceAsync(string message)
@@ -23,6 +27,9 @@ public class KafkaProducerService
         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         await _redisDb.StringSetAsync($"enqueue:{messageId}", now);
 
+        // ✅ Response Time
+        var responseTimeWatch = Stopwatch.StartNew();
+        
         var config = new ProducerConfig
         {
             BootstrapServers = _settings.BootstrapServers,
@@ -33,8 +40,18 @@ public class KafkaProducerService
 
         try
         {
+            // ✅ Latency 
+            var latencyWatch = Stopwatch.StartNew();
+
             await producer.ProduceAsync(_settings.Topic, new Message<Null, string> { Value = $"{messageId}:{message}"});
+            
+            latencyWatch.Stop();
+            _prometheusMetricService.RecordKafkaLatency("producer-latency", latencyWatch.ElapsedMilliseconds);
             Console.WriteLine($"✅ Produced message: {messageId}, Timestamp set: enqueue:{messageId} with = {now}ms");
+            
+            responseTimeWatch.Stop();
+            
+            _prometheusMetricService.RecordKafkaResponseTime("producer-response_time", responseTimeWatch.Elapsed.TotalSeconds);
         }
         catch (ProduceException<Null, string> ex)
         {

@@ -13,6 +13,8 @@ public interface IPrometheusMetricService
     void RecordGrpcTurnaround(string service, string method, StatusCode statusCode, double durationSeconds);
     void RecordRedisLatency(string command, double durationSeconds);
     void RecordRedisResponseTime(string operation, double durationSeconds);
+    void RecordKafkaLatency(string command, double durationSeconds);
+    void RecordKafkaResponseTime(string operation, double durationSeconds);
     Task<IEnumerable<MetricDataPoint>> GetMetricRangeDataAsync(
         string query,
         DateTime startTime,

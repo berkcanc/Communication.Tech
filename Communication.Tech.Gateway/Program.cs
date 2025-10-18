@@ -74,6 +74,8 @@ builder.Services.AddSingleton<IMetricsCollector<HttpMetric>, HttpMetricsCollecto
 builder.Services.AddSingleton<IMetricsCollector<GrpcMetric>, GrpcMetricsCollector>();
 builder.Services.AddSingleton<IMetricsCollector<RedisMetric>, RedisMetricsCollector>();
 builder.Services.AddSingleton<IMetricsCollector<RabbitMqMetric>, RabbitMqMetricsCollector>();
+builder.Services.AddSingleton<IMetricsCollector<KafkaMetric>, KafkaMetricsCollector>();
+
 builder.Services.AddSingleton<IMetricsFileStorageService, MetricsFileStorageService>();
 builder.Services.AddSingleton<IPrometheusMetricService, PrometheusMetricService>();
 builder.Services.AddSingleton<KafkaProducerService>();

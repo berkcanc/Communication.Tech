@@ -70,7 +70,7 @@ public class ExportController : ControllerBase
                 return BadRequest(new
                 {
                     Message = $"Invalid technology ID: {request.TechnologyId}",
-                    ValidIds = "1=Http, 2=gRPC, 3=Redis, 4=RabbitMQ",
+                    ValidIds = "1=Http, 2=gRPC, 3=Redis, 4=RabbitMQ, 5=Kafka",
                     Status = "ValidationError"
                 });
             }

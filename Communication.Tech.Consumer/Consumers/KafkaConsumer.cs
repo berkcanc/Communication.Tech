@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using communication_tech.Models;
 using Communication.Tech.Consumer.Interfaces;
 using StackExchange.Redis;
@@ -5,7 +6,6 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Communication.Tech.Consumer.Consumers;
 
@@ -49,10 +49,19 @@ public class KafkaConsumer : BackgroundService
             {
                 try
                 {
+                    // ✅ Response Time
+                    var responseTimeWatch = Stopwatch.StartNew();
+                    
+                    // ✅ Latency (consume)
+                    var latencyWatch = Stopwatch.StartNew();
+                    
                     var result = consumer.Consume(stoppingToken);
 
-                    var split = result.Message.Value.Split(':', 2);
+                    latencyWatch.Stop();
 
+                    _prometheusConsumerMetricService.RecordKafkaLatency("consumer-latency", latencyWatch.Elapsed.TotalSeconds);
+                    
+                    var split = result.Message.Value.Split(':', 2);
                     var messageId = split[0];
 
                     // Redis timestamp key
@@ -64,11 +73,25 @@ public class KafkaConsumer : BackgroundService
                         var nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                         var durationMs = nowMs - enqueueMs;
                         var durationSec = durationMs / 1000.0;
-
+                        
+                        responseTimeWatch.Stop();
+                    
+                        // ✅ Response Time (parsing + Redis operations)
+                        _prometheusConsumerMetricService.RecordKafkaResponseTime("consumer-response_time", responseTimeWatch.Elapsed.TotalSeconds);
+                        
                         _prometheusConsumerMetricService.RecordMessageQueueTurnaround(messageId, "default", "kafka", durationSec);
                         await _redisDb.KeyDeleteAsync(tsKey);
 
-                        _logger.LogInformation("✅  Consumed message: {MessageId}, turnaround = {Duration}ms", messageId, durationSec.ToString("F3"));
+                        _logger.LogInformation(
+                            "✅ Consumed message: {MessageId}, " +
+                            "Latency: {Latency}ms, " +
+                            "Response Time: {ResponseTime}ms, " +
+                            "Turnaround: {Turnaround}s",
+                            messageId,
+                            latencyWatch.ElapsedMilliseconds,
+                            responseTimeWatch.ElapsedMilliseconds,
+                            durationSec.ToString("F3")
+                        );
                     }
                     else
                     {
