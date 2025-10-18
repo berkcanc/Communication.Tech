@@ -66,7 +66,7 @@ services:
         aliases:
           - kafka
     healthcheck:
-      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:9092"]
       interval: 15s
       timeout: 10s
       retries: 5
@@ -274,10 +274,7 @@ services:
         protocol: tcp
         mode: ingress
     volumes:
-      # Host path -> Container path
-      - type: bind
-        source: /home/ubuntu/Communication.Tech/results
-        target: /app/results
+      - results-data:/app/results
     networks:
       - communication-net
     deploy:
@@ -348,6 +345,7 @@ volumes:
   zookeeper-data:
   zookeeper-log:
   kafka-data:
+  results-data:
 
 configs:
   prometheus_config:
