@@ -30,6 +30,9 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data  # Persistent data
+      - zookeeper-log:/var/lib/zookeeper/log    # Persistent logs
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "2181" ]
       interval: 10s
@@ -69,6 +72,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_DELETE_TOPIC_ENABLE: "true"
+    volumes:
+      - kafka-data:/var/lib/kafka/data  # Persistent data
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
       interval: 15s
@@ -276,6 +281,8 @@ services:
       - Redis__ConnectionString=redis:6379,abortConnect=false
       - Redis__IsEnabled=true
       - Kafka__IsEnabled=true
+      - Kafka__BootstrapServers=kafka:9092
+      - Kafka__Topic=test-topic
     ports:
       - target: 6060
         published: 6060
@@ -352,6 +359,12 @@ networks:
     
 volumes:
   registry-data:
+    driver: local
+  zookeeper-data:
+    driver: local
+  zookeeper-log:
+    driver: local
+  kafka-data:
     driver: local
 
 configs:
