@@ -26,6 +26,38 @@ public class KafkaConsumer : BackgroundService
         _logger = logger;
         _redisDb = redisConnection.GetDatabase();
         _prometheusConsumerMetricService = prometheusConsumerMetricService;
+        
+        WaitForKafkaAsync(_settings.BootstrapServers).GetAwaiter().GetResult();
+    }
+    
+    private async Task WaitForKafkaAsync(string bootstrapServers)
+    {
+        var config = new AdminClientConfig { BootstrapServers = bootstrapServers };
+        const int retries = 12;
+        const int delayInMs = 5000;
+        
+        for (var i = 0; i < retries; i++)
+        {
+            try
+            {
+                using var adminClient = new AdminClientBuilder(config).Build();
+                var metadata = adminClient.GetMetadata(TimeSpan.FromSeconds(5));
+                if (metadata.Brokers.Count > 0)
+                {
+                    _logger.LogInformation("Kafka broker is ready. Brokers found: {Count}", metadata.Brokers.Count);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning("Kafka not ready yet: {Message}", ex.Message);
+            }
+
+            _logger.LogInformation("Waiting for Kafka... retry {Retry}/{MaxRetries}", i + 1, retries);
+            await Task.Delay(delayInMs);
+        }
+
+        throw new Exception("Kafka broker is not available after retries.");
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net.Sockets;
 using communication_tech.Interfaces;
 using communication_tech.Models;
 using Confluent.Kafka;
@@ -19,7 +20,38 @@ public class KafkaProducerService
         _redisDb = redisConnection.GetDatabase();
         _logger = logger;
         _prometheusMetricService = prometheusMetricService;
+        
+        WaitForKafkaAsync(_settings.BootstrapServers).GetAwaiter().GetResult();
     }
+    
+    async Task WaitForKafkaAsync(string bootstrapServers)
+    {
+        var host = bootstrapServers.Split(':')[0];
+        var port = int.Parse(bootstrapServers.Split(':')[1]);
+
+        for (var i = 0; i < 12; i++)
+        {
+            try
+            {
+                using var tcp = new TcpClient();
+                var connectTask = tcp.ConnectAsync(host, port);
+                var timeoutTask = Task.Delay(2000);
+
+                if (await Task.WhenAny(connectTask, timeoutTask) == connectTask && tcp.Connected)
+                {
+                    Console.WriteLine("✅ Kafka is available!");
+                    return;
+                }
+            }
+            catch { }
+
+            Console.WriteLine("Kafka not ready, retrying in 5s...");
+            await Task.Delay(5000);
+        }
+
+        throw new Exception("Kafka is not reachable!");
+    }
+
 
     public async Task ProduceAsync(string message)
     {
