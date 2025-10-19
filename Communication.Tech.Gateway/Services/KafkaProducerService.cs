@@ -14,6 +14,7 @@ public class KafkaProducerService
     private readonly IDatabase _redisDb;
     private readonly ILogger<KafkaProducerService> _logger;
     private readonly IPrometheusMetricService _prometheusMetricService;
+    private readonly IProducer<Null, string> _producer;
 
     public KafkaProducerService(IConfiguration configuration, IConnectionMultiplexer redisConnection, ILogger<KafkaProducerService> logger, IPrometheusMetricService prometheusMetricService)
     {
@@ -23,6 +24,11 @@ public class KafkaProducerService
         _prometheusMetricService = prometheusMetricService;
         
         WaitForKafkaAsync(_settings.BootstrapServers).GetAwaiter().GetResult();
+        
+        var config = GetProducerConfig();
+        _producer = new ProducerBuilder<Null, string>(config)
+            .SetErrorHandler((_, error) => _logger.LogError($"Kafka Error: {error.Code} - {error.Reason}"))
+            .Build();
     }
     
     async Task WaitForKafkaAsync(string bootstrapServers)
@@ -66,10 +72,41 @@ public class KafkaProducerService
         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         await _redisDb.StringSetAsync($"enqueue:{messageId}", now);
 
-        // ✅ Response Time
-        var responseTimeWatch = Stopwatch.StartNew();
-        
-        var config = new ProducerConfig
+        try
+        {
+            // ✅ Response Time
+            var responseTimeWatch = Stopwatch.StartNew();
+            
+            // ✅ Latency 
+            var latencyWatch = Stopwatch.StartNew();
+
+            var deliveryResult = await _producer.ProduceAsync(_settings.Topic, 
+                new Message<Null, string> { Value = $"{messageId}:{message}" });
+            
+            latencyWatch.Stop();
+            
+            _prometheusMetricService.RecordKafkaLatency("producer-latency", latencyWatch.Elapsed.TotalSeconds);
+            _logger.LogInformation($"✅ Produced message: {messageId}, Partition: {deliveryResult.Partition}, Offset: {deliveryResult.Offset}");
+            _logger.LogInformation($"Timestamp set: enqueue:{messageId} = {now}ms");
+            
+            responseTimeWatch.Stop();
+            _prometheusMetricService.RecordKafkaResponseTime("producer-response_time", responseTimeWatch.Elapsed.TotalSeconds);
+        }
+        catch (ProduceException<Null, string> ex)
+        {
+            _logger.LogError($"❌ Kafka produce error: {ex.Error.Code} - {ex.Error.Reason}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"❌ Unexpected error: {ex.Message}");
+            throw;
+        }
+    }
+
+    private ProducerConfig GetProducerConfig()
+    {
+        return new ProducerConfig
         {
             BootstrapServers = _settings.BootstrapServers,
             
@@ -88,44 +125,5 @@ public class KafkaProducerService
             // Debug 
             Debug = "broker,topic,msg"
         };
-
-        using var producer = new ProducerBuilder<Null, string>(config)
-            .SetLogHandler((_, logMessage) =>
-            {
-                _logger.LogInformation($"Kafka Producer Log: {logMessage.Level} - {logMessage.Message}");
-            })
-            .SetErrorHandler((_, error) =>
-            {
-                _logger.LogError($"Kafka Producer Error: {error.Code} - {error.Reason}");
-            })
-            .Build();
-
-        try
-        {
-            // ✅ Latency 
-            var latencyWatch = Stopwatch.StartNew();
-
-            var deliveryResult = await producer.ProduceAsync(_settings.Topic, 
-                new Message<Null, string> { Value = $"{messageId}:{message}" });
-            
-            latencyWatch.Stop();
-            
-            _prometheusMetricService.RecordKafkaLatency("producer-latency", latencyWatch.ElapsedMilliseconds);
-            _logger.LogInformation($"✅ Produced message: {messageId}, Partition: {deliveryResult.Partition}, Offset: {deliveryResult.Offset}");
-            _logger.LogInformation($"Timestamp set: enqueue:{messageId} = {now}ms");
-            
-            responseTimeWatch.Stop();
-            _prometheusMetricService.RecordKafkaResponseTime("producer-response_time", responseTimeWatch.Elapsed.TotalSeconds);
-        }
-        catch (ProduceException<Null, string> ex)
-        {
-            _logger.LogError($"❌ Kafka produce error: {ex.Error.Code} - {ex.Error.Reason}");
-            throw;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"❌ Unexpected error: {ex.Message}");
-            throw;
-        }
     }
 }
