@@ -47,8 +47,8 @@ services:
       restart_policy:
         condition: any
         delay: 10s
-        max_attempts: 3
-        window: 120s
+        max_attempts: 10
+        window: 300s
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -65,16 +65,21 @@ services:
       KAFKA_DELETE_TOPIC_ENABLE: "true"
       KAFKA_LOG_RETENTION_HOURS: 168
       KAFKA_LOG_SEGMENT_BYTES: 1073741824
-      KAFKA_NUM_NETWORK_THREADS: 3
-      KAFKA_NUM_IO_THREADS: 8
+      KAFKA_NUM_NETWORK_THREADS: 8
+      KAFKA_NUM_IO_THREADS: 16
     volumes:
       - kafka-data:/var/lib/kafka/data
     networks:
       communication-net:
         aliases:
           - kafka
+    ports:
+      - target: 9092
+        published: 9092
+        protocol: tcp
+        mode: ingress
     healthcheck:
-      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 || exit 1"]
+      test: [ "CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 || exit 1" ]
       interval: 20s
       timeout: 10s
       retries: 5
@@ -87,8 +92,8 @@ services:
       restart_policy:
         condition: on-failure
         delay: 20s
-        max_attempts: 5
-        window: 120s
+        max_attempts: 20
+        window: 600s
   
   # ========== RABBITMQ ==========
   
@@ -220,10 +225,11 @@ services:
       - RabbitMQ__RoutingKey=messages.routing
       - RabbitMQ__IsEnabled=false
       - Redis__ConnectionString=redis:6379,abortConnect=false,connectTimeout=30000,syncTimeout=30000
-      - Redis__IsEnabled=true
+      - Redis__IsEnabled=false
       - Kafka__IsEnabled=true
       - Kafka__BootstrapServers=kafka:9092
       - Kafka__Topic=test-topic
+      - Kafka__GroupId=test-consumer-group
     networks:
       - communication-net
     deploy:
@@ -277,7 +283,7 @@ services:
       - RabbitMQ__RoutingKey=messages.routing
       - RabbitMQ__IsEnabled=false
       - Redis__ConnectionString=redis:6379,abortConnect=false
-      - Redis__IsEnabled=true
+      - Redis__IsEnabled=false
       - Kafka__IsEnabled=true
       - Kafka__BootstrapServers=kafka:9092
       - Kafka__Topic=test-topic
@@ -295,9 +301,9 @@ services:
       restart_policy:
         condition: any
         delay: 10s
-        max_attempts: 3
-        window: 120s
-
+        max_attempts: 20 
+        window: 600s
+  
   # ========== PROMETHEUS ==========
 
   prometheus:

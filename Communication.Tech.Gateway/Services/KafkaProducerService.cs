@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
 using communication_tech.Interfaces;
 using communication_tech.Models;
@@ -14,7 +15,7 @@ public class KafkaProducerService
     private readonly ILogger<KafkaProducerService> _logger;
     private readonly IPrometheusMetricService _prometheusMetricService;
 
-    public KafkaProducerService(IConfiguration configuration,  IConnectionMultiplexer redisConnection,  ILogger<KafkaProducerService> logger, IPrometheusMetricService prometheusMetricService)
+    public KafkaProducerService(IConfiguration configuration, IConnectionMultiplexer redisConnection, ILogger<KafkaProducerService> logger, IPrometheusMetricService prometheusMetricService)
     {
         _settings = configuration.GetSection("Kafka").Get<KafkaSettings>()!;
         _redisDb = redisConnection.GetDatabase();
@@ -33,25 +34,31 @@ public class KafkaProducerService
         {
             try
             {
+                // DNS resolving
+                var addresses = await Dns.GetHostAddressesAsync(host);
+                _logger.LogInformation($"✅ DNS resolved for {host}: {string.Join(", ", addresses.Select(a => a.ToString()))}");
+
                 using var tcp = new TcpClient();
                 var connectTask = tcp.ConnectAsync(host, port);
                 var timeoutTask = Task.Delay(2000);
 
                 if (await Task.WhenAny(connectTask, timeoutTask) == connectTask && tcp.Connected)
                 {
-                    Console.WriteLine("✅ Kafka is available!");
+                    _logger.LogInformation($"✅ Kafka is available at {host}:{port}!");
                     return;
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Kafka connection attempt {i + 1} failed: {ex.Message}");
+            }
 
-            Console.WriteLine("Kafka not ready, retrying in 5s...");
+            _logger.LogInformation($"Kafka not ready, retrying in 5s... (attempt {i + 1}/12)");
             await Task.Delay(5000);
         }
 
         throw new Exception("Kafka is not reachable!");
     }
-
 
     public async Task ProduceAsync(string message)
     {
@@ -65,29 +72,60 @@ public class KafkaProducerService
         var config = new ProducerConfig
         {
             BootstrapServers = _settings.BootstrapServers,
-            BrokerAddressFamily = BrokerAddressFamily.V6
+            
+            // Retry and timeout 
+            MessageTimeoutMs = 30000,
+            RequestTimeoutMs = 30000,
+            SocketTimeoutMs = 60000,
+            
+            // Metadata refresh 
+            MetadataMaxAgeMs = 180000,
+            TopicMetadataRefreshIntervalMs = 10000,
+            
+            // DNS 
+            BrokerAddressTtl = 1000,
+            
+            // Debug 
+            Debug = "broker,topic,msg"
         };
 
-        using var producer = new ProducerBuilder<Null, string>(config).Build();
+        using var producer = new ProducerBuilder<Null, string>(config)
+            .SetLogHandler((_, logMessage) =>
+            {
+                _logger.LogInformation($"Kafka Producer Log: {logMessage.Level} - {logMessage.Message}");
+            })
+            .SetErrorHandler((_, error) =>
+            {
+                _logger.LogError($"Kafka Producer Error: {error.Code} - {error.Reason}");
+            })
+            .Build();
 
         try
         {
             // ✅ Latency 
             var latencyWatch = Stopwatch.StartNew();
 
-            await producer.ProduceAsync(_settings.Topic, new Message<Null, string> { Value = $"{messageId}:{message}"});
+            var deliveryResult = await producer.ProduceAsync(_settings.Topic, 
+                new Message<Null, string> { Value = $"{messageId}:{message}" });
             
             latencyWatch.Stop();
+            
             _prometheusMetricService.RecordKafkaLatency("producer-latency", latencyWatch.ElapsedMilliseconds);
-            Console.WriteLine($"✅ Produced message: {messageId}, Timestamp set: enqueue:{messageId} with = {now}ms");
+            _logger.LogInformation($"✅ Produced message: {messageId}, Partition: {deliveryResult.Partition}, Offset: {deliveryResult.Offset}");
+            _logger.LogInformation($"Timestamp set: enqueue:{messageId} = {now}ms");
             
             responseTimeWatch.Stop();
-            
             _prometheusMetricService.RecordKafkaResponseTime("producer-response_time", responseTimeWatch.Elapsed.TotalSeconds);
         }
         catch (ProduceException<Null, string> ex)
         {
-            _logger.LogInformation($"❌ Kafka produce error: {ex.Error.Reason}");
+            _logger.LogError($"❌ Kafka produce error: {ex.Error.Code} - {ex.Error.Reason}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"❌ Unexpected error: {ex.Message}");
+            throw;
         }
     }
 }
