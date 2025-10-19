@@ -34,7 +34,8 @@ public class PrometheusConsumerMetricService : IPrometheusConsumerMetricService
         "Time between when a Kafka message was produced and when it was consumed",
         new HistogramConfiguration
         {
-            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15)
+            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15),
+            LabelNames = new[] { "command" }
         });
 
     private static readonly Histogram _kafkaResponseTimeHistogram = Metrics.CreateHistogram(
@@ -42,7 +43,8 @@ public class PrometheusConsumerMetricService : IPrometheusConsumerMetricService
         "Time taken by consumer to process a consumed Kafka message",
         new HistogramConfiguration
         {
-            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15)
+            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15),
+            LabelNames = new[] { "operation" }
         });
     
     public void RecordMessageQueueTurnaround(string messageId, string messageType, string source, double durationSeconds)

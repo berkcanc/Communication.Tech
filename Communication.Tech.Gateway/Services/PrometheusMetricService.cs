@@ -74,7 +74,8 @@ public class PrometheusMetricService : IPrometheusMetricService
         "Time taken for Kafka producer to send a message and receive acknowledgment",
         new HistogramConfiguration
         {
-            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15) // 1ms - 16s
+            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15), // 1ms - 16s
+            LabelNames = new[] { "command" }
         });
 
     private static readonly Histogram _kafkaResponseTimeHistogram = Metrics.CreateHistogram(
@@ -82,7 +83,8 @@ public class PrometheusMetricService : IPrometheusMetricService
         "End-to-end Kafka producer response time including local processing",
         new HistogramConfiguration
         {
-            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15)
+            Buckets = Histogram.ExponentialBuckets(0.001, 2, 15),
+            LabelNames = new[] { "operation" }
         });
     
     private readonly HttpClientService _httpClientService;
