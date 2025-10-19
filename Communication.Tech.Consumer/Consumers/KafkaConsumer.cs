@@ -31,7 +31,7 @@ public class KafkaConsumer : BackgroundService
     
     private async Task WaitForKafkaAsync(string bootstrapServers)
     {
-        const int retries = 12;
+        const int retries = 20;
         const int delayInMs = 5000;
         
         var host = bootstrapServers.Split(':')[0];
