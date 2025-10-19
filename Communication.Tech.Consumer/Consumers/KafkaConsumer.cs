@@ -210,7 +210,7 @@ public class KafkaConsumer : BackgroundService
                             result.Offset.Value,
                             latencyWatch.ElapsedMilliseconds,
                             responseTimeWatch.ElapsedMilliseconds,
-                            durationSec.ToString("F3")
+                            durationMs.ToString("F3")
                         );
                     }
                     else
