@@ -249,7 +249,8 @@ public class PrometheusMetricService : IPrometheusMetricService
             { TechnologyType.Http, typeof(HttpMetric) },
             { TechnologyType.gRPC, typeof(GrpcMetric) },
             { TechnologyType.Redis, typeof(RedisMetric) },
-            { TechnologyType.RabbitMQ, typeof(RabbitMqMetric) }
+            { TechnologyType.RabbitMQ, typeof(RabbitMqMetric) },
+            { TechnologyType.Kafka, typeof(KafkaMetric) }
         };
 
         if (!typeMap.TryGetValue(technologyType, out var metricType))
