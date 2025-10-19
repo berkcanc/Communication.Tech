@@ -101,6 +101,23 @@ services:
         delay: 20s
         max_attempts: 20
         window: 600s
+        
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: kafka-exporter
+    environment:
+      - KAFKA_BROKERS=kafka:9092
+      - KAFKA_VERSION=2.8.0
+      - LOG_LEVEL=info
+    ports:
+      - "9308:9308"
+    networks:
+      - communication-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
   
   # ========== RABBITMQ ==========
   
