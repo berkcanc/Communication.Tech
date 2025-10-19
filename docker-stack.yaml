@@ -25,6 +25,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 1
     volumes:
       - zookeeper-data:/var/lib/zookeeper/data
       - zookeeper-log:/var/lib/zookeeper/log
@@ -33,13 +34,16 @@ services:
         aliases:
           - zookeeper
     healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "2181" ]
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 20s
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
       restart_policy:
         condition: any
         delay: 10s
@@ -52,7 +56,6 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_BOOTSTRAP_SERVERS: communication-tech_kafka:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
@@ -60,6 +63,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_DELETE_TOPIC_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+      KAFKA_NUM_NETWORK_THREADS: 3
+      KAFKA_NUM_IO_THREADS: 8
     volumes:
       - kafka-data:/var/lib/kafka/data
     networks:
@@ -67,17 +74,20 @@ services:
         aliases:
           - kafka
     healthcheck:
-      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:9092"]
-      interval: 15s
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 || exit 1"]
+      interval: 20s
       timeout: 10s
       retries: 5
-      start_period: 30s
+      start_period: 40s
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
       restart_policy:
-        condition: any
-        delay: 15s
-        max_attempts: 3
+        condition: on-failure
+        delay: 20s
+        max_attempts: 5
         window: 120s
   
   # ========== RABBITMQ ==========
@@ -212,6 +222,8 @@ services:
       - Redis__ConnectionString=redis:6379,abortConnect=false,connectTimeout=30000,syncTimeout=30000
       - Redis__IsEnabled=true
       - Kafka__IsEnabled=true
+      - Kafka__BootstrapServers=kafka:9092
+      - Kafka__Topic=test-topic
     networks:
       - communication-net
     deploy:
@@ -339,14 +351,18 @@ networks:
   communication-net:
     driver: overlay
     attachable: true
-    
+
 volumes:
   registry-data:
     driver: local
   zookeeper-data:
+    driver: local
   zookeeper-log:
+    driver: local
   kafka-data:
+    driver: local
   results-data:
+    driver: local
 
 configs:
   prometheus_config:
