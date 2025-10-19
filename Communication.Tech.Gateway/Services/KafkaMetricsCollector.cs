@@ -9,7 +9,7 @@ public class KafkaMetricsCollector : BaseMetricsCollector<KafkaMetric>
     public override TechnologyType TechnologyType => TechnologyType.Kafka;
     
     protected override string ThroughputQuery =>
-        "sum(rate(kafka_server_brokertopicmetrics_messages_in_total[5m]))";
+        "sum(delta(kafka_topic_partition_current_offset{topic=\"test-topic\"}[5m])";
 
     protected override string LatencyQuery =>
         @"avg(
