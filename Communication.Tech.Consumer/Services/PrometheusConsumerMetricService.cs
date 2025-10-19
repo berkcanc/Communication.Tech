@@ -68,12 +68,12 @@ public class PrometheusConsumerMetricService : IPrometheusConsumerMetricService
     public void RecordKafkaLatency(string command, double durationSeconds)
     {
         _kafkaLatencyHistogram.WithLabels(command).Observe(durationSeconds);
-        Console.WriteLine($"📊 Observed Redis Latency metric: {command}, {durationSeconds:F3}s");
+        Console.WriteLine($"📊 Observed Kafka Latency metric: {command}, {durationSeconds:F3}s");
     }
 
     public void RecordKafkaResponseTime(string operation, double durationSeconds)
     {
         _kafkaResponseTimeHistogram.WithLabels(operation).Observe(durationSeconds);
-        Console.WriteLine($"📊 Observed Redis Response Time metric: {operation}, {durationSeconds:F3}s");
+        Console.WriteLine($"📊 Observed Kafka Response Time metric: {operation}, {durationSeconds:F3}s");
     }
 }
