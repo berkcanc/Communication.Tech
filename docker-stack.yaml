@@ -300,7 +300,10 @@ services:
         protocol: tcp
         mode: ingress
     volumes:
-      - results-data:/app/results
+      # Host path -> Container path
+      - type: bind
+        source: /home/ubuntu/Communication.Tech/results
+        target: /app/results
     networks:
       - communication-net
     deploy:
