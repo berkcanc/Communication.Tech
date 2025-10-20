@@ -11,7 +11,7 @@ public class KafkaMetricsCollector : BaseMetricsCollector<KafkaMetric>
     protected override string ThroughputQuery =>
         "sum(increase(kafka_topic_partition_current_offset{topic=\"test-topic\"}[5m])) / 300";
     protected override string LatencyQuery =>
-        "(avg(rate(kafka_producer_latency_seconds_sum[5m]) / rate(kafka_producer_latency_seconds_count[5m])) + avg(rate(kafka_consumer_latency_seconds_sum[5m]) / rate(kafka_consumer_latency_seconds_count[5m]))) / 2";
+        "(avg(rate(kafka_producer_latency_seconds_sum[5m]) / rate(kafka_producer_latency_seconds_count[5m])) + avg(rate(kafka_consumer_latency_seconds_sum[5m]) / rate(kafka_consumer_latency_seconds_count[5m]))) * 1000 / 2";
     protected override string ResponseTimeQuery =>
         "(avg(rate(kafka_producer_response_time_seconds_sum[5m]) / rate(kafka_producer_response_time_seconds_count[5m])) + avg(rate(kafka_consumer_response_time_seconds_sum[5m]) / rate(kafka_consumer_response_time_seconds_count[5m]))) * 1000 / 2";
     protected override string TurnaroundTimeQuery =>
