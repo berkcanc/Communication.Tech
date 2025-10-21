@@ -69,13 +69,15 @@ public class KafkaProducerService
     public async Task ProduceAsync(string message)
     {
         var messageId = Guid.NewGuid().ToString();
-        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        await _redisDb.StringSetAsync($"enqueue:{messageId}", now);
 
         try
         {
             // ✅ Response Time
             var responseTimeWatch = Stopwatch.StartNew();
+            
+            // ✅ Turnaround Time
+            var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            await _redisDb.StringSetAsync($"enqueue:{messageId}", now);
             
             // ✅ Latency 
             var latencyWatch = Stopwatch.StartNew();
@@ -85,12 +87,13 @@ public class KafkaProducerService
             
             latencyWatch.Stop();
             
+            responseTimeWatch.Stop();
+            
             _prometheusMetricService.RecordKafkaLatency("producer-latency", latencyWatch.Elapsed.TotalSeconds);
+            _prometheusMetricService.RecordKafkaResponseTime("producer-response_time", responseTimeWatch.Elapsed.TotalSeconds);
+            
             _logger.LogInformation($"✅ Produced message: {messageId}, Partition: {deliveryResult.Partition}, Offset: {deliveryResult.Offset}");
             _logger.LogInformation($"Timestamp set: enqueue:{messageId} = {now}ms");
-            
-            responseTimeWatch.Stop();
-            _prometheusMetricService.RecordKafkaResponseTime("producer-response_time", responseTimeWatch.Elapsed.TotalSeconds);
         }
         catch (ProduceException<Null, string> ex)
         {

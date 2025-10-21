@@ -162,15 +162,15 @@ public class KafkaConsumer : BackgroundService
                     
                     var result = consumer.Consume(TimeSpan.FromSeconds(1)); // Timeout
                     
+                    latencyWatch.Stop();
+                    
                     if (result == null)
                     {
                         // When timeout and then continue
+                        responseTimeWatch.Stop();
                         continue;
                     }
 
-                    latencyWatch.Stop();
-
-                    _prometheusConsumerMetricService.RecordKafkaLatency("consumer-latency", latencyWatch.Elapsed.TotalSeconds);
                     
                     var split = result.Message.Value.Split(':', 2);
                     
@@ -192,13 +192,14 @@ public class KafkaConsumer : BackgroundService
                         var durationMs = nowMs - enqueueMs;
                         var durationSec = durationMs / 1000.0;
                         
+                        await _redisDb.KeyDeleteAsync(tsKey);
+                        
                         responseTimeWatch.Stop();
                     
                         // ✅ Response Time (parsing + Redis operations)
+                        _prometheusConsumerMetricService.RecordKafkaLatency("consumer-latency", latencyWatch.Elapsed.TotalSeconds);
                         _prometheusConsumerMetricService.RecordKafkaResponseTime("consumer-response_time", responseTimeWatch.Elapsed.TotalSeconds);
-                        
                         _prometheusConsumerMetricService.RecordMessageQueueTurnaround(messageId, "default", "kafka", durationSec);
-                        await _redisDb.KeyDeleteAsync(tsKey);
 
                         _logger.LogInformation(
                             "✅ Consumed message: {MessageId} from Partition: {Partition}, Offset: {Offset}, " +
@@ -215,6 +216,7 @@ public class KafkaConsumer : BackgroundService
                     }
                     else
                     {
+                        responseTimeWatch.Stop();
                         _logger.LogWarning("No enqueue timestamp found in Redis for messageId: {MessageId}", messageId);
                     }
                 }
