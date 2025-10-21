@@ -160,7 +160,7 @@ public class KafkaConsumer : BackgroundService
                     // ✅ Latency (consume)
                     var latencyWatch = Stopwatch.StartNew();
                     
-                    var result = consumer.Consume(TimeSpan.FromSeconds(1)); // Timeout
+                    var result = consumer.Consume(TimeSpan.FromMilliseconds(100));
                     
                     latencyWatch.Stop();
                     
