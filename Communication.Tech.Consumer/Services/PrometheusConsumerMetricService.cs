@@ -7,7 +7,7 @@ public class PrometheusConsumerMetricService : IPrometheusConsumerMetricService
 {
     private readonly Histogram _turnaroundMessageQueueHistogram = Metrics.CreateHistogram("queue_turnaround_duration_seconds", "Turnaround duration", new HistogramConfiguration
     {
-        Buckets = Histogram.LinearBuckets(0.01, 0.01, 100), // 10ms - 1s - 100 bucket
+        Buckets = Histogram.ExponentialBuckets(0.001, 2, 15), // 1ms - 16s
         LabelNames = new[] { "message_type", "source" }
     });
     
