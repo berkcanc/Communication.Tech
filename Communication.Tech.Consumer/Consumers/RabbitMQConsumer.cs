@@ -161,7 +161,7 @@ public class RabbitMQConsumer : BackgroundService
                     autoDelete: false,
                     arguments: null);
                 
-                _channel.BasicQos(0, 1, false);
+                _channel.BasicQos(0, 50, false);
                 
                 _logger.LogInformation("✅ Successfully connected to RabbitMQ on {Host}:{Port}", 
                     _settings.HostName, _settings.Port);

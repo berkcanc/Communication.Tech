@@ -8,11 +8,10 @@ public class RabbitMqMetricsCollector : BaseMetricsCollector<RabbitMqMetric>
 {
     private readonly string _queue;
     private readonly string _vhost;
-
     public override TechnologyType TechnologyType => TechnologyType.RabbitMQ;
 
     protected override string ThroughputQuery => $"rate(rabbitmq_queue_messages_ack_total{{queue=\"{_queue}\",vhost=\"{_vhost}\"}}[5m])";
-    protected override string LatencyQuery => $"((rabbitmq_queue_messages_ready{{queue=\"{_queue}\"}} or vector(0) + rabbitmq_queue_messages_unacknowledged{{queue=\"{_queue}\"}} or vector(0)) / clamp_min(rate(rabbitmq_queue_messages_delivered_total{{queue=\"{_queue}\"}}[5m]), 1)) * 1000";
+    protected override string LatencyQuery => "(((rabbitmq_queue_messages_ready{queue=\"message_queue\"} or vector(0)) + (rabbitmq_queue_messages_unacknowledged{queue=\"message_queue\"} or vector(0))) / clamp_min(rate(rabbitmq_queue_messages_delivered_total{queue=\"message_queue\"}[5m]), 0.1)) * 1000";
     protected override string ResponseTimeQuery => "(rate(queue_turnaround_duration_seconds_sum{source=\"rabbitmq\"}[5m]) / clamp_min(rate(queue_turnaround_duration_seconds_count{source=\"rabbitmq\"}[5m]), 0.01)) * 1000";
     protected override string TurnaroundTimeQuery => "1000*(sum(rate(queue_turnaround_duration_seconds_sum{source=\"rabbitmq\"}[5m])) / sum(rate(queue_turnaround_duration_seconds_count{source=\"rabbitmq\"}[5m])))";
 
