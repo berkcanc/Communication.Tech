@@ -23,7 +23,8 @@ public class RabbitMQProducerService
         {
             HostName = _settings.HostName,
             UserName = _settings.UserName,
-            Password = _settings.Password
+            Password = _settings.Password,
+            SocketFactory = (addressFamily) => new NoDelayTcpClient(addressFamily)
         };
         
         var connection = factory.CreateConnection();

@@ -1,4 +1,5 @@
 using System.Text;
+using communication_tech;
 using communication_tech.Models;
 using Communication.Tech.Consumer.Interfaces;
 using Microsoft.Extensions.Hosting;
@@ -134,6 +135,7 @@ public class RabbitMQConsumer : BackgroundService
                     Password = _settings.Password,
                     VirtualHost = _settings.VirtualHost,
                     DispatchConsumersAsync = true,
+                    SocketFactory = (addressFamily) => new NoDelayTcpClient(addressFamily),
                     
                     // Connection recovery settings
                     AutomaticRecoveryEnabled = true,
