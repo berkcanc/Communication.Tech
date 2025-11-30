@@ -79,7 +79,7 @@ public class RabbitMQConsumer : BackgroundService
                     var durationSec = durationMs / 1000.0;
 
                     _prometheusConsumerMetricService.RecordMessageQueueTurnaround(messageId, "default", "rabbitmq", durationSec);
-                    await _redisDb.KeyDeleteAsync(tsKey);
+                    _redisDb.KeyDelete(tsKey);
 
                     _logger.LogInformation("✅ MessageId: {MessageId}, turnaround = {DurationMs}ms", messageId, durationMs);
                 }
@@ -221,7 +221,7 @@ public class RabbitMQConsumer : BackgroundService
                         autoDelete: false,
                         arguments: null);
                     
-                    _channel.BasicQos(0, 50, false);
+                    _channel.BasicQos(0, 10, false);
                 }
                 
                 _logger.LogInformation("✅ Successfully connected to RabbitMQ on {Host}:{Port}", 
