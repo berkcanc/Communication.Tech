@@ -20,6 +20,8 @@ public class RabbitMQConsumer : BackgroundService
     private readonly IDatabase _redisDb;
     private IConnection? _connection;
     private IModel? _channel;
+    private readonly object _channelLock = new object();
+    private bool _isDisposed = false;
 
     public RabbitMQConsumer(
         IOptions<RabbitMqSettings> options,
@@ -62,7 +64,7 @@ public class RabbitMQConsumer : BackgroundService
                 if (split.Length < 2)
                 {
                     _logger.LogWarning("⚠️ Malformed message: {Message}", message);
-                    _channel.BasicNack(ea.DeliveryTag, false, false);
+                    await SafeBasicNackAsync(ea.DeliveryTag, false, false);
                     return;
                 }
 
@@ -86,12 +88,12 @@ public class RabbitMQConsumer : BackgroundService
                     _logger.LogWarning("❌ Redis timestamp not found for MessageId: {MessageId}", messageId);
                 }
 
-                _channel.BasicAck(ea.DeliveryTag, false);
+                await SafeBasicAckAsync(ea.DeliveryTag, false);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "❗ Error processing message");
-                _channel.BasicNack(ea.DeliveryTag, false, true); // mesajı kuyruğa geri koy
+                await SafeBasicNackAsync(ea.DeliveryTag, false, true);
             }
         };
 
@@ -99,7 +101,7 @@ public class RabbitMQConsumer : BackgroundService
         _connection.ConnectionShutdown += async (sender, args) =>
         {
             _logger.LogWarning("⚠️ RabbitMQ connection lost. Reason: {Reason}", args.ReplyText);
-            if (!stoppingToken.IsCancellationRequested)
+            if (!stoppingToken.IsCancellationRequested && !_isDisposed)
             {
                 await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
                 _logger.LogInformation("🔄 Attempting to reconnect to RabbitMQ...");
@@ -112,6 +114,62 @@ public class RabbitMQConsumer : BackgroundService
                               consumer: consumer);
 
         await Task.Delay(Timeout.Infinite, stoppingToken);
+    }
+
+    private async Task SafeBasicAckAsync(ulong deliveryTag, bool multiple)
+    {
+        try
+        {
+            lock (_channelLock)
+            {
+                if (_channel?.IsOpen == true)
+                {
+                    _channel.BasicAck(deliveryTag, multiple);
+                }
+                else
+                {
+                    _logger.LogWarning("⚠️ Channel is not open, cannot acknowledge message with tag {DeliveryTag}", deliveryTag);
+                }
+            }
+        }
+        catch (AlreadyClosedException ex)
+        {
+            _logger.LogWarning(ex, "⚠️ Channel already closed when acknowledging delivery tag {DeliveryTag}", deliveryTag);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "❌ Error acknowledging message with delivery tag {DeliveryTag}", deliveryTag);
+        }
+
+        await Task.CompletedTask;
+    }
+
+    private async Task SafeBasicNackAsync(ulong deliveryTag, bool multiple, bool requeue)
+    {
+        try
+        {
+            lock (_channelLock)
+            {
+                if (_channel?.IsOpen == true)
+                {
+                    _channel.BasicNack(deliveryTag, multiple, requeue);
+                }
+                else
+                {
+                    _logger.LogWarning("⚠️ Channel is not open, cannot nack message with tag {DeliveryTag}", deliveryTag);
+                }
+            }
+        }
+        catch (AlreadyClosedException ex)
+        {
+            _logger.LogWarning(ex, "⚠️ Channel already closed when nacking delivery tag {DeliveryTag}", deliveryTag);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "❌ Error nacking message with delivery tag {DeliveryTag}", deliveryTag);
+        }
+
+        await Task.CompletedTask;
     }
 
     private async Task ConnectWithRetryAsync(CancellationToken stoppingToken)
@@ -150,18 +208,21 @@ public class RabbitMQConsumer : BackgroundService
                     HandshakeContinuationTimeout = TimeSpan.FromSeconds(20)
                 };
 
-                _connection = factory.CreateConnection($"consumer-{Environment.MachineName}");
-                _channel = _connection.CreateModel();
-                
-                // Queue declaration with error handling
-                _channel.QueueDeclare(
-                    queue: _settings.QueueName,
-                    durable: true,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
-                
-                _channel.BasicQos(0, 50, false);
+                lock (_channelLock)
+                {
+                    _connection = factory.CreateConnection($"consumer-{Environment.MachineName}");
+                    _channel = _connection.CreateModel();
+                    
+                    // Queue declaration with error handling
+                    _channel.QueueDeclare(
+                        queue: _settings.QueueName,
+                        durable: true,
+                        exclusive: false,
+                        autoDelete: false,
+                        arguments: null);
+                    
+                    _channel.BasicQos(0, 50, false);
+                }
                 
                 _logger.LogInformation("✅ Successfully connected to RabbitMQ on {Host}:{Port}", 
                     _settings.HostName, _settings.Port);
@@ -203,15 +264,20 @@ public class RabbitMQConsumer : BackgroundService
 
     public override void Dispose()
     {
+        _isDisposed = true;
+        
         try
         {
-            if (_channel?.IsOpen == true)
+            lock (_channelLock)
             {
-                _channel.Close();
-            }
-            if (_connection?.IsOpen == true)
-            {
-                _connection.Close();
+                if (_channel?.IsOpen == true)
+                {
+                    _channel.Close();
+                }
+                if (_connection?.IsOpen == true)
+                {
+                    _connection.Close();
+                }
             }
             _logger.LogInformation("🔻 RabbitMQ connection closed.");
         }
