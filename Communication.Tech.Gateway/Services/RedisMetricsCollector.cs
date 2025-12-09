@@ -8,7 +8,7 @@ public class RedisMetricsCollector : BaseMetricsCollector<RedisMetric>
 {
     public override TechnologyType TechnologyType => TechnologyType.Redis;
     
-    protected override string ThroughputQuery => "sum(rate(redis_commands_total{cmd=~\"lpush|rpop\"}[1m]))";
+    protected override string ThroughputQuery => "sum(rate(redis_commands_total{cmd=~\"lpush|rpush\"}[1m]))";
     protected override string LatencyQuery => 
         "avg((rate(redis_producer_command_duration_seconds_sum{command=\"lpush\"}[5m]) / rate(redis_producer_command_duration_seconds_count{command=\"lpush\"}[5m])) or (rate(redis_consumer_command_duration_seconds_sum{command=\"rpop\"}[5m]) / rate(redis_consumer_command_duration_seconds_count{command=\"rpop\"}[5m]))) * 1000";
     protected override string ResponseTimeQuery => 
