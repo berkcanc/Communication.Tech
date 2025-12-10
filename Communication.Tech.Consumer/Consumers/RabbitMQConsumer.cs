@@ -50,70 +50,88 @@ public class RabbitMQConsumer : BackgroundService
 
         _logger.LogInformation("✅ Connected to RabbitMQ queue: {Queue}", _settings.QueueName);
 
-        var consumer = new AsyncEventingBasicConsumer(_channel);
-        
-        consumer.Received += async (model, ea) =>
-        {   
-            try
-            {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                _logger.LogInformation("📩 Received message: {Message}", message);
-
-                var split = message.Split(':', 2);
-                if (split.Length < 2)
-                {
-                    _logger.LogWarning("⚠️ Malformed message: {Message}", message);
-                    await SafeBasicNackAsync(ea.DeliveryTag, false, false);
-                    return;
-                }
-
-                var messageId = split[0];
-                var tsKey = $"enqueue:{messageId}";
-                var enqueueTimeStr = await _redisDb.StringGetAsync(tsKey);
-
-                if (long.TryParse(enqueueTimeStr, out var enqueueMs))
-                {
-                    var nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                    var durationMs = nowMs - enqueueMs;
-                    var durationSec = durationMs / 1000.0;
-
-                    _prometheusConsumerMetricService.RecordMessageQueueTurnaround(messageId, "default", "rabbitmq", durationSec);
-                    _redisDb.KeyDelete(tsKey);
-
-                    _logger.LogInformation("✅ MessageId: {MessageId}, turnaround = {DurationMs}ms", messageId, durationMs);
-                }
-                else
-                {
-                    _logger.LogWarning("❌ Redis timestamp not found for MessageId: {MessageId}", messageId);
-                }
-
-                await SafeBasicAckAsync(ea.DeliveryTag, false);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "❗ Error processing message");
-                await SafeBasicNackAsync(ea.DeliveryTag, false, true);
-            }
-        };
-
-        // Connection lost handler
-        _connection.ConnectionShutdown += async (sender, args) =>
+        try
         {
-            _logger.LogWarning("⚠️ RabbitMQ connection lost. Reason: {Reason}", args.ReplyText);
-            if (!stoppingToken.IsCancellationRequested && !_isDisposed)
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+            
+            consumer.Received += async (model, ea) =>
+            {   
+                try
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    _logger.LogInformation("📩 Received message: {Message}", message);
+
+                    var split = message.Split(':', 2);
+                    if (split.Length < 2)
+                    {
+                        _logger.LogWarning("⚠️ Malformed message: {Message}", message);
+                        await SafeBasicNackAsync(ea.DeliveryTag, false, false);
+                        return;
+                    }
+
+                    var messageId = split[0];
+                    var tsKey = $"enqueue:{messageId}";
+                    var enqueueTimeStr = await _redisDb.StringGetAsync(tsKey);
+
+                    if (long.TryParse(enqueueTimeStr, out var enqueueMs))
+                    {
+                        var nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                        var durationMs = nowMs - enqueueMs;
+                        var durationSec = durationMs / 1000.0;
+
+                        _prometheusConsumerMetricService.RecordMessageQueueTurnaround(messageId, "default", "rabbitmq", durationSec);
+                        _redisDb.KeyDelete(tsKey);
+
+                        _logger.LogInformation("✅ MessageId: {MessageId}, turnaround = {DurationMs}ms", messageId, durationMs);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("❌ Redis timestamp not found for MessageId: {MessageId}", messageId);
+                    }
+
+                    await SafeBasicAckAsync(ea.DeliveryTag, false);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "❗ Error processing message");
+                    await SafeBasicNackAsync(ea.DeliveryTag, false, true);
+                }
+            };
+
+            // Connection lost handler
+            _connection.ConnectionShutdown += async (sender, args) =>
             {
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
-                _logger.LogInformation("🔄 Attempting to reconnect to RabbitMQ...");
-                await ConnectWithRetryAsync(stoppingToken);
+                _logger.LogWarning("⚠️ RabbitMQ connection lost. Reason: {Reason}", args.ReplyText);
+                if (!stoppingToken.IsCancellationRequested && !_isDisposed)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                    _logger.LogInformation("🔄 Attempting to reconnect to RabbitMQ...");
+                    await ConnectWithRetryAsync(stoppingToken);
+                }
+            };
+
+            lock (_channelLock)
+            {
+                _channel.BasicConsume(queue: _settings.QueueName,
+                                      autoAck: false,
+                                      consumer: consumer);
             }
-        };
 
-        _channel.BasicConsume(queue: _settings.QueueName,
-                              autoAck: false,
-                              consumer: consumer);
-
-        await Task.Delay(Timeout.Infinite, stoppingToken);
+            _logger.LogInformation("✅ Started consuming messages from queue: {Queue}", _settings.QueueName);
+            
+            // Keep the service running
+            await Task.Delay(Timeout.Infinite, stoppingToken);
+        }
+        catch (OperationCanceledException)
+        {
+            _logger.LogInformation("🛑 Consumer operation cancelled");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "❌ Fatal error in consumer: {ErrorMessage}", ex.Message);
+            throw;
+        }
     }
 
     private async Task SafeBasicAckAsync(ulong deliveryTag, bool multiple)
