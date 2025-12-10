@@ -35,21 +35,9 @@ public class RabbitMQConsumer : BackgroundService
         _redisDb = redis.GetDatabase();
         _logger.LogInformation("🟢 RabbitMQConsumer constructor initialized.");
     }
-    
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+
+    private async Task ExecuteConsumerAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("🟡 ExecuteAsync started (RabbitMQ)");
-
-        await ConnectWithRetryAsync(stoppingToken);
-
-        if (_connection == null || _channel == null)
-        {
-            _logger.LogError("❌ Failed to establish RabbitMQ connection after all retries");
-            return;
-        }
-
-        _logger.LogInformation("✅ Connected to RabbitMQ queue: {Queue}", _settings.QueueName);
-
         try
         {
             var consumer = new AsyncEventingBasicConsumer(_channel);
@@ -60,7 +48,7 @@ public class RabbitMQConsumer : BackgroundService
                 {
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
-                    _logger.LogInformation("📩 Received message: {Message}", message);
+                    _logger.LogInformation("📩 Received message: {Message}", message[..Math.Min(100, message.Length)]);
 
                     var split = message.Split(':', 2);
                     if (split.Length < 2)
@@ -106,30 +94,6 @@ public class RabbitMQConsumer : BackgroundService
                 }
             };
 
-            // Connection lost handler - NOT async, fire-and-forget
-            _connection.ConnectionShutdown += (sender, args) =>
-            {
-                _logger.LogWarning("⚠️ RabbitMQ connection lost. Reason: {Reason}", args.ReplyText);
-                
-                if (!stoppingToken.IsCancellationRequested && !_isDisposed)
-                {
-                    // Fire and forget - don't await in event handler
-                    _ = Task.Run(async () =>
-                    {
-                        try
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
-                            _logger.LogInformation("🔄 Attempting to reconnect to RabbitMQ...");
-                            await ConnectWithRetryAsync(stoppingToken);
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, "❗ Error in reconnection task");
-                        }
-                    }, stoppingToken);
-                }
-            };
-
             lock (_channelLock)
             {
                 if (_channel?.IsOpen == true)
@@ -142,17 +106,110 @@ public class RabbitMQConsumer : BackgroundService
                 }
             }
 
-            // Keep the service running
+            // Wait until connection is lost or cancellation requested
             await Task.Delay(Timeout.Infinite, stoppingToken);
         }
         catch (OperationCanceledException)
         {
-            _logger.LogInformation("🛑 Consumer operation cancelled");
+            _logger.LogInformation("🛑 Consumer cancelled");
+            throw;
+        }
+    }
+    
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("🟡 ExecuteAsync started (RabbitMQ)");
+
+        while (!stoppingToken.IsCancellationRequested && !_isDisposed)
+        {
+            try
+            {
+                await ConnectWithRetryAsync(stoppingToken);
+
+                if (_connection == null || _channel == null)
+                {
+                    _logger.LogError("❌ Failed to establish RabbitMQ connection after all retries");
+                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                    continue;
+                }
+
+                _logger.LogInformation("✅ Connected to RabbitMQ queue: {Queue}", _settings.QueueName);
+
+                // Register connection shutdown handler
+                _connection.ConnectionShutdown += (sender, args) =>
+                {
+                    _logger.LogWarning("⚠️ RabbitMQ connection lost. ReplyCode: {ReplyCode}, ReplyText: {ReplyText}, Cause: {Cause}", 
+                        args.ReplyCode, args.ReplyText, args.Cause);
+                };
+
+                // Execute consumer
+                await ExecuteConsumerAsync(stoppingToken);
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("🛑 ExecuteAsync cancelled");
+                break;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Error in ExecuteAsync");
+                
+                // Cleanup before retry
+                CleanupConnection();
+
+                // Wait before retry
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    private void CleanupConnection()
+    {
+        try
+        {
+            lock (_channelLock)
+            {
+                if (_channel?.IsOpen == true)
+                {
+                    try
+                    {
+                        _channel.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "⚠️ Error closing channel");
+                    }
+                }
+                _channel?.Dispose();
+                _channel = null;
+
+                if (_connection?.IsOpen == true)
+                {
+                    try
+                    {
+                        _connection.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "⚠️ Error closing connection");
+                    }
+                }
+                _connection?.Dispose();
+                _connection = null;
+            }
+
+            _logger.LogInformation("🔻 Connection and channel cleaned up");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "❌ Fatal error in consumer: {ErrorMessage}", ex.Message);
-            throw;
+            _logger.LogError(ex, "❌ Error during cleanup");
         }
     }
 
@@ -305,31 +362,8 @@ public class RabbitMQConsumer : BackgroundService
     public override void Dispose()
     {
         _isDisposed = true;
-        
-        try
-        {
-            lock (_channelLock)
-            {
-                if (_channel?.IsOpen == true)
-                {
-                    _channel.Close();
-                }
-                if (_connection?.IsOpen == true)
-                {
-                    _connection.Close();
-                }
-            }
-            _logger.LogInformation("🔻 RabbitMQ connection closed.");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error closing RabbitMQ connections");
-        }
-        finally
-        {
-            _channel?.Dispose();
-            _connection?.Dispose();
-            base.Dispose();
-        }
-    }    
+        CleanupConnection();
+        _logger.LogInformation("🔻 RabbitMQConsumer disposed.");
+        base.Dispose();
+    }
 }
