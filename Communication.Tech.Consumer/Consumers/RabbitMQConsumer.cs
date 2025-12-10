@@ -95,31 +95,53 @@ public class RabbitMQConsumer : BackgroundService
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "❗ Error processing message");
-                    await SafeBasicNackAsync(ea.DeliveryTag, false, true);
+                    try
+                    {
+                        await SafeBasicNackAsync(ea.DeliveryTag, false, true);
+                    }
+                    catch (Exception nackEx)
+                    {
+                        _logger.LogError(nackEx, "❗ Error nacking message after exception");
+                    }
                 }
             };
 
-            // Connection lost handler
-            _connection.ConnectionShutdown += async (sender, args) =>
+            // Connection lost handler - NOT async, fire-and-forget
+            _connection.ConnectionShutdown += (sender, args) =>
             {
                 _logger.LogWarning("⚠️ RabbitMQ connection lost. Reason: {Reason}", args.ReplyText);
+                
                 if (!stoppingToken.IsCancellationRequested && !_isDisposed)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
-                    _logger.LogInformation("🔄 Attempting to reconnect to RabbitMQ...");
-                    await ConnectWithRetryAsync(stoppingToken);
+                    // Fire and forget - don't await in event handler
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                            _logger.LogInformation("🔄 Attempting to reconnect to RabbitMQ...");
+                            await ConnectWithRetryAsync(stoppingToken);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "❗ Error in reconnection task");
+                        }
+                    }, stoppingToken);
                 }
             };
 
             lock (_channelLock)
             {
-                _channel.BasicConsume(queue: _settings.QueueName,
-                                      autoAck: false,
-                                      consumer: consumer);
+                if (_channel?.IsOpen == true)
+                {
+                    _channel.BasicConsume(queue: _settings.QueueName,
+                                          autoAck: false,
+                                          consumerTag: "consumer",
+                                          consumer: consumer);
+                    _logger.LogInformation("✅ Started consuming messages from queue: {Queue}", _settings.QueueName);
+                }
             }
 
-            _logger.LogInformation("✅ Started consuming messages from queue: {Queue}", _settings.QueueName);
-            
             // Keep the service running
             await Task.Delay(Timeout.Infinite, stoppingToken);
         }
