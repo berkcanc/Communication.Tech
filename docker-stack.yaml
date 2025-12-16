@@ -247,10 +247,10 @@ services:
       - RabbitMQ__QueueName=message_queue
       - RabbitMQ__ExchangeName=messages-exchange
       - RabbitMQ__RoutingKey=messages.routing
-      - RabbitMQ__IsEnabled=true
+      - RabbitMQ__IsEnabled=false
       - Redis__ConnectionString=redis:6379,abortConnect=false,connectTimeout=30000,syncTimeout=30000
       - Redis__IsEnabled=false
-      - Kafka__IsEnabled=false
+      - Kafka__IsEnabled=true
       - Kafka__BootstrapServers=kafka:9092
       - Kafka__Topic=test-topic
       - Kafka__GroupId=test-consumer-group
@@ -305,10 +305,10 @@ services:
       - RabbitMQ__QueueName=message_queue
       - RabbitMQ__ExchangeName=messages-exchange
       - RabbitMQ__RoutingKey=messages.routing
-      - RabbitMQ__IsEnabled=true
+      - RabbitMQ__IsEnabled=false
       - Redis__ConnectionString=redis:6379,abortConnect=false
       - Redis__IsEnabled=false
-      - Kafka__IsEnabled=false
+      - Kafka__IsEnabled=true
       - Kafka__BootstrapServers=kafka:9092
       - Kafka__Topic=test-topic
     ports:
