@@ -963,6 +963,9 @@ for TH in "${THROUGHPUTS[@]}"; do
 
     echo "=== Test completed ==="
 
+    echo "Waiting 6 seconds for Prometheus scrape..."
+    sleep 6
+
     # --- Export Loop For Scrape Interval (3 Times) ---
     for i in {1..3}
     do
